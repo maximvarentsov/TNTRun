@@ -88,7 +88,7 @@ public class SignEditor {
 		}
 
 		String text = null;
-		int players = plugin.pdata.getArenaPlayers(arenainst).size();
+		int players = arenainst.getPlayersCount();
 		int maxPlayers = arenainst.getMaxPlayers();
 		if (!arenainst.isArenaEnabled()) {
 			text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "Disabled";

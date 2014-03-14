@@ -19,7 +19,9 @@ package tntrun.arena;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -48,7 +50,7 @@ public class Arena {
 		arenafile = new File(plugin.getDataFolder() + File.separator + "arenas" + File.separator + arenaname + ".yml");
 		plugin.pdata.registerArena(this);
 	}
-
+	
 	private boolean enabled = false;
 	private boolean starting = false;
 	private boolean running = false;
@@ -77,6 +79,23 @@ public class Arena {
 	public Vector getP2() {
 		return p2;
 	}
+	
+	private HashSet<String> players = new HashSet<String>();
+	public boolean isPlayerInArena(String name) {
+		return players.contains(name);
+	}
+	public int getPlayersCount() {
+		return players.size();
+	}
+	public Set<String> getPlayersInArena() {
+		return Collections.unmodifiableSet(players);
+	}
+	public void addPlayerToArena(String name) {
+		players.add(name);
+	}
+	public void removePlayerFromArena(String name) {
+		players.remove(name);
+	}
 
 	private HashSet<GameLevel> gamelevels = new HashSet<GameLevel>();
 
@@ -99,8 +118,7 @@ public class Arena {
 	private Vector spawnpoint = null;
 
 	public Location getSpawnPoint() {
-		Location spawn = new Location(getWorld(), spawnpoint.getX(),
-				spawnpoint.getY(), spawnpoint.getZ());
+		Location spawn = new Location(getWorld(), spawnpoint.getX(), spawnpoint.getY(), spawnpoint.getZ());
 		return spawn;
 	}
 
@@ -159,7 +177,7 @@ public class Arena {
 		enabled = false;
 		// drop players
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (plugin.pdata.getArenaPlayers(this).contains(player.getName())) {
+			if (players.contains(player.getName())) {
 				arenaph.leavePlayer(player, Messages.arenadisabling, "");
 			}
 		}

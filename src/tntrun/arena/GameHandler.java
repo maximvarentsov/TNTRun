@@ -17,8 +17,6 @@
 
 package tntrun.arena;
 
-import java.util.HashSet;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -46,7 +44,7 @@ public class GameHandler {
 				new Runnable() {
 					public void run() {
 						for (Player player : Bukkit.getOnlinePlayers()) {
-							if (plugin.pdata.getArenaPlayers(arena).contains(player.getName())) {
+							if (arena.isPlayerInArena(player.getName())) {
 								if (!arena.isInArenaBounds(player.getLocation())) {
 									arena.arenaph.leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
 								}
@@ -70,15 +68,13 @@ public class GameHandler {
 			plugin,
 			new Runnable() {
 				public void run() {
-					// check if countdown should be stopped for some various
-					// reasons
-					HashSet<String> arenaplayers = plugin.pdata.getArenaPlayers(arena);
+					// check if countdown should be stopped for some various reasons
 					if (!arena.isArenaEnabled()) {
 						stopArenaCountdown();
-					} else if (arenaplayers.size() < arena.getMinPlayers()) {
+					} else if (arena.getPlayersCount() < arena.getMinPlayers()) {
 						for (Player player : Bukkit.getOnlinePlayers()) {
-							if (arenaplayers.contains(player.getName())) {
-								Bars.setBar(player, Bars.waiting, arenaplayers.size(), 0, arenaplayers.size() * 100 / arena.getMinPlayers());
+							if (arena.isPlayerInArena(player.getName())) {
+								Bars.setBar(player, Bars.waiting, arena.getPlayersCount(), 0, arena.getPlayersCount() * 100 / arena.getMinPlayers());
 							}
 						}
 						plugin.signEditor.modifySigns(arena.getArenaName());
@@ -92,12 +88,9 @@ public class GameHandler {
 					// countdown
 					{
 						for (Player player : Bukkit.getOnlinePlayers()) {
-							if (arenaplayers.contains(player.getName())) {
-								Messages.sendMessage(player,
-										Messages.arenacountdown, count);
-								Bars.setBar(player, Bars.starting, 0,
-										count,
-										count * 100 / arena.getCountdown());
+							if (arena.isPlayerInArena(player.getName())) {
+								Messages.sendMessage(player, Messages.arenacountdown, count);
+								Bars.setBar(player, Bars.starting, 0, count, count * 100 / arena.getCountdown());
 							}
 						}
 						count--;
@@ -121,7 +114,7 @@ public class GameHandler {
 	public void startArena() {
 		arena.setRunning(true);
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (plugin.pdata.getArenaPlayers(arena).contains(player.getName())) {
+			if (arena.isPlayerInArena(player.getName())) {
 				Messages.sendMessage(player, Messages.arenastarted, arena.getTimeLimit());
 			}
 		}
@@ -132,7 +125,7 @@ public class GameHandler {
 					public void run() {
 						if (timelimit < 0) {
 							for (Player player : Bukkit.getOnlinePlayers()) {
-								if (plugin.pdata.getArenaPlayers(arena).contains(player.getName())) {
+								if (arena.isPlayerInArena(player.getName())) {
 									// kick player
 									arena.arenaph.leavePlayer(player,Messages.arenatimeout, "");
 								}
@@ -141,18 +134,17 @@ public class GameHandler {
 							stopArena();
 							return;
 						}
-						HashSet<String> arenaplayers = plugin.pdata.getArenaPlayers(arena);
 						// stop arena if player count is 0 (just in case)
-						if (arenaplayers.size() == 0) {
+						if (arena.getPlayersCount() == 0) {
 							// stop arena
 							stopArena();
 							return;
 						}
 						// handle players
 						for (Player player : Bukkit.getOnlinePlayers()) {
-							if (arenaplayers.contains(player.getName())) {
+							if (arena.isPlayerInArena(player.getName())) {
 								// update bar
-								Bars.setBar(player, Bars.playing, arenaplayers.size(), timelimit / 20, timelimit * 5 / arena.getTimeLimit());
+								Bars.setBar(player, Bars.playing, arena.getPlayersCount(), timelimit / 20, timelimit * 5 / arena.getTimeLimit());
 								// handle player
 								handlePlayer(player);
 							}
@@ -184,7 +176,7 @@ public class GameHandler {
 			}
 		}
 		// check for win
-		if (plugin.pdata.getArenaPlayers(arena).size() == 1) {
+		if (arena.getPlayersCount() == 1) {
 			// last player won
 			arena.arenaph.leaveWinner(player, Messages.playerwontoplayer);
 			broadcastWin(player);

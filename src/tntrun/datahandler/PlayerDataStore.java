@@ -19,7 +19,6 @@ package tntrun.datahandler;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
@@ -33,41 +32,18 @@ import tntrun.arena.Arena;
 
 public class PlayerDataStore {
 
-	private HashMap<String, Arena> plingame = new HashMap<String, Arena>();
 	private HashMap<String, Arena> arenanames = new HashMap<String, Arena>();
-	private HashMap<Arena, HashSet<String>> arenaplayers = new HashMap<Arena, HashSet<String>>();
 	
 	public void registerArena(Arena arena) {
 		arenanames.put(arena.getArenaName(), arena);
-		arenaplayers.put(arena, new HashSet<String>());
 	}
-
+	
 	public void unregisterArena(Arena arena) {
 		arenanames.remove(arena.getArenaName());
-		arenaplayers.remove(arena);
 	}
 
-	public Arena getPlayerArena(String player) {
-		return plingame.get(player);
-	}
-
-	public void setPlayerArena(String player, Arena arena) {
-		plingame.put(player, arena);
-		arenaplayers.get(arena).add(player);
-	}
-
-	public void removePlayerFromArena(String player) {
-		Arena arena = plingame.get(player);
-		arenaplayers.get(arena).remove(player);
-		plingame.remove(player);
-	}
-
-	public HashSet<String> getArenaPlayers(Arena arena) {
-		return arenaplayers.get(arena);
-	}
-
-	public Set<Arena> getArenas() {
-		return arenaplayers.keySet();
+	public Collection<Arena> getArenas() {
+		return arenanames.values();
 	}
 
 	public Set<String> getArenasNames() {
@@ -76,6 +52,15 @@ public class PlayerDataStore {
 
 	public Arena getArenaByName(String name) {
 		return arenanames.get(name);
+	}
+	
+	public Arena getPlayerArena(String name) {
+		for (Arena arena : arenanames.values()) {
+			if (arena.isPlayerInArena(name)) {
+				return arena;
+			}
+		}
+		return null;
 	}
 
 	private HashMap<String, ItemStack[]> plinv = new HashMap<String, ItemStack[]>();
@@ -98,8 +83,7 @@ public class PlayerDataStore {
 	}
 
 	public void storePlayerPotionEffects(String player) {
-		Collection<PotionEffect> peff = Bukkit.getPlayerExact(player)
-				.getActivePotionEffects();
+		Collection<PotionEffect> peff = Bukkit.getPlayerExact(player).getActivePotionEffects();
 		pleffects.put(player, peff);
 		for (PotionEffect peffect : peff) {
 			Bukkit.getPlayerExact(player).removePotionEffect(peffect.getType());
@@ -121,14 +105,12 @@ public class PlayerDataStore {
 	}
 
 	public void restorePlayerInventory(String player) {
-		Bukkit.getPlayerExact(player).getInventory()
-				.setContents(plinv.get(player));
+		Bukkit.getPlayerExact(player).getInventory().setContents(plinv.get(player));
 		plinv.remove(player);
 	}
 
 	public void restorePlayerArmor(String player) {
-		Bukkit.getPlayerExact(player).getInventory()
-				.setArmorContents(plarmor.get(player));
+		Bukkit.getPlayerExact(player).getInventory().setArmorContents(plarmor.get(player));
 		plarmor.remove(player);
 	}
 
