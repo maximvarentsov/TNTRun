@@ -74,7 +74,7 @@ public class GameCommands implements CommandExecutor {
 			StringBuilder message = new StringBuilder(200);
 			message.append(Messages.availablearenas);
 			for (Arena arena : plugin.amanager.getArenas()) {
-				if (arena.isArenaEnabled()) {
+				if (arena.getStatusManager().isArenaEnabled()) {
 					message.append("&a" + arena.getArenaName() + " ");
 				} else {
 					message.append("&c" + arena.getArenaName() + " ");

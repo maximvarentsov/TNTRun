@@ -22,14 +22,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.arena.handlers.GameHandler;
 import tntrun.arena.handlers.PlayerHandler;
-import tntrun.arena.structure.GameLevel;
 import tntrun.arena.structure.StructureManager;
-import tntrun.messages.Messages;
 
 public class Arena {
 
@@ -43,6 +39,16 @@ public class Arena {
 		arenagh = new GameHandler(plugin, this);
 		arenaph = new PlayerHandler(plugin, this);
 		structureManager.setArenaFile(new File(plugin.getDataFolder() + File.separator + "arenas" + File.separator + arenaname + ".yml"));
+	}
+	
+	private String arenaname;
+	public String getArenaName() {
+		return arenaname;
+	}
+	
+	private StatusManager statusManager = new StatusManager(this);
+	public StatusManager getStatusManager() {
+		return statusManager;
 	}
 	
 	private StructureManager structureManager = new StructureManager();
@@ -71,78 +77,6 @@ public class Arena {
 		public void removePlayerFromArena(String name) {
 			players.remove(name);
 		}
-	}
-
-	private boolean enabled = false;
-	private boolean starting = false;
-	private boolean running = false;
-	private boolean regenerating = false;
-
-	private String arenaname;
-
-	public String getArenaName() {
-		return arenaname;
-	}
-
-	// arena status handler
-	public boolean isArenaEnabled() {
-		return enabled;
-	}
-
-	public boolean enableArena() {
-		if (getStructureManager().isArenaConfigured().equalsIgnoreCase("yes")) {
-			enabled = true;
-			arenagh.startArenaAntiLeaveHandler();
-			plugin.signEditor.modifySigns(getArenaName());
-			return true;
-		}
-		return false;
-	}
-
-	public void disableArena() {
-		enabled = false;
-		// drop players
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (getPlayersManager().isPlayerInArena(player.getName())) {
-				arenaph.leavePlayer(player, Messages.arenadisabling, "");
-			}
-		}
-		// stop arena
-		arenagh.stopArena();
-		// stop countdown
-		arenagh.stopArenaCountdown();
-		// stop antileave handler
-		arenagh.stopArenaAntiLeaveHandler();
-		// regen gamelevels
-		for (GameLevel gl : getStructureManager().getGameLevels()) {
-			gl.regen();
-		}
-		// modify signs
-		plugin.signEditor.modifySigns(getArenaName());
-	}
-
-	public boolean isArenaStarting() {
-		return starting;
-	}
-
-	public void setStarting(boolean starting) {
-		this.starting = starting;
-	}
-
-	public boolean isArenaRunning() {
-		return running;
-	}
-
-	public void setRunning(boolean running) {
-		this.running = running;
-	}
-
-	public boolean isArenaRegenerating() {
-		return regenerating;
-	}
-
-	public void setRegenerating(boolean regenerating) {
-		this.regenerating = regenerating;
 	}
 
 }

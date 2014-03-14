@@ -90,11 +90,11 @@ public class SignEditor {
 		String text = null;
 		int players = arenainst.getPlayersManager().getPlayersCount();
 		int maxPlayers = arenainst.getStructureManager().getMaxPlayers();
-		if (!arenainst.isArenaEnabled()) {
+		if (!arenainst.getStatusManager().isArenaEnabled()) {
 			text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "Disabled";
-		} else if (arenainst.isArenaRunning()) {
+		} else if (arenainst.getStatusManager().isArenaRunning()) {
 			text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "In Game";
-		} else if (arenainst.isArenaRegenerating()) {
+		} else if (arenainst.getStatusManager().isArenaRegenerating()) {
 			text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "Regenerating";
 		} else if (players == maxPlayers) {
 			text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + Integer.toString(players) + "/" + Integer.toString(maxPlayers);

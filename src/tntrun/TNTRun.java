@@ -95,7 +95,7 @@ public class TNTRun extends JavaPlugin {
 					for (String file : arenasfolder.list()) {
 						Arena arena = new Arena(file.substring(0, file.length() - 4), instance);
 						arena.getStructureManager().loadFromConfig();
-						arena.enableArena();
+						arena.getStatusManager().enableArena();
 						amanager.registerArena(arena);
 					}
 					// load signs
@@ -110,7 +110,7 @@ public class TNTRun extends JavaPlugin {
 	public void onDisable() {
 		// save arenas
 		for (Arena arena : amanager.getArenas()) {
-			arena.disableArena();
+			arena.getStatusManager().disableArena();
 			arena.getStructureManager().saveToConfig();
 		}
 		// save lobby

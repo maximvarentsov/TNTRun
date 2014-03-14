@@ -65,13 +65,13 @@ public class GameHandler {
 	int count;
 
 	public void runArenaCountdown() {
-		arena.setStarting(true);
+		arena.getStatusManager().setStarting(true);
 		runtaskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(
 			plugin,
 			new Runnable() {
 				public void run() {
 					// check if countdown should be stopped for some various reasons
-					if (!arena.isArenaEnabled()) {
+					if (!arena.getStatusManager().isArenaEnabled()) {
 						stopArenaCountdown();
 					} else if (arena.getPlayersManager().getPlayersCount() < arena.getStructureManager().getMinPlayers()) {
 						for (Player player : Bukkit.getOnlinePlayers()) {
@@ -104,7 +104,7 @@ public class GameHandler {
 	}
 
 	public void stopArenaCountdown() {
-		arena.setStarting(false);
+		arena.getStatusManager().setStarting(false);
 		count = arena.getStructureManager().getCountdown();
 		Bukkit.getScheduler().cancelTask(runtaskid);
 	}
@@ -114,7 +114,7 @@ public class GameHandler {
 	private int arenahandler;
 
 	public void startArena() {
-		arena.setRunning(true);
+		arena.getStatusManager().setRunning(true);
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (arena.getPlayersManager().isPlayerInArena(player.getName())) {
 				Messages.sendMessage(player, Messages.arenastarted, arena.getStructureManager().getTimeLimit());
@@ -158,10 +158,10 @@ public class GameHandler {
 	}
 
 	public void stopArena() {
-		arena.setRunning(false);
+		arena.getStatusManager().setRunning(false);
 		Bukkit.getScheduler().cancelTask(arenahandler);
 		plugin.signEditor.modifySigns(arena.getArenaName());
-		if (arena.isArenaEnabled()) {
+		if (arena.getStatusManager().isArenaEnabled()) {
 			startArenaRegen();
 		}
 	}
@@ -199,7 +199,7 @@ public class GameHandler {
 
 	private void startArenaRegen() {
 		// set arena is regenerating status
-		arena.setRegenerating(true);
+		arena.getStatusManager().setRegenerating(true);
 		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		// start arena regen
@@ -208,13 +208,13 @@ public class GameHandler {
 				try {
 					// regen
 					for (final GameLevel gl : arena.getStructureManager().getGameLevels()) {
-						if (!arena.isArenaEnabled()) {
+						if (!arena.getStatusManager().isArenaEnabled()) {
 							break;
 						}
 						int regentask = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,
 							new Runnable() {
 								public void run() {
-									if (arena.isArenaEnabled()) {
+									if (arena.getStatusManager().isArenaEnabled()) {
 										gl.regen();
 									}
 								}
@@ -226,7 +226,7 @@ public class GameHandler {
 						Thread.sleep(100);
 					}
 					Thread.sleep(100);
-					if (!arena.isArenaEnabled()) {
+					if (!arena.getStatusManager().isArenaEnabled()) {
 						return;
 					}
 					// update arena status
@@ -234,10 +234,9 @@ public class GameHandler {
 						new Runnable() {
 							public void run() {
 								// set not regenerating status
-								arena.setRegenerating(false);
+								arena.getStatusManager().setRegenerating(false);
 								// modify signs
-								plugin.signEditor.modifySigns(arena
-										.getArenaName());
+								plugin.signEditor.modifySigns(arena.getArenaName());
 							}
 						}
 					);

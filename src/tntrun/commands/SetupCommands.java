@@ -91,7 +91,7 @@ public class SetupCommands implements CommandExecutor {
 				sender.sendMessage("Arena does not exist");
 				return true;
 			}
-			if (arena.isArenaEnabled()) {
+			if (arena.getStatusManager().isArenaEnabled()) {
 				sender.sendMessage("Disable arena first");
 				return true;
 			}
@@ -105,7 +105,7 @@ public class SetupCommands implements CommandExecutor {
 		else if (args.length == 2 && args[1].equalsIgnoreCase("setarena")) {
 			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
-				if (arena.isArenaEnabled()) {
+				if (arena.getStatusManager().isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
@@ -125,7 +125,7 @@ public class SetupCommands implements CommandExecutor {
 		else if (args.length == 3 && args[1].equalsIgnoreCase("setgamelevel")) {
 			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
-				if (arena.isArenaEnabled()) {
+				if (arena.getStatusManager().isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
@@ -150,7 +150,7 @@ public class SetupCommands implements CommandExecutor {
 				&& args[1].equalsIgnoreCase("setgameleveldestroydelay")) {
 			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
-				if (arena.isArenaEnabled()) {
+				if (arena.getStatusManager().isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
@@ -165,7 +165,7 @@ public class SetupCommands implements CommandExecutor {
 		else if (args.length == 2 && args[1].equalsIgnoreCase("setloselevel")) {
 			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
-				if (arena.isArenaEnabled()) {
+				if (arena.getStatusManager().isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
@@ -189,7 +189,7 @@ public class SetupCommands implements CommandExecutor {
 		else if (args.length == 2 && args[1].equalsIgnoreCase("setspawn")) {
 			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
-				if (arena.isArenaEnabled()) {
+				if (arena.getStatusManager().isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
@@ -207,7 +207,7 @@ public class SetupCommands implements CommandExecutor {
 		else if (args.length == 3 && args[1].equalsIgnoreCase("setmaxplayers")) {
 			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
-				if (arena.isArenaEnabled()) {
+				if (arena.getStatusManager().isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
@@ -222,7 +222,7 @@ public class SetupCommands implements CommandExecutor {
 		else if (args.length == 3 && args[1].equalsIgnoreCase("setminplayers")) {
 			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
-				if (arena.isArenaEnabled()) {
+				if (arena.getStatusManager().isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
@@ -237,7 +237,7 @@ public class SetupCommands implements CommandExecutor {
 		else if (args.length == 3 && args[1].equalsIgnoreCase("setvotepercent")) {
 			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
-				if (arena.isArenaEnabled()) {
+				if (arena.getStatusManager().isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
@@ -252,7 +252,7 @@ public class SetupCommands implements CommandExecutor {
 		else if (args.length == 3 && args[1].equalsIgnoreCase("setcountdown")) {
 			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
-				if (arena.isArenaEnabled()) {
+				if (arena.getStatusManager().isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
@@ -266,7 +266,7 @@ public class SetupCommands implements CommandExecutor {
 		else if (args.length == 2 && args[1].equalsIgnoreCase("setitemsrewards")) {
 			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
-				if (arena.isArenaEnabled()) {
+				if (arena.getStatusManager().isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
@@ -281,7 +281,7 @@ public class SetupCommands implements CommandExecutor {
 		else if (args.length == 3 && args[1].equalsIgnoreCase("setmoneyrewards")) {
 			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
-				if (arena.isArenaEnabled()) {
+				if (arena.getStatusManager().isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
@@ -296,7 +296,7 @@ public class SetupCommands implements CommandExecutor {
 		else if (args.length == 3 && args[1].equalsIgnoreCase("settimelimit")) {
 			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
-				if (arena.isArenaEnabled()) {
+				if (arena.getStatusManager().isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
@@ -311,7 +311,7 @@ public class SetupCommands implements CommandExecutor {
 		else if (args.length == 3 && args[1].equalsIgnoreCase("setcountdown")) {
 			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
-				if (arena.isArenaEnabled()) {
+				if (arena.getStatusManager().isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
@@ -326,11 +326,11 @@ public class SetupCommands implements CommandExecutor {
 		else if (args.length == 2 && args[1].equalsIgnoreCase("finish")) {
 			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
-				if (!arena.isArenaEnabled()) {
+				if (!arena.getStatusManager().isArenaEnabled()) {
 					if (arena.getStructureManager().isArenaConfigured().equalsIgnoreCase("yes")) {
 						arena.getStructureManager().saveToConfig();
 						plugin.amanager.registerArena(arena);
-						arena.enableArena();
+						arena.getStatusManager().enableArena();
 						sender.sendMessage("Arena saved and enabled");
 					} else {
 						sender.sendMessage("Arena is not configured. Reason: " + arena.getStructureManager().isArenaConfigured());
@@ -347,7 +347,7 @@ public class SetupCommands implements CommandExecutor {
 		else if (args.length == 2 && args[1].equalsIgnoreCase("disable")) {
 			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
-				arena.disableArena();
+				arena.getStatusManager().disableArena();
 				sender.sendMessage("Arena disabled");
 			} else {
 				sender.sendMessage("Arena does not exist");
@@ -358,10 +358,10 @@ public class SetupCommands implements CommandExecutor {
 		else if (args.length == 2 && args[1].equalsIgnoreCase("enable")) {
 			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
-				if (arena.isArenaEnabled()) {
+				if (arena.getStatusManager().isArenaEnabled()) {
 					sender.sendMessage("Arena already enabled.");
 				} else {
-					if (arena.enableArena()) {
+					if (arena.getStatusManager().enableArena()) {
 						sender.sendMessage("Arena enabled");
 					} else {
 						sender.sendMessage("Arena is not configured. Reason: " + arena.getStructureManager().isArenaConfigured());

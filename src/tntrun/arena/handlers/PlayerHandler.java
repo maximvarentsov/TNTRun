@@ -43,15 +43,15 @@ public class PlayerHandler {
 			player.sendMessage("Arena world is unloaded, can't join arena");
 			return false;
 		}
-		if (!arena.isArenaEnabled()) {
+		if (!arena.getStatusManager().isArenaEnabled()) {
 			Messages.sendMessage(player, Messages.arenadisabled);
 			return false;
 		}
-		if (arena.isArenaRunning()) {
+		if (arena.getStatusManager().isArenaRunning()) {
 			Messages.sendMessage(player, Messages.arenarunning);
 			return false;
 		}
-		if (arena.isArenaRegenerating()) {
+		if (arena.getStatusManager().isArenaRegenerating()) {
 			Messages.sendMessage(player, Messages.arenarunning);
 			return false;
 		}
@@ -95,7 +95,7 @@ public class PlayerHandler {
 		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		// modify bars
-		if (!arena.isArenaStarting()) {
+		if (!arena.getStatusManager().isArenaStarting()) {
 			for (Player oplayer : Bukkit.getOnlinePlayers()) {
 				if (arena.getPlayersManager().isPlayerInArena(oplayer.getName())) {
 					Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
@@ -103,7 +103,7 @@ public class PlayerHandler {
 			}
 		}
 		// check for game start
-		if (!arena.isArenaStarting() && (arena.getPlayersManager().getPlayersCount() == arena.getStructureManager().getMaxPlayers() || arena.getPlayersManager().getPlayersCount() == arena.getStructureManager().getMinPlayers())) {
+		if (!arena.getStatusManager().isArenaStarting() && (arena.getPlayersManager().getPlayersCount() == arena.getStructureManager().getMaxPlayers() || arena.getPlayersManager().getPlayersCount() == arena.getStructureManager().getMinPlayers())) {
 			arena.arenagh.runArenaCountdown();
 		}
 	}
@@ -120,7 +120,7 @@ public class PlayerHandler {
 		for (Player oplayer : Bukkit.getOnlinePlayers()) {
 			if (arena.getPlayersManager().isPlayerInArena(oplayer.getName())) {
 				Messages.sendMessage(oplayer, player.getName(), msgtoarenaplayers);
-				if (!arena.isArenaStarting() && !arena.isArenaRunning()) {
+				if (!arena.getStatusManager().isArenaStarting() && !arena.getStatusManager().isArenaRunning()) {
 					Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
 				}
 			}
@@ -166,7 +166,7 @@ public class PlayerHandler {
 	public boolean vote(Player player) {
 		if (!votes.contains(player.getName())) {
 			votes.add(player.getName());
-			if (!arena.isArenaStarting() && (arena.getPlayersManager().getPlayersCount() > 1 && (votes.size() >= arena.getPlayersManager().getPlayersCount() * arena.getStructureManager().getVotePercent()))) {
+			if (!arena.getStatusManager().isArenaStarting() && (arena.getPlayersManager().getPlayersCount() > 1 && (votes.size() >= arena.getPlayersManager().getPlayersCount() * arena.getStructureManager().getVotePercent()))) {
 				arena.arenagh.runArenaCountdown();
 			}
 			return true;
