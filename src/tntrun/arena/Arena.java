@@ -48,7 +48,6 @@ public class Arena {
 		arenagh = new GameHandler(plugin, this);
 		arenaph = new PlayerHandler(plugin, this);
 		arenafile = new File(plugin.getDataFolder() + File.separator + "arenas" + File.separator + arenaname + ".yml");
-		plugin.pdata.registerArena(this);
 	}
 	
 	private PlayersManager playersManager = new PlayersManager();

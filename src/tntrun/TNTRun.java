@@ -92,6 +92,7 @@ public class TNTRun extends JavaPlugin {
 					for (String file : arenasfolder.list()) {
 						Arena arena = new Arena(file.substring(0, file.length() - 4), instance);
 						arena.loadFromConfig();
+						pdata.registerArena(arena);
 					}
 					// load signs
 					signEditor.loadConfiguration();

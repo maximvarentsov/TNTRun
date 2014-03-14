@@ -80,7 +80,7 @@ public class SetupCommands implements CommandExecutor {
 				sender.sendMessage("Arena already exists");
 				return true;
 			}
-			new Arena(args[0], plugin);
+			plugin.pdata.registerArena(new Arena(args[0], plugin));
 			sender.sendMessage("Arena created");
 			return true;
 		}
