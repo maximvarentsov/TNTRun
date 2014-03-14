@@ -52,9 +52,9 @@ public class JoinSign {
 	public void handleClick(PlayerInteractEvent e) {
 		Arena arena = plugin.amanager.getArenaByName(((Sign) e.getClickedBlock().getState()).getLine(2));
 		if (arena != null) {
-			boolean canJoin = arena.arenaph.checkJoin(e.getPlayer());
+			boolean canJoin = arena.getPlayerHandler().checkJoin(e.getPlayer());
 			if (canJoin) {
-				arena.arenaph.spawnPlayer(e.getPlayer(), Messages.playerjoinedtoplayer, Messages.playerjoinedtoothers);
+				arena.getPlayerHandler().spawnPlayer(e.getPlayer(), Messages.playerjoinedtoplayer, Messages.playerjoinedtoothers);
 			}
 			e.setCancelled(true);
 		} else {

@@ -27,8 +27,6 @@ import tntrun.arena.structure.StructureManager;
 public class Arena {
 
 	public TNTRun plugin;
-	public GameHandler arenagh;
-	public PlayerHandler arenaph;
 
 	public Arena(String name, TNTRun plugin) {
 		this.arenaname = name;
@@ -41,6 +39,16 @@ public class Arena {
 	private String arenaname;
 	public String getArenaName() {
 		return arenaname;
+	}
+	
+	private GameHandler arenagh;
+	public GameHandler getGameHandler() {
+		return arenagh;
+	}
+	
+	private PlayerHandler arenaph;
+	public PlayerHandler getPlayerHandler() {
+		return arenaph;
 	}
 
 	private StatusManager statusManager = new StatusManager(this);

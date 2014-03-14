@@ -41,7 +41,7 @@ public class LeaveSign {
 	public void handleClick(PlayerInteractEvent e) {
 		Arena arena = plugin.amanager.getPlayerArena(e.getPlayer().getName());
 		if (arena != null) {
-			arena.arenaph.leavePlayer(e.getPlayer(), Messages.playerlefttoplayer, Messages.playerlefttoothers);
+			arena.getPlayerHandler().leavePlayer(e.getPlayer(), Messages.playerlefttoplayer, Messages.playerlefttoothers);
 			e.setCancelled(true);
 		} else {
 			e.getPlayer().sendMessage("You are not in arena");

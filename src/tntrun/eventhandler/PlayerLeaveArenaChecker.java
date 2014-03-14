@@ -45,7 +45,7 @@ public class PlayerLeaveArenaChecker implements Listener {
 		if (arena == null) {
 			return;
 		}
-		arena.arenaph.leavePlayer(player, "", Messages.playerlefttoothers);
+		arena.getPlayerHandler().leavePlayer(player, "", Messages.playerlefttoothers);
 	}
 
 	// remove player from arena if he died (/kill command sux)
@@ -57,7 +57,7 @@ public class PlayerLeaveArenaChecker implements Listener {
 		if (arena == null) {
 			return;
 		}
-		arena.arenaph.leavePlayer(player, "", Messages.playerlefttoothers);
+		arena.getPlayerHandler().leavePlayer(player, "", Messages.playerlefttoothers);
 	}
 
 }

@@ -25,7 +25,7 @@ public class StatusManager {
 	public boolean enableArena() {
 		if (arena.getStructureManager().isArenaConfigured().equalsIgnoreCase("yes")) {
 			enabled = true;
-			arena.arenagh.startArenaAntiLeaveHandler();
+			arena.getGameHandler().startArenaAntiLeaveHandler();
 			arena.plugin.signEditor.modifySigns(arena.getArenaName());
 			return true;
 		}
@@ -37,15 +37,15 @@ public class StatusManager {
 		// drop players
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (arena.getPlayersManager().isPlayerInArena(player.getName())) {
-				arena.arenaph.leavePlayer(player, Messages.arenadisabling, "");
+				arena.getPlayerHandler().leavePlayer(player, Messages.arenadisabling, "");
 			}
 		}
 		// stop arena
-		arena.arenagh.stopArena();
+		arena.getGameHandler().stopArena();
 		// stop countdown
-		arena.arenagh.stopArenaCountdown();
+		arena.getGameHandler().stopArenaCountdown();
 		// stop antileave handler
-		arena.arenagh.stopArenaAntiLeaveHandler();
+		arena.getGameHandler().stopArenaAntiLeaveHandler();
 		// regen gamelevels
 		for (GameLevel gl : arena.getStructureManager().getGameLevels()) {
 			gl.regen();

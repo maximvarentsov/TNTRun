@@ -49,7 +49,7 @@ public class GameHandler {
 						for (Player player : Bukkit.getOnlinePlayers()) {
 							if (arena.getPlayersManager().isPlayerInArena(player.getName())) {
 								if (!arena.getStructureManager().isInArenaBounds(player.getLocation())) {
-									arena.arenaph.leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
+									arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
 								}
 							}
 						}
@@ -132,7 +132,7 @@ public class GameHandler {
 							for (Player player : Bukkit.getOnlinePlayers()) {
 								if (arena.getPlayersManager().isPlayerInArena(player.getName())) {
 									// kick player
-									arena.arenaph.leavePlayer(player,Messages.arenatimeout, "");
+									arena.getPlayerHandler().leavePlayer(player,Messages.arenatimeout, "");
 								}
 							}
 							// stop arena
@@ -183,7 +183,7 @@ public class GameHandler {
 		// check for win
 		if (arena.getPlayersManager().getPlayersCount() == 1) {
 			// last player won
-			arena.arenaph.leaveWinner(player, Messages.playerwontoplayer);
+			arena.getPlayerHandler().leaveWinner(player, Messages.playerwontoplayer);
 			broadcastWin(player);
 			stopArena();
 			return;
@@ -191,7 +191,7 @@ public class GameHandler {
 		// check for lose
 		if (arena.getStructureManager().getLoseLevel().isLooseLocation(plloc)) {
 			// player lost
-			arena.arenaph.leavePlayer(player, Messages.playerlosttoplayer, Messages.playerlosttoothers);
+			arena.getPlayerHandler().leavePlayer(player, Messages.playerlosttoplayer, Messages.playerlosttoothers);
 			return;
 		}
 	}

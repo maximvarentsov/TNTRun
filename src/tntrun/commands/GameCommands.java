@@ -87,9 +87,9 @@ public class GameCommands implements CommandExecutor {
 		else if (args.length == 2 && args[0].equalsIgnoreCase("join")) {
 			Arena arena = plugin.amanager.getArenaByName(args[1]);
 			if (arena != null) {
-				boolean canJoin = arena.arenaph.checkJoin(player);
+				boolean canJoin = arena.getPlayerHandler().checkJoin(player);
 				if (canJoin) {
-					arena.arenaph.spawnPlayer(player, Messages.playerjoinedtoplayer, Messages.playerjoinedtoothers);
+					arena.getPlayerHandler().spawnPlayer(player, Messages.playerjoinedtoplayer, Messages.playerjoinedtoothers);
 				}
 				return true;
 			} else {
@@ -101,7 +101,7 @@ public class GameCommands implements CommandExecutor {
 		else if (args.length == 1 && args[0].equalsIgnoreCase("leave")) {
 			Arena arena = plugin.amanager.getPlayerArena(player.getName());
 			if (arena != null) {
-				arena.arenaph.leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
+				arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
 				return true;
 			} else {
 				sender.sendMessage("You are not in arena");
@@ -112,7 +112,7 @@ public class GameCommands implements CommandExecutor {
 		else if (args.length == 1 && args[0].equalsIgnoreCase("vote")) {
 			Arena arena = plugin.amanager.getPlayerArena(player.getName());
 			if (arena != null) {
-				if (arena.arenaph.vote(player)) {
+				if (arena.getPlayerHandler().vote(player)) {
 					Messages.sendMessage(player, Messages.playervotedforstart);
 				} else {
 					Messages.sendMessage(player, Messages.playeralreadyvotedforstart);
