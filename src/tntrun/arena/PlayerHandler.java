@@ -44,6 +44,7 @@ public class PlayerHandler {
 		if (arena.isArenaRunning()) {Messages.sendMessage(player, Messages.arenarunning); return false;}
 		if (arena.isArenaRegenerating()) {Messages.sendMessage(player, Messages.arenarunning); return false;}
 		if (player.isInsideVehicle()) {player.sendMessage("You can't join the game while sitting inside vehicle"); return false;}
+		if (plugin.pdata.getArenaPlayers(arena).size() == arena.getMaxPlayers()) {Messages.sendMessage(player, Messages.limitreached); return false;}
 		return true;
 	}
 	
@@ -51,11 +52,6 @@ public class PlayerHandler {
 	@SuppressWarnings("deprecation")
 	public void spawnPlayer(final Player player, String msgtoplayer, String msgtoarenaplayers)
 	{
-		if (plugin.pdata.getArenaPlayers(arena).size() == arena.getMaxPlayers())
-		{
-			Messages.sendMessage(player, Messages.limitreached);
-			return;
-		}
 		//change player status
 		plugin.pdata.storePlayerGameMode(player.getName());
 		player.setFlying(false);
