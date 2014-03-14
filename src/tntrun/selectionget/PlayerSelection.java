@@ -32,8 +32,7 @@ public class PlayerSelection {
 		}
 	}
 
-	public PlayerCuboidSelection getPlayerSelection(Player player,
-			boolean oneBlockHigh) {
+	public PlayerCuboidSelection getPlayerSelection(Player player, boolean oneBlockHigh) {
 		// try to get own locations
 		Location[] locs = ownlocations.getLocations(player, oneBlockHigh);
 		if (locs != null) {

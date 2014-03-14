@@ -27,7 +27,7 @@ import tntrun.arena.Arena;
 import tntrun.bars.Bars;
 import tntrun.commands.ConsoleCommands;
 import tntrun.commands.GameCommands;
-import tntrun.commands.SetupCommands;
+import tntrun.commands.setup.SetupCommandsHandler;
 import tntrun.datahandler.ArenasManager;
 import tntrun.datahandler.PlayerDataStore;
 import tntrun.eventhandler.PlayerLeaveArenaChecker;
@@ -45,7 +45,7 @@ public class TNTRun extends JavaPlugin {
 
 	public PlayerDataStore pdata;
 	public ArenasManager amanager;
-	public SetupCommands scommands;
+	public SetupCommandsHandler scommands;
 	public GameCommands gcommands;
 	public ConsoleCommands ccommands;
 	public PlayerStatusHandler pshandler;
@@ -65,7 +65,7 @@ public class TNTRun extends JavaPlugin {
 		Bars.loadBars(this);
 		pdata = new PlayerDataStore();
 		amanager = new ArenasManager();
-		scommands = new SetupCommands(this);
+		scommands = new SetupCommandsHandler(this);
 		getCommand("tntrunsetup").setExecutor(scommands);
 		gcommands = new GameCommands(this);
 		getCommand("tntrun").setExecutor(gcommands);
