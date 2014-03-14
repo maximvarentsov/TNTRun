@@ -39,7 +39,7 @@ public class PlayerHandler {
 
 	// check if player can join the arena
 	public boolean checkJoin(Player player) {
-		if (arena.getWorld() == null) {
+		if (arena.getStructureManager().getWorld() == null) {
 			player.sendMessage("Arena world is unloaded, can't join arena");
 			return false;
 		}
@@ -59,7 +59,7 @@ public class PlayerHandler {
 			player.sendMessage("You can't join the game while sitting inside vehicle");
 			return false;
 		}
-		if (arena.getPlayersManager().getPlayersCount() == arena.getMaxPlayers()) {
+		if (arena.getPlayersManager().getPlayersCount() == arena.getStructureManager().getMaxPlayers()) {
 			Messages.sendMessage(player, Messages.limitreached);
 			return false;
 		}
@@ -79,7 +79,7 @@ public class PlayerHandler {
 		plugin.pdata.storePlayerHunger(player.getName());
 		// teleport player to arena
 		plugin.pdata.storePlayerLocation(player.getName());
-		player.teleport(arena.getSpawnPoint());
+		player.teleport(arena.getStructureManager().getSpawnPoint());
 		// update inventory
 		player.updateInventory();
 		// send message to player
@@ -98,12 +98,12 @@ public class PlayerHandler {
 		if (!arena.isArenaStarting()) {
 			for (Player oplayer : Bukkit.getOnlinePlayers()) {
 				if (arena.getPlayersManager().isPlayerInArena(oplayer.getName())) {
-					Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getMinPlayers());
+					Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
 				}
 			}
 		}
 		// check for game start
-		if (!arena.isArenaStarting() && (arena.getPlayersManager().getPlayersCount() == arena.getMaxPlayers() || arena.getPlayersManager().getPlayersCount() == arena.getMinPlayers())) {
+		if (!arena.isArenaStarting() && (arena.getPlayersManager().getPlayersCount() == arena.getStructureManager().getMaxPlayers() || arena.getPlayersManager().getPlayersCount() == arena.getStructureManager().getMinPlayers())) {
 			arena.arenagh.runArenaCountdown();
 		}
 	}
@@ -121,7 +121,7 @@ public class PlayerHandler {
 			if (arena.getPlayersManager().isPlayerInArena(oplayer.getName())) {
 				Messages.sendMessage(oplayer, player.getName(), msgtoarenaplayers);
 				if (!arena.isArenaStarting() && !arena.isArenaRunning()) {
-					Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getMinPlayers());
+					Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
 				}
 			}
 		}
@@ -153,7 +153,7 @@ public class PlayerHandler {
 		plugin.pdata.restorePlayerInventory(player.getName());
 		// reward player before restoring gamemode if player is winner
 		if (winner) {
-			arena.getRewards().rewardPlayer(player);
+			arena.getStructureManager().getRewards().rewardPlayer(player);
 		}
 		plugin.pdata.restorePlayerGameMode(player.getName());
 		// update inventory
@@ -166,7 +166,7 @@ public class PlayerHandler {
 	public boolean vote(Player player) {
 		if (!votes.contains(player.getName())) {
 			votes.add(player.getName());
-			if (!arena.isArenaStarting() && (arena.getPlayersManager().getPlayersCount() > 1 && (votes.size() >= arena.getPlayersManager().getPlayersCount() * arena.getVotePercent()))) {
+			if (!arena.isArenaStarting() && (arena.getPlayersManager().getPlayersCount() > 1 && (votes.size() >= arena.getPlayersManager().getPlayersCount() * arena.getStructureManager().getVotePercent()))) {
 				arena.arenagh.runArenaCountdown();
 			}
 			return true;

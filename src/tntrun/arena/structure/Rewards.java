@@ -15,7 +15,7 @@
  * 
  */
 
-package tntrun.arena;
+package tntrun.arena.structure;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +53,7 @@ public class Rewards {
 		return moneyreward;
 	}
 
-	protected void setRewards(ItemStack[] rewards) {
+	public void setRewards(ItemStack[] rewards) {
 		this.itemrewards.clear();
 		for (ItemStack reward : rewards) {
 			if (reward != null) {
@@ -62,7 +62,7 @@ public class Rewards {
 		}
 	}
 
-	protected void setRewards(int money) {
+	public void setRewards(int money) {
 		this.moneyreward = money;
 	}
 
@@ -87,13 +87,13 @@ public class Rewards {
 		}
 	}
 
-	protected void saveToConfig(FileConfiguration config) {
+	public void saveToConfig(FileConfiguration config) {
 		config.set("reward.money", moneyreward);
 		config.set("reward.items", itemrewards);
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void loadFromConfig(FileConfiguration config) {
+	public void loadFromConfig(FileConfiguration config) {
 		moneyreward = config.getInt("reward.money", moneyreward);
 		Object obj = config.get("reward.items");
 		if (obj != null) {

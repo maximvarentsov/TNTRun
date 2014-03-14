@@ -23,7 +23,7 @@ import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
-import tntrun.arena.GameLevel;
+import tntrun.arena.structure.GameLevel;
 import tntrun.bars.Bars;
 import tntrun.messages.Messages;
 
@@ -35,7 +35,7 @@ public class GameHandler {
 	public GameHandler(TNTRun plugin, Arena arena) {
 		this.plugin = plugin;
 		this.arena = arena;
-		count = arena.getCountdown();
+		count = arena.getStructureManager().getCountdown();
 	}
 
 	// arena leave handler
@@ -47,7 +47,7 @@ public class GameHandler {
 					public void run() {
 						for (Player player : Bukkit.getOnlinePlayers()) {
 							if (arena.getPlayersManager().isPlayerInArena(player.getName())) {
-								if (!arena.isInArenaBounds(player.getLocation())) {
+								if (!arena.getStructureManager().isInArenaBounds(player.getLocation())) {
 									arena.arenaph.leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
 								}
 							}
@@ -73,10 +73,10 @@ public class GameHandler {
 					// check if countdown should be stopped for some various reasons
 					if (!arena.isArenaEnabled()) {
 						stopArenaCountdown();
-					} else if (arena.getPlayersManager().getPlayersCount() < arena.getMinPlayers()) {
+					} else if (arena.getPlayersManager().getPlayersCount() < arena.getStructureManager().getMinPlayers()) {
 						for (Player player : Bukkit.getOnlinePlayers()) {
 							if (arena.getPlayersManager().isPlayerInArena(player.getName())) {
-								Bars.setBar(player, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getMinPlayers());
+								Bars.setBar(player, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
 							}
 						}
 						plugin.signEditor.modifySigns(arena.getArenaName());
@@ -92,7 +92,7 @@ public class GameHandler {
 						for (Player player : Bukkit.getOnlinePlayers()) {
 							if (arena.getPlayersManager().isPlayerInArena(player.getName())) {
 								Messages.sendMessage(player, Messages.arenacountdown, count);
-								Bars.setBar(player, Bars.starting, 0, count, count * 100 / arena.getCountdown());
+								Bars.setBar(player, Bars.starting, 0, count, count * 100 / arena.getStructureManager().getCountdown());
 							}
 						}
 						count--;
@@ -105,7 +105,7 @@ public class GameHandler {
 
 	public void stopArenaCountdown() {
 		arena.setStarting(false);
-		count = arena.getCountdown();
+		count = arena.getStructureManager().getCountdown();
 		Bukkit.getScheduler().cancelTask(runtaskid);
 	}
 
@@ -117,11 +117,11 @@ public class GameHandler {
 		arena.setRunning(true);
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (arena.getPlayersManager().isPlayerInArena(player.getName())) {
-				Messages.sendMessage(player, Messages.arenastarted, arena.getTimeLimit());
+				Messages.sendMessage(player, Messages.arenastarted, arena.getStructureManager().getTimeLimit());
 			}
 		}
 		plugin.signEditor.modifySigns(arena.getArenaName());
-		timelimit = arena.getTimeLimit() * 20; // timelimit is in ticks
+		timelimit = arena.getStructureManager().getTimeLimit() * 20; // timelimit is in ticks
 		arenahandler = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin,
 				new Runnable() {
 					public void run() {
@@ -146,7 +146,7 @@ public class GameHandler {
 						for (Player player : Bukkit.getOnlinePlayers()) {
 							if (arena.getPlayersManager().isPlayerInArena(player.getName())) {
 								// update bar
-								Bars.setBar(player, Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, timelimit * 5 / arena.getTimeLimit());
+								Bars.setBar(player, Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit());
 								// handle player
 								handlePlayer(player);
 							}
@@ -171,7 +171,7 @@ public class GameHandler {
 		Location plloc = player.getLocation();
 		Location plufloc = plloc.clone().add(0, -1, 0);
 		// check for game location
-		for (final GameLevel gl : arena.getGameLevels()) {
+		for (final GameLevel gl : arena.getStructureManager().getGameLevels()) {
 			// remove block under player feet
 			if (gl.isSandLocation(plufloc)) {
 				gl.destroyBlock(plufloc, arena);
@@ -186,7 +186,7 @@ public class GameHandler {
 			return;
 		}
 		// check for lose
-		if (arena.getLoseLevel().isLooseLocation(plloc)) {
+		if (arena.getStructureManager().getLoseLevel().isLooseLocation(plloc)) {
 			// player lost
 			arena.arenaph.leavePlayer(player, Messages.playerlosttoplayer, Messages.playerlosttoothers);
 			return;
@@ -207,7 +207,7 @@ public class GameHandler {
 			public void run() {
 				try {
 					// regen
-					for (final GameLevel gl : arena.getGameLevels()) {
+					for (final GameLevel gl : arena.getStructureManager().getGameLevels()) {
 						if (!arena.isArenaEnabled()) {
 							break;
 						}

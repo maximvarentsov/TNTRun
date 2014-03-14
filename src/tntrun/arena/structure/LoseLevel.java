@@ -15,7 +15,7 @@
  * 
  */
 
-package tntrun.arena;
+package tntrun.arena.structure;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -35,7 +35,7 @@ public class LoseLevel {
 		return p2;
 	}
 
-	protected boolean isConfigured() {
+	public boolean isConfigured() {
 		return (p1 != null && p2 != null);
 	}
 
@@ -43,17 +43,17 @@ public class LoseLevel {
 		return loc.getY() < Math.max(p2.getBlockY(), p1.getBlockY()) + 1;
 	};
 
-	protected void setLooseLocation(Location p1, Location p2) {
+	public void setLooseLocation(Location p1, Location p2) {
 		this.p1 = p1.toVector();
 		this.p2 = p2.toVector();
 	}
 
-	protected void saveToConfig(FileConfiguration config) {
+	public void saveToConfig(FileConfiguration config) {
 		config.set("loselevel.p1", p1);
 		config.set("loselevel.p2", p2);
 	}
 
-	protected void loadFromConfig(FileConfiguration config) {
+	public void loadFromConfig(FileConfiguration config) {
 		p1 = config.getVector("loselevel.p1", null);
 		p2 = config.getVector("loselevel.p2", null);
 	}

@@ -15,7 +15,7 @@
  * 
  */
 
-package tntrun.arena;
+package tntrun.arena.structure;
 
 import java.util.HashSet;
 
@@ -28,6 +28,8 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.util.Vector;
+
+import tntrun.arena.Arena;
 
 public class GameLevel {
 
@@ -88,7 +90,7 @@ public class GameLevel {
 								removeGLBlocks(block);
 							}
 						}
-					}, arena.getGameLevelDestroyDelay()
+					}, arena.getStructureManager().getGameLevelDestroyDelay()
 				);
 			}
 		}
@@ -132,7 +134,7 @@ public class GameLevel {
 		blocks.clear();
 	}
 
-	protected void setGameLocation(Location p1, Location p2) {
+	public void setGameLocation(Location p1, Location p2) {
 		this.p1 = p1.toVector();
 		this.p2 = p2.toVector();
 		this.gp1 = p1.add(0, 1, 0).toVector();
@@ -158,12 +160,12 @@ public class GameLevel {
 		}
 	}
 
-	protected void saveToConfig(FileConfiguration config) {
+	public void saveToConfig(FileConfiguration config) {
 		config.set("gamelevels." + name + ".p1", p1);
 		config.set("gamelevels." + name + ".p2", p2);
 	}
 
-	protected void loadFromConfig(FileConfiguration config) {
+	public void loadFromConfig(FileConfiguration config) {
 		Vector p1 = config.getVector("gamelevels." + name + ".p1", null);
 		Vector p2 = config.getVector("gamelevels." + name + ".p2", null);
 		this.p1 = p1;

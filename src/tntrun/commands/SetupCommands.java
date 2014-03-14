@@ -111,8 +111,7 @@ public class SetupCommands implements CommandExecutor {
 				}
 				PlayerCuboidSelection selection = plselection.getPlayerSelection(player, false);
 				if (selection != null) {
-					arena.setArenaPoints(selection.getMinimumLocation(),
-							selection.getMaximumLocation());
+					arena.getStructureManager().setArenaPoints(selection.getMinimumLocation(), selection.getMaximumLocation());
 					sender.sendMessage("Arena bounds set");
 				} else {
 					sender.sendMessage("Locations are wrong or not defined");
@@ -133,7 +132,7 @@ public class SetupCommands implements CommandExecutor {
 				PlayerCuboidSelection selection = plselection
 						.getPlayerSelection(player, true);
 				if (selection != null) {
-					if (arena.setGameLevel(args[2], selection.getMinimumLocation(), selection.getMaximumLocation())) {
+					if (arena.getStructureManager().setGameLevel(args[2], selection.getMinimumLocation(), selection.getMaximumLocation())) {
 						sender.sendMessage("GameLevel set");
 					} else {
 						sender.sendMessage("GameLevel should be in arena bounds");
@@ -155,7 +154,7 @@ public class SetupCommands implements CommandExecutor {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
-				arena.setGameLevelDestroyDelay(Integer.valueOf(args[2]));
+				arena.getStructureManager().setGameLevelDestroyDelay(Integer.valueOf(args[2]));
 				sender.sendMessage("GameLevel blocks destroy delay set");
 			} else {
 				sender.sendMessage("Arena does not exist");
@@ -172,7 +171,7 @@ public class SetupCommands implements CommandExecutor {
 				}
 				PlayerCuboidSelection selection = plselection.getPlayerSelection(player, true);
 				if (selection != null) {
-					if (arena.setLooseLevel(selection.getMinimumLocation(),
+					if (arena.getStructureManager().setLooseLevel(selection.getMinimumLocation(),
 							selection.getMaximumLocation())) {
 						sender.sendMessage("LoseLevel set");
 					} else {
@@ -194,7 +193,7 @@ public class SetupCommands implements CommandExecutor {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
-				if (arena.setSpawnPoint(player.getLocation())) {
+				if (arena.getStructureManager().setSpawnPoint(player.getLocation())) {
 					sender.sendMessage("Spawnpoint set");
 				} else {
 					sender.sendMessage("Spawnpoint should be in arena bounds");
@@ -212,7 +211,7 @@ public class SetupCommands implements CommandExecutor {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
-				arena.setMaxPlayers(Integer.valueOf(args[2]));
+				arena.getStructureManager().setMaxPlayers(Integer.valueOf(args[2]));
 				sender.sendMessage("Max Players set");
 			} else {
 				sender.sendMessage("Arena does not exist");
@@ -227,7 +226,7 @@ public class SetupCommands implements CommandExecutor {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
-				arena.setMinPlayers(Integer.valueOf(args[2]));
+				arena.getStructureManager().setMinPlayers(Integer.valueOf(args[2]));
 				sender.sendMessage("Min Players set");
 			} else {
 				sender.sendMessage("Arena does not exist");
@@ -242,7 +241,7 @@ public class SetupCommands implements CommandExecutor {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
-				arena.setVotePercent(Double.valueOf(args[2]));
+				arena.getStructureManager().setVotePercent(Double.valueOf(args[2]));
 				sender.sendMessage("Vote percent set");
 			} else {
 				sender.sendMessage("Arena does not exist");
@@ -257,7 +256,7 @@ public class SetupCommands implements CommandExecutor {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
-				arena.setCountdown(Integer.valueOf(args[2]));
+				arena.getStructureManager().setCountdown(Integer.valueOf(args[2]));
 			} else {
 				sender.sendMessage("Arena does not exist");
 			}
@@ -271,7 +270,7 @@ public class SetupCommands implements CommandExecutor {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
-				arena.setRewards(player.getInventory().getContents());
+				arena.getStructureManager().setRewards(player.getInventory().getContents());
 				sender.sendMessage("Items Rewards set");
 			} else {
 				sender.sendMessage("Arena does not exist");
@@ -286,7 +285,7 @@ public class SetupCommands implements CommandExecutor {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
-				arena.setRewards(Integer.valueOf(args[2]));
+				arena.getStructureManager().setRewards(Integer.valueOf(args[2]));
 				sender.sendMessage("Money Rewards set");
 			} else {
 				sender.sendMessage("Arena does not exist");
@@ -301,7 +300,7 @@ public class SetupCommands implements CommandExecutor {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
-				arena.setTimeLimit(Integer.valueOf(args[2]));
+				arena.getStructureManager().setTimeLimit(Integer.valueOf(args[2]));
 				sender.sendMessage("Time limit set");
 			} else {
 				sender.sendMessage("Arena does not exist");
@@ -316,7 +315,7 @@ public class SetupCommands implements CommandExecutor {
 					sender.sendMessage("Disable arena first");
 					return true;
 				}
-				arena.setCountdown(Integer.valueOf(args[2]));
+				arena.getStructureManager().setCountdown(Integer.valueOf(args[2]));
 				sender.sendMessage("Countdown set");
 			} else {
 				sender.sendMessage("Arena does not exist");
@@ -328,13 +327,13 @@ public class SetupCommands implements CommandExecutor {
 			Arena arena = plugin.pdata.getArenaByName(args[0]);
 			if (arena != null) {
 				if (!arena.isArenaEnabled()) {
-					if (arena.isArenaConfigured().equalsIgnoreCase("yes")) {
-						arena.saveToConfig();
+					if (arena.getStructureManager().isArenaConfigured().equalsIgnoreCase("yes")) {
+						arena.getStructureManager().saveToConfig();
 						plugin.pdata.registerArena(arena);
 						arena.enableArena();
 						sender.sendMessage("Arena saved and enabled");
 					} else {
-						sender.sendMessage("Arena is not configured. Reason: " + arena.isArenaConfigured());
+						sender.sendMessage("Arena is not configured. Reason: " + arena.getStructureManager().isArenaConfigured());
 					}
 				} else {
 					sender.sendMessage("Disable arena first");
@@ -365,8 +364,7 @@ public class SetupCommands implements CommandExecutor {
 					if (arena.enableArena()) {
 						sender.sendMessage("Arena enabled");
 					} else {
-						sender.sendMessage("Arena is not configured. Reason: "
-								+ arena.isArenaConfigured());
+						sender.sendMessage("Arena is not configured. Reason: " + arena.getStructureManager().isArenaConfigured());
 					}
 				}
 			} else {

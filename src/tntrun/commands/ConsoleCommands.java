@@ -47,7 +47,7 @@ public class ConsoleCommands implements CommandExecutor {
 					if (arena.enableArena()) {
 						sender.sendMessage("Arena enabled");
 					} else {
-						sender.sendMessage("Arena is not configured. Reason: "+ arena.isArenaConfigured());
+						sender.sendMessage("Arena is not configured. Reason: "+ arena.getStructureManager().isArenaConfigured());
 					}
 				}
 			} else {

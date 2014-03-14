@@ -89,7 +89,7 @@ public class SignEditor {
 
 		String text = null;
 		int players = arenainst.getPlayersManager().getPlayersCount();
-		int maxPlayers = arenainst.getMaxPlayers();
+		int maxPlayers = arenainst.getStructureManager().getMaxPlayers();
 		if (!arenainst.isArenaEnabled()) {
 			text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "Disabled";
 		} else if (arenainst.isArenaRunning()) {
