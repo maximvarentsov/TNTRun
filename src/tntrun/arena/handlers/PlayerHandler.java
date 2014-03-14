@@ -70,15 +70,15 @@ public class PlayerHandler {
 	@SuppressWarnings("deprecation")
 	public void spawnPlayer(final Player player, String msgtoplayer, String msgtoarenaplayers) {
 		// change player status
-		plugin.pdata.storePlayerGameMode(player.getName());
+		plugin.pdata.storePlayerGameMode(player);
 		player.setFlying(false);
 		player.setAllowFlight(false);
-		plugin.pdata.storePlayerInventory(player.getName());
-		plugin.pdata.storePlayerArmor(player.getName());
-		plugin.pdata.storePlayerPotionEffects(player.getName());
-		plugin.pdata.storePlayerHunger(player.getName());
+		plugin.pdata.storePlayerInventory(player);
+		plugin.pdata.storePlayerArmor(player);
+		plugin.pdata.storePlayerPotionEffects(player);
+		plugin.pdata.storePlayerHunger(player);
 		// teleport player to arena
-		plugin.pdata.storePlayerLocation(player.getName());
+		plugin.pdata.storePlayerLocation(player);
 		player.teleport(arena.getStructureManager().getSpawnPoint());
 		// update inventory
 		player.updateInventory();
@@ -145,17 +145,17 @@ public class PlayerHandler {
 		// remove player on arena data
 		arena.getPlayersManager().removePlayerFromArena(player.getName());
 		// restore location
-		plugin.pdata.restorePlayerLocation(player.getName());
+		plugin.pdata.restorePlayerLocation(player);
 		// restore player status
-		plugin.pdata.restorePlayerHunger(player.getName());
-		plugin.pdata.restorePlayerPotionEffects(player.getName());
-		plugin.pdata.restorePlayerArmor(player.getName());
-		plugin.pdata.restorePlayerInventory(player.getName());
+		plugin.pdata.restorePlayerHunger(player);
+		plugin.pdata.restorePlayerPotionEffects(player);
+		plugin.pdata.restorePlayerArmor(player);
+		plugin.pdata.restorePlayerInventory(player);
 		// reward player before restoring gamemode if player is winner
 		if (winner) {
 			arena.getStructureManager().getRewards().rewardPlayer(player);
 		}
-		plugin.pdata.restorePlayerGameMode(player.getName());
+		plugin.pdata.restorePlayerGameMode(player);
 		// update inventory
 		player.updateInventory();
 	}
