@@ -7,11 +7,11 @@ commands:
   tntrunsetup:
     description: TNTRun arena setup commands
     aliases: trsetup
-    usage: Command is invalid.
+    usage: Command is invalid
   tntrun:
     description: TNTRun game commands
     aliases: tr
-    usage: Use /tr help to show all commands available in plugin.
+    usage: Use /tr help to show all commands available in plugin
   tntrunconsole:
     description: TNTRun console commands
     aliases: trconsole
