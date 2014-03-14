@@ -82,7 +82,7 @@ public class SignEditor {
 	}
 
 	public void modifySigns(String arena) {
-		Arena arenainst = plugin.pdata.getArenaByName(arena);
+		Arena arenainst = plugin.amanager.getArenaByName(arena);
 		if (arena == null) {
 			return;
 		}

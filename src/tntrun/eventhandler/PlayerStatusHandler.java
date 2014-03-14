@@ -39,7 +39,7 @@ public class PlayerStatusHandler implements Listener {
 	public void onPlayerDamage(EntityDamageEvent e) {
 		if (e.getEntity() instanceof Player) {
 			Player player = (Player) e.getEntity();
-			if (plugin.pdata.getPlayerArena(player.getName()) != null) {
+			if (plugin.amanager.getPlayerArena(player.getName()) != null) {
 				e.setCancelled(true);
 			}
 		}
@@ -50,7 +50,7 @@ public class PlayerStatusHandler implements Listener {
 	public void onPlayerDamage(FoodLevelChangeEvent e) {
 		if (e.getEntity() instanceof Player) {
 			Player player = (Player) e.getEntity();
-			if (plugin.pdata.getPlayerArena(player.getName()) != null) {
+			if (plugin.amanager.getPlayerArena(player.getName()) != null) {
 				e.setCancelled(true);
 			}
 		}

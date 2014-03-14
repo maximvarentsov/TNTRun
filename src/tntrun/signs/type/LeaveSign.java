@@ -39,7 +39,7 @@ public class LeaveSign {
 	}
 
 	public void handleClick(PlayerInteractEvent e) {
-		Arena arena = plugin.pdata.getPlayerArena(e.getPlayer().getName());
+		Arena arena = plugin.amanager.getPlayerArena(e.getPlayer().getName());
 		if (arena != null) {
 			arena.arenaph.leavePlayer(e.getPlayer(), Messages.playerlefttoplayer, Messages.playerlefttoothers);
 			e.setCancelled(true);

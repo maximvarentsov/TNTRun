@@ -19,7 +19,6 @@ package tntrun.datahandler;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -28,40 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 
-import tntrun.arena.Arena;
-
 public class PlayerDataStore {
-
-	private HashMap<String, Arena> arenanames = new HashMap<String, Arena>();
-	
-	public void registerArena(Arena arena) {
-		arenanames.put(arena.getArenaName(), arena);
-	}
-	
-	public void unregisterArena(Arena arena) {
-		arenanames.remove(arena.getArenaName());
-	}
-
-	public Collection<Arena> getArenas() {
-		return arenanames.values();
-	}
-
-	public Set<String> getArenasNames() {
-		return arenanames.keySet();
-	}
-
-	public Arena getArenaByName(String name) {
-		return arenanames.get(name);
-	}
-	
-	public Arena getPlayerArena(String name) {
-		for (Arena arena : arenanames.values()) {
-			if (arena.getPlayersManager().isPlayerInArena(name)) {
-				return arena;
-			}
-		}
-		return null;
-	}
 
 	private HashMap<String, ItemStack[]> plinv = new HashMap<String, ItemStack[]>();
 	private HashMap<String, ItemStack[]> plarmor = new HashMap<String, ItemStack[]>();

@@ -28,6 +28,7 @@ import tntrun.bars.Bars;
 import tntrun.commands.ConsoleCommands;
 import tntrun.commands.GameCommands;
 import tntrun.commands.SetupCommands;
+import tntrun.datahandler.ArenasManager;
 import tntrun.datahandler.PlayerDataStore;
 import tntrun.eventhandler.PlayerLeaveArenaChecker;
 import tntrun.eventhandler.PlayerStatusHandler;
@@ -43,6 +44,7 @@ public class TNTRun extends JavaPlugin {
 	private Logger log;
 
 	public PlayerDataStore pdata;
+	public ArenasManager amanager;
 	public SetupCommands scommands;
 	public GameCommands gcommands;
 	public ConsoleCommands ccommands;
@@ -62,6 +64,7 @@ public class TNTRun extends JavaPlugin {
 		Messages.loadMessages(this);
 		Bars.loadBars(this);
 		pdata = new PlayerDataStore();
+		amanager = new ArenasManager();
 		scommands = new SetupCommands(this);
 		getCommand("tntrunsetup").setExecutor(scommands);
 		gcommands = new GameCommands(this);
@@ -93,7 +96,7 @@ public class TNTRun extends JavaPlugin {
 						Arena arena = new Arena(file.substring(0, file.length() - 4), instance);
 						arena.getStructureManager().loadFromConfig();
 						arena.enableArena();
-						pdata.registerArena(arena);
+						amanager.registerArena(arena);
 					}
 					// load signs
 					signEditor.loadConfiguration();
@@ -106,7 +109,7 @@ public class TNTRun extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		// save arenas
-		for (Arena arena : pdata.getArenas()) {
+		for (Arena arena : amanager.getArenas()) {
 			arena.disableArena();
 			arena.getStructureManager().saveToConfig();
 		}
@@ -125,6 +128,7 @@ public class TNTRun extends JavaPlugin {
 		plachecker = null;
 		signs = null;
 		pdata = null;
+		amanager = null;
 		log = null;
 	}
 

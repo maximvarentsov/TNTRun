@@ -48,7 +48,7 @@ public class RestrictionHandler implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerCommand(PlayerCommandPreprocessEvent e) {
 		Player player = e.getPlayer();
-		Arena arena = plugin.pdata.getPlayerArena(player.getName());
+		Arena arena = plugin.amanager.getPlayerArena(player.getName());
 		// ignore if player is not in arena
 		if (arena == null) {
 			return;
@@ -67,7 +67,7 @@ public class RestrictionHandler implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerBlockBreak(BlockBreakEvent e) {
 		Player player = e.getPlayer();
-		Arena arena = plugin.pdata.getPlayerArena(player.getName());
+		Arena arena = plugin.amanager.getPlayerArena(player.getName());
 		// ignore if player is not in arena
 		if (arena == null) {
 			return;
@@ -79,7 +79,7 @@ public class RestrictionHandler implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerBlockPlayer(BlockPlaceEvent e) {
 		Player player = e.getPlayer();
-		Arena arena = plugin.pdata.getPlayerArena(player.getName());
+		Arena arena = plugin.amanager.getPlayerArena(player.getName());
 		// ignore if player is not in arena
 		if (arena == null) {
 			return;

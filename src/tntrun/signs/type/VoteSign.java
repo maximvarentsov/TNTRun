@@ -39,7 +39,7 @@ public class VoteSign {
 	}
 
 	public void handleClick(PlayerInteractEvent e) {
-		Arena arena = plugin.pdata.getPlayerArena(e.getPlayer().getName());
+		Arena arena = plugin.amanager.getPlayerArena(e.getPlayer().getName());
 		if (arena != null) {
 			if (arena.arenaph.vote(e.getPlayer())) {
 				Messages.sendMessage(e.getPlayer(), Messages.playervotedforstart);

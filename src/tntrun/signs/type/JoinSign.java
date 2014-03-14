@@ -36,7 +36,7 @@ public class JoinSign {
 	}
 
 	public void handleCreation(SignChangeEvent e) {
-		Arena arena = plugin.pdata.getArenaByName(e.getLine(2));
+		Arena arena = plugin.amanager.getArenaByName(e.getLine(2));
 		if (arena != null) {
 			e.setLine(0, ChatColor.BLUE + "[TNTRun]");
 			e.getPlayer().sendMessage("Sign succesfully created");
@@ -50,8 +50,7 @@ public class JoinSign {
 	}
 
 	public void handleClick(PlayerInteractEvent e) {
-		Arena arena = plugin.pdata.getArenaByName(((Sign) e.getClickedBlock()
-				.getState()).getLine(2));
+		Arena arena = plugin.amanager.getArenaByName(((Sign) e.getClickedBlock().getState()).getLine(2));
 		if (arena != null) {
 			boolean canJoin = arena.arenaph.checkJoin(e.getPlayer());
 			if (canJoin) {

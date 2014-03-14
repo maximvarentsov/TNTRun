@@ -75,18 +75,18 @@ public class SetupCommands implements CommandExecutor {
 		}
 		// create arena
 		else if (args.length == 2 && args[1].equalsIgnoreCase("create")) {
-			Arena arenac = plugin.pdata.getArenaByName(args[0]);
+			Arena arenac = plugin.amanager.getArenaByName(args[0]);
 			if (arenac != null) {
 				sender.sendMessage("Arena already exists");
 				return true;
 			}
-			plugin.pdata.registerArena(new Arena(args[0], plugin));
+			plugin.amanager.registerArena(new Arena(args[0], plugin));
 			sender.sendMessage("Arena created");
 			return true;
 		}
 		// delete arena
 		else if (args.length == 2 && args[1].equalsIgnoreCase("delete")) {
-			Arena arena = plugin.pdata.getArenaByName(args[0]);
+			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena == null) {
 				sender.sendMessage("Arena does not exist");
 				return true;
@@ -97,13 +97,13 @@ public class SetupCommands implements CommandExecutor {
 			}
 			new File(plugin.getDataFolder() + File.separator + "arenas" + File.separator + arena.getArenaName() + ".yml").delete();
 			plugin.signEditor.removeArena(arena.getArenaName());
-			plugin.pdata.unregisterArena(arena);
+			plugin.amanager.unregisterArena(arena);
 			sender.sendMessage("Arena deleted");
 			return true;
 		}
 		// set arena bounds
 		else if (args.length == 2 && args[1].equalsIgnoreCase("setarena")) {
-			Arena arena = plugin.pdata.getArenaByName(args[0]);
+			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
 				if (arena.isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
@@ -123,7 +123,7 @@ public class SetupCommands implements CommandExecutor {
 		}
 		// set game level
 		else if (args.length == 3 && args[1].equalsIgnoreCase("setgamelevel")) {
-			Arena arena = plugin.pdata.getArenaByName(args[0]);
+			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
 				if (arena.isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
@@ -148,7 +148,7 @@ public class SetupCommands implements CommandExecutor {
 		// set gamelevel destroy delay
 		else if (args.length == 3
 				&& args[1].equalsIgnoreCase("setgameleveldestroydelay")) {
-			Arena arena = plugin.pdata.getArenaByName(args[0]);
+			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
 				if (arena.isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
@@ -163,7 +163,7 @@ public class SetupCommands implements CommandExecutor {
 		}
 		// set looselevel
 		else if (args.length == 2 && args[1].equalsIgnoreCase("setloselevel")) {
-			Arena arena = plugin.pdata.getArenaByName(args[0]);
+			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
 				if (arena.isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
@@ -187,7 +187,7 @@ public class SetupCommands implements CommandExecutor {
 		}
 		// set spawnpoint
 		else if (args.length == 2 && args[1].equalsIgnoreCase("setspawn")) {
-			Arena arena = plugin.pdata.getArenaByName(args[0]);
+			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
 				if (arena.isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
@@ -205,7 +205,7 @@ public class SetupCommands implements CommandExecutor {
 		}
 		// set maxPlayers
 		else if (args.length == 3 && args[1].equalsIgnoreCase("setmaxplayers")) {
-			Arena arena = plugin.pdata.getArenaByName(args[0]);
+			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
 				if (arena.isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
@@ -220,7 +220,7 @@ public class SetupCommands implements CommandExecutor {
 		}
 		// set min players
 		else if (args.length == 3 && args[1].equalsIgnoreCase("setminplayers")) {
-			Arena arena = plugin.pdata.getArenaByName(args[0]);
+			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
 				if (arena.isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
@@ -235,7 +235,7 @@ public class SetupCommands implements CommandExecutor {
 		}
 		// set vote percent
 		else if (args.length == 3 && args[1].equalsIgnoreCase("setvotepercent")) {
-			Arena arena = plugin.pdata.getArenaByName(args[0]);
+			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
 				if (arena.isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
@@ -250,7 +250,7 @@ public class SetupCommands implements CommandExecutor {
 		}
 		// set countdown
 		else if (args.length == 3 && args[1].equalsIgnoreCase("setcountdown")) {
-			Arena arena = plugin.pdata.getArenaByName(args[0]);
+			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
 				if (arena.isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
@@ -264,7 +264,7 @@ public class SetupCommands implements CommandExecutor {
 		}
 		// set items rewards
 		else if (args.length == 2 && args[1].equalsIgnoreCase("setitemsrewards")) {
-			Arena arena = plugin.pdata.getArenaByName(args[0]);
+			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
 				if (arena.isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
@@ -279,7 +279,7 @@ public class SetupCommands implements CommandExecutor {
 		}
 		// set money rewards
 		else if (args.length == 3 && args[1].equalsIgnoreCase("setmoneyrewards")) {
-			Arena arena = plugin.pdata.getArenaByName(args[0]);
+			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
 				if (arena.isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
@@ -294,7 +294,7 @@ public class SetupCommands implements CommandExecutor {
 		}
 		// set time limit
 		else if (args.length == 3 && args[1].equalsIgnoreCase("settimelimit")) {
-			Arena arena = plugin.pdata.getArenaByName(args[0]);
+			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
 				if (arena.isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
@@ -309,7 +309,7 @@ public class SetupCommands implements CommandExecutor {
 		}
 		// set countdown
 		else if (args.length == 3 && args[1].equalsIgnoreCase("setcountdown")) {
-			Arena arena = plugin.pdata.getArenaByName(args[0]);
+			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
 				if (arena.isArenaEnabled()) {
 					sender.sendMessage("Disable arena first");
@@ -324,12 +324,12 @@ public class SetupCommands implements CommandExecutor {
 		}
 		// finish arena creation
 		else if (args.length == 2 && args[1].equalsIgnoreCase("finish")) {
-			Arena arena = plugin.pdata.getArenaByName(args[0]);
+			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
 				if (!arena.isArenaEnabled()) {
 					if (arena.getStructureManager().isArenaConfigured().equalsIgnoreCase("yes")) {
 						arena.getStructureManager().saveToConfig();
-						plugin.pdata.registerArena(arena);
+						plugin.amanager.registerArena(arena);
 						arena.enableArena();
 						sender.sendMessage("Arena saved and enabled");
 					} else {
@@ -345,7 +345,7 @@ public class SetupCommands implements CommandExecutor {
 		}
 		// disable arena
 		else if (args.length == 2 && args[1].equalsIgnoreCase("disable")) {
-			Arena arena = plugin.pdata.getArenaByName(args[0]);
+			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
 				arena.disableArena();
 				sender.sendMessage("Arena disabled");
@@ -356,7 +356,7 @@ public class SetupCommands implements CommandExecutor {
 		}
 		// enable arena
 		else if (args.length == 2 && args[1].equalsIgnoreCase("enable")) {
-			Arena arena = plugin.pdata.getArenaByName(args[0]);
+			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
 				if (arena.isArenaEnabled()) {
 					sender.sendMessage("Arena already enabled.");

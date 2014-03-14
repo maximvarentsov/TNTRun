@@ -28,7 +28,7 @@ public class ConsoleCommands implements CommandExecutor {
 		// handle commands
 		// disable arena
 		else if (args.length == 2 && args[1].equalsIgnoreCase("disable")) {
-			Arena arena = plugin.pdata.getArenaByName(args[0]);
+			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
 				arena.disableArena();
 				sender.sendMessage("Arena disabled");
@@ -39,7 +39,7 @@ public class ConsoleCommands implements CommandExecutor {
 		}
 		// enable arena
 		else if (args.length == 2 && args[1].equalsIgnoreCase("enable")) {
-			Arena arena = plugin.pdata.getArenaByName(args[0]);
+			Arena arena = plugin.amanager.getArenaByName(args[0]);
 			if (arena != null) {
 				if (arena.isArenaEnabled()) {
 					sender.sendMessage("Arena already enabled.");
