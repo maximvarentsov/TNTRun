@@ -7,7 +7,7 @@ import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
 
 public class SetTimeLimit implements CommandHandlerInterface {
-	
+
 	private TNTRun plugin;
 	public SetTimeLimit(TNTRun plugin) {
 		this.plugin = plugin;

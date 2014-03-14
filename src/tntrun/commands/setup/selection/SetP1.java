@@ -6,7 +6,7 @@ import tntrun.commands.setup.CommandHandlerInterface;
 import tntrun.selectionget.PlayerSelection;
 
 public class SetP1 implements CommandHandlerInterface {
-	
+
 	private PlayerSelection selection;
 	public SetP1(PlayerSelection selection) {
 		this.selection = selection;
@@ -18,5 +18,5 @@ public class SetP1 implements CommandHandlerInterface {
 		player.sendMessage("p1 saved");
 		return true;
 	}
-	
+
 }

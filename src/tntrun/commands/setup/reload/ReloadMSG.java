@@ -12,7 +12,7 @@ public class ReloadMSG implements CommandHandlerInterface {
 	public ReloadMSG(TNTRun plugin) {
 		this.plugin = plugin;
 	}
-	
+
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
 		Messages.loadMessages(plugin);

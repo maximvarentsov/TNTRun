@@ -7,7 +7,7 @@ import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
 
 public class Disable implements CommandHandlerInterface {
-	
+
 	private TNTRun plugin;
 	public Disable(TNTRun plugin) {
 		this.plugin = plugin;

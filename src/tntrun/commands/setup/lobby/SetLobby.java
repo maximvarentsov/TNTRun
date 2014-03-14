@@ -6,7 +6,7 @@ import tntrun.TNTRun;
 import tntrun.commands.setup.CommandHandlerInterface;
 
 public class SetLobby implements CommandHandlerInterface {
-	
+
 	private TNTRun plugin;
 	public SetLobby(TNTRun plugin) {
 		this.plugin = plugin;

@@ -7,7 +7,7 @@ import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
 
 public class SetGameLevelDestroyDelay implements CommandHandlerInterface {
-	
+
 	private TNTRun plugin;
 	public SetGameLevelDestroyDelay(TNTRun plugin) {
 		this.plugin = plugin;

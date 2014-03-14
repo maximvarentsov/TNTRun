@@ -37,5 +37,5 @@ public class SetArena implements CommandHandlerInterface {
 		}
 		return true;
 	}
-	
+
 }

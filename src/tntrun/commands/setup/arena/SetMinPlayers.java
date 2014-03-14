@@ -7,7 +7,7 @@ import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
 
 public class SetMinPlayers implements CommandHandlerInterface {
-	
+
 	private TNTRun plugin;
 	public SetMinPlayers(TNTRun plugin) {
 		this.plugin = plugin;

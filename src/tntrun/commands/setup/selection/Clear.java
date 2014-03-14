@@ -6,7 +6,7 @@ import tntrun.commands.setup.CommandHandlerInterface;
 import tntrun.selectionget.PlayerSelection;
 
 public class Clear implements CommandHandlerInterface {
-	
+
 	private PlayerSelection selection;
 	public Clear(PlayerSelection selection) {
 		this.selection = selection;

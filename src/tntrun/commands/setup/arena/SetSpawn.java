@@ -12,7 +12,7 @@ public class SetSpawn implements CommandHandlerInterface {
 	public SetSpawn(TNTRun plugin) {
 		this.plugin = plugin;
 	}
-	
+
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
 		Arena arena = plugin.amanager.getArenaByName(args[0]);

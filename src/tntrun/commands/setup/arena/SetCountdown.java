@@ -7,7 +7,7 @@ import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
 
 public class SetCountdown implements CommandHandlerInterface {
-	
+
 	private TNTRun plugin;
 	public SetCountdown(TNTRun plugin) {
 		this.plugin = plugin;

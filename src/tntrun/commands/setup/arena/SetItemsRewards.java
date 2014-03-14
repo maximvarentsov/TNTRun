@@ -7,7 +7,7 @@ import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
 
 public class SetItemsRewards implements CommandHandlerInterface {
-	
+
 	private TNTRun plugin;
 	public SetItemsRewards(TNTRun plugin) {
 		this.plugin = plugin;

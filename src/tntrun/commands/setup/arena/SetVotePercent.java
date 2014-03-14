@@ -7,7 +7,7 @@ import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
 
 public class SetVotePercent implements CommandHandlerInterface {
-	
+
 	private TNTRun plugin;
 	public SetVotePercent(TNTRun plugin) {
 		this.plugin = plugin;

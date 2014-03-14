@@ -7,7 +7,7 @@ import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
 
 public class SetMaxPlayers implements CommandHandlerInterface {
-	
+
 	private TNTRun plugin;
 	public SetMaxPlayers(TNTRun plugin) {
 		this.plugin = plugin;

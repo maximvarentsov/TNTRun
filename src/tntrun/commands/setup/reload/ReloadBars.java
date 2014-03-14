@@ -12,12 +12,12 @@ public class ReloadBars implements CommandHandlerInterface {
 	public ReloadBars(TNTRun plugin) {
 		this.plugin = plugin;
 	}
-	
+
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
 		Bars.loadBars(plugin);
 		player.sendMessage("nars reloaded");
 		return true;
 	}
-	
+
 }
