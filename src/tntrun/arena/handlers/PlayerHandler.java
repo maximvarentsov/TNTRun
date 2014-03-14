@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
+import tntrun.arena.structure.StructureManager.TeleportDestination;
 import tntrun.bars.Bars;
 import tntrun.messages.Messages;
 
@@ -144,8 +145,13 @@ public class PlayerHandler {
 		Bars.removeBar(player);
 		// remove player on arena data
 		arena.getPlayersManager().removePlayerFromArena(player.getName());
-		// restore location
-		plugin.pdata.restorePlayerLocation(player);
+		// restore location ot teleport to lobby
+		if (arena.getStructureManager().getTeleportDestination() == TeleportDestination.LOBBY && plugin.globallobby.isLobbyLocationWorldAvailable()) {
+			player.teleport(plugin.globallobby.getLobbyLocation());
+			plugin.pdata.clearPlayerLocation(player);
+		} else {
+			plugin.pdata.restorePlayerLocation(player);
+		}
 		// restore player status
 		plugin.pdata.restorePlayerHunger(player);
 		plugin.pdata.restorePlayerPotionEffects(player);
