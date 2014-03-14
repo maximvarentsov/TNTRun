@@ -34,6 +34,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import tntrun.TNTRun;
+import tntrun.arena.handlers.GameHandler;
+import tntrun.arena.handlers.PlayerHandler;
 import tntrun.messages.Messages;
 
 public class Arena {
@@ -204,7 +206,7 @@ public class Arena {
 		return starting;
 	}
 
-	protected void setStarting(boolean starting) {
+	public void setStarting(boolean starting) {
 		this.starting = starting;
 	}
 
@@ -212,7 +214,7 @@ public class Arena {
 		return running;
 	}
 
-	protected void setRunning(boolean running) {
+	public void setRunning(boolean running) {
 		this.running = running;
 	}
 
@@ -220,7 +222,7 @@ public class Arena {
 		return regenerating;
 	}
 
-	protected void setRegenerating(boolean regenerating) {
+	public void setRegenerating(boolean regenerating) {
 		this.regenerating = regenerating;
 	}
 

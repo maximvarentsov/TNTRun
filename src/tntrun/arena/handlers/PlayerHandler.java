@@ -15,7 +15,7 @@
  * 
  */
 
-package tntrun.arena;
+package tntrun.arena.handlers;
 
 import java.util.HashSet;
 
@@ -23,6 +23,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
+import tntrun.arena.Arena;
 import tntrun.bars.Bars;
 import tntrun.messages.Messages;
 

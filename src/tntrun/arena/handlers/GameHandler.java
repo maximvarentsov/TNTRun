@@ -15,13 +15,15 @@
  * 
  */
 
-package tntrun.arena;
+package tntrun.arena.handlers;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
+import tntrun.arena.Arena;
+import tntrun.arena.GameLevel;
 import tntrun.bars.Bars;
 import tntrun.messages.Messages;
 

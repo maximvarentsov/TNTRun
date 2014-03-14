@@ -66,7 +66,7 @@ public class Rewards {
 		this.moneyreward = money;
 	}
 
-	protected void rewardPlayer(Player player) {
+	public void rewardPlayer(Player player) {
 		for (ItemStack reward : itemrewards) {
 			if (player.getInventory().firstEmpty() != -1) {
 				player.getInventory().addItem(reward);

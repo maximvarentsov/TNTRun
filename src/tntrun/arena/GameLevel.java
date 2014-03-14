@@ -66,13 +66,13 @@ public class GameLevel {
 		return false;
 	}
 
-	protected boolean isSandLocation(Location loc) {
+	public boolean isSandLocation(Location loc) {
 		return loc.toVector().isInAABB(gp1, gp2.clone().add(new Vector(0, 1, 0)));
 	};
 
 	private HashSet<Block> blockstodestroy = new HashSet<Block>();
 
-	protected void destroyBlock(Location loc, final Arena arena) {
+	public void destroyBlock(Location loc, final Arena arena) {
 		final Location blockUnderFeetLocation = getPlayerStandOnBlockLocation(loc);
 		if (blockUnderFeetLocation != null) {
 			final Block block = blockUnderFeetLocation.getBlock();
@@ -125,7 +125,7 @@ public class GameLevel {
 		block.setType(Material.AIR);
 	}
 
-	protected void regen() {
+	public void regen() {
 		for (BlockState bs : blocks) {
 			bs.update(true);
 		}

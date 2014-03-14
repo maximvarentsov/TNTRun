@@ -39,7 +39,7 @@ public class LoseLevel {
 		return (p1 != null && p2 != null);
 	}
 
-	protected boolean isLooseLocation(Location loc) {
+	public boolean isLooseLocation(Location loc) {
 		return loc.getY() < Math.max(p2.getBlockY(), p1.getBlockY()) + 1;
 	};
 
