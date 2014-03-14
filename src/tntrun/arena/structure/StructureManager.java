@@ -220,7 +220,7 @@ public class StructureManager {
 
 	private File arenafile;
 	public void setArenaFile(File file) {
-		if (arenafile != null) {
+		if (arenafile == null) {
 			arenafile = file;
 		}
 	}
