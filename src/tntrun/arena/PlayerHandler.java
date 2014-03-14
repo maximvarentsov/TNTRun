@@ -30,29 +30,45 @@ public class PlayerHandler {
 
 	private TNTRun plugin;
 	private Arena arena;
-	public PlayerHandler(TNTRun plugin, Arena arena)
-	{
+
+	public PlayerHandler(TNTRun plugin, Arena arena) {
 		this.plugin = plugin;
 		this.arena = arena;
 	}
 
-	//check if player can join the arena
-	public boolean checkJoin(Player player)
-	{
-		if (arena.getWorld() == null) {player.sendMessage("Arena world is unloaded, can't join arena"); return false;}
-		if (!arena.isArenaEnabled()) {Messages.sendMessage(player, Messages.arenadisabled); return false;}
-		if (arena.isArenaRunning()) {Messages.sendMessage(player, Messages.arenarunning); return false;}
-		if (arena.isArenaRegenerating()) {Messages.sendMessage(player, Messages.arenarunning); return false;}
-		if (player.isInsideVehicle()) {player.sendMessage("You can't join the game while sitting inside vehicle"); return false;}
-		if (plugin.pdata.getArenaPlayers(arena).size() == arena.getMaxPlayers()) {Messages.sendMessage(player, Messages.limitreached); return false;}
+	// check if player can join the arena
+	public boolean checkJoin(Player player) {
+		if (arena.getWorld() == null) {
+			player.sendMessage("Arena world is unloaded, can't join arena");
+			return false;
+		}
+		if (!arena.isArenaEnabled()) {
+			Messages.sendMessage(player, Messages.arenadisabled);
+			return false;
+		}
+		if (arena.isArenaRunning()) {
+			Messages.sendMessage(player, Messages.arenarunning);
+			return false;
+		}
+		if (arena.isArenaRegenerating()) {
+			Messages.sendMessage(player, Messages.arenarunning);
+			return false;
+		}
+		if (player.isInsideVehicle()) {
+			player.sendMessage("You can't join the game while sitting inside vehicle");
+			return false;
+		}
+		if (plugin.pdata.getArenaPlayers(arena).size() == arena.getMaxPlayers()) {
+			Messages.sendMessage(player, Messages.limitreached);
+			return false;
+		}
 		return true;
 	}
-	
-	//spawn player on arena
+
+	// spawn player on arena
 	@SuppressWarnings("deprecation")
-	public void spawnPlayer(final Player player, String msgtoplayer, String msgtoarenaplayers)
-	{
-		//change player status
+	public void spawnPlayer(final Player player, String msgtoplayer, String msgtoarenaplayers) {
+		// change player status
 		plugin.pdata.storePlayerGameMode(player.getName());
 		player.setFlying(false);
 		player.setAllowFlight(false);
@@ -60,117 +76,104 @@ public class PlayerHandler {
 		plugin.pdata.storePlayerArmor(player.getName());
 		plugin.pdata.storePlayerPotionEffects(player.getName());
 		plugin.pdata.storePlayerHunger(player.getName());
-		//teleport player to arena
+		// teleport player to arena
 		plugin.pdata.storePlayerLocation(player.getName());
 		player.teleport(arena.getSpawnPoint());
-		//update inventory
+		// update inventory
 		player.updateInventory();
-		//send message to player
+		// send message to player
 		Messages.sendMessage(player, msgtoplayer);
-		//send message to other players and update bar
-		for (String pname : plugin.pdata.getArenaPlayers(arena))
-		{
+		// send message to other players and update bar
+		for (String pname : plugin.pdata.getArenaPlayers(arena)) {
 			Messages.sendMessage(Bukkit.getPlayerExact(pname), player.getName(), msgtoarenaplayers);
 		}
-		//set player on arena data
+		// set player on arena data
 		plugin.pdata.setPlayerArena(player.getName(), arena);
-		//send message about arena player count
-		Messages.sendMessage(player, Messages.playerscount+plugin.pdata.getArenaPlayers(arena).size());
-		//modify signs
+		// send message about arena player count
+		Messages.sendMessage(player, Messages.playerscount
+				+ plugin.pdata.getArenaPlayers(arena).size());
+		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
-		//modify bars
-		if (!arena.isArenaStarting())
-		{
+		// modify bars
+		if (!arena.isArenaStarting()) {
 			HashSet<String> arenaplayers = plugin.pdata.getArenaPlayers(arena);
-			for (Player oplayer : Bukkit.getOnlinePlayers())
-			{
-				if (arenaplayers.contains(oplayer.getName()))
-				{
-					Bars.setBar(oplayer, Bars.waiting, arenaplayers.size(), 0, arenaplayers.size()*100/arena.getMinPlayers());
+			for (Player oplayer : Bukkit.getOnlinePlayers()) {
+				if (arenaplayers.contains(oplayer.getName())) {
+					Bars.setBar(oplayer, Bars.waiting, arenaplayers.size(), 0, arenaplayers.size() * 100 / arena.getMinPlayers());
 				}
 			}
 		}
-		//check for game start
-		if (!arena.isArenaStarting() && (plugin.pdata.getArenaPlayers(arena).size() == arena.getMaxPlayers() || plugin.pdata.getArenaPlayers(arena).size() == arena.getMinPlayers()))
-		{
+		// check for game start
+		if (!arena.isArenaStarting() && (plugin.pdata.getArenaPlayers(arena).size() == arena.getMaxPlayers() || plugin.pdata.getArenaPlayers(arena).size() == arena.getMinPlayers())) {
 			arena.arenagh.runArenaCountdown();
 		}
 	}
 
-	//remove player from arena
-	public void leavePlayer(Player player, String msgtoplayer, String msgtoarenaplayers)
-	{
-		//remove player from arena and restore his state
+	// remove player from arena
+	public void leavePlayer(Player player, String msgtoplayer, String msgtoarenaplayers) {
+		// remove player from arena and restore his state
 		removePlayerFromArenaAndRestoreState(player, false);
-		//send message to player
+		// send message to player
 		Messages.sendMessage(player, msgtoplayer);
-		//modify signs
+		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
-		//send message to other players and update bars
+		// send message to other players and update bars
 		HashSet<String> arenaplayers = plugin.pdata.getArenaPlayers(arena);
-		for (Player oplayer : Bukkit.getOnlinePlayers())
-		{
-			if (arenaplayers.contains(oplayer.getName()))
-			{
+		for (Player oplayer : Bukkit.getOnlinePlayers()) {
+			if (arenaplayers.contains(oplayer.getName())) {
 				Messages.sendMessage(oplayer, player.getName(), msgtoarenaplayers);
-				if (!arena.isArenaStarting() && !arena.isArenaRunning())
-				{
-					Bars.setBar(oplayer, Bars.waiting, arenaplayers.size(), 0, arenaplayers.size()*100/arena.getMinPlayers());
+				if (!arena.isArenaStarting() && !arena.isArenaRunning()) {
+					Bars.setBar(oplayer, Bars.waiting, arenaplayers.size(), 0, arenaplayers.size() * 100 / arena.getMinPlayers());
 				}
 			}
 		}
 	}
-	protected void leaveWinner(Player player, String msgtoplayer)
-	{
-		//remove player from arena and restore his state
+
+	protected void leaveWinner(Player player, String msgtoplayer) {
+		// remove player from arena and restore his state
 		removePlayerFromArenaAndRestoreState(player, true);
-		//send message to player
+		// send message to player
 		Messages.sendMessage(player, msgtoplayer);
-		//modify signs
+		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
 	}
+
 	@SuppressWarnings("deprecation")
-	private void removePlayerFromArenaAndRestoreState(Player player, boolean winner)
-	{
-		//remove vote
+	private void removePlayerFromArenaAndRestoreState(Player player, boolean winner) {
+		// remove vote
 		votes.remove(player.getName());
-		//remove bar
+		// remove bar
 		Bars.removeBar(player);
-		//remove player on arena data
+		// remove player on arena data
 		plugin.pdata.removePlayerFromArena(player.getName());
-		//restore location
+		// restore location
 		plugin.pdata.restorePlayerLocation(player.getName());
-		//restore player status
+		// restore player status
 		plugin.pdata.restorePlayerHunger(player.getName());
 		plugin.pdata.restorePlayerPotionEffects(player.getName());
 		plugin.pdata.restorePlayerArmor(player.getName());
 		plugin.pdata.restorePlayerInventory(player.getName());
-		//reward player before restoring gamemode if player is winner
-		if (winner)
-		{
+		// reward player before restoring gamemode if player is winner
+		if (winner) {
 			arena.getRewards().rewardPlayer(player);
 		}
 		plugin.pdata.restorePlayerGameMode(player.getName());
-		//update inventory
+		// update inventory
 		player.updateInventory();
 	}
-	
 
-	//vote for game start
+	// vote for game start
 	private HashSet<String> votes = new HashSet<String>();
-	public boolean vote(Player player)
-	{
-		if (!votes.contains(player.getName()))
-		{
+
+	public boolean vote(Player player) {
+		if (!votes.contains(player.getName())) {
 			votes.add(player.getName());
-			if (!arena.isArenaStarting() && (plugin.pdata.getArenaPlayers(arena).size() > 1 && (votes.size() >= plugin.pdata.getArenaPlayers(arena).size()*arena.getVotePercent())))
-			{
+			if (!arena.isArenaStarting() && (plugin.pdata.getArenaPlayers(arena).size() > 1 && (votes.size() >= plugin.pdata.getArenaPlayers(arena).size() * arena.getVotePercent()))) {
 				arena.arenagh.runArenaCountdown();
-			}	
+			}
 			return true;
 		}
 		return false;
 	}
-	
-	
+
 }

@@ -28,35 +28,28 @@ import tntrun.messages.Messages;
 public class VoteSign {
 
 	private TNTRun plugin;
-	public VoteSign(TNTRun plugin)
-	{
+
+	public VoteSign(TNTRun plugin) {
 		this.plugin = plugin;
 	}
 
-	
-	public void handleCreation(SignChangeEvent e)
-	{
-		e.setLine(0, ChatColor.BLUE+"[TNTRun]");
+	public void handleCreation(SignChangeEvent e) {
+		e.setLine(0, ChatColor.BLUE + "[TNTRun]");
 		e.getPlayer().sendMessage("Sign succesfully created");
 	}
-	
-	public void handleClick(PlayerInteractEvent e)
-	{
+
+	public void handleClick(PlayerInteractEvent e) {
 		Arena arena = plugin.pdata.getPlayerArena(e.getPlayer().getName());
-		if (arena!=null)
-		{
-			if (arena.arenaph.vote(e.getPlayer()))
-			{
+		if (arena != null) {
+			if (arena.arenaph.vote(e.getPlayer())) {
 				Messages.sendMessage(e.getPlayer(), Messages.playervotedforstart);
-			} else
-			{
+			} else {
 				Messages.sendMessage(e.getPlayer(), Messages.playeralreadyvotedforstart);
 			}
 			e.setCancelled(true);
-		} else
-		{
+		} else {
 			e.getPlayer().sendMessage("You are not in arena");
 		}
 	}
-	
+
 }

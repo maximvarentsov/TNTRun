@@ -15,7 +15,6 @@
  * 
  */
 
-
 package tntrun.selectionget;
 
 import java.util.HashMap;
@@ -25,80 +24,76 @@ import org.bukkit.entity.Player;
 
 public class OwnLocations {
 
-	
 	private HashMap<String, Location> loc1 = new HashMap<String, Location>();
-	protected void putPlayerLoc1(String playername, Location loc)
-	{
+
+	protected void putPlayerLoc1(String playername, Location loc) {
 		loc1.put(playername, loc);
 	}
+
 	private HashMap<String, Location> loc2 = new HashMap<String, Location>();
-	protected void putPlayerLoc2(String playername, Location loc)
-	{
+
+	protected void putPlayerLoc2(String playername, Location loc) {
 		loc2.put(playername, loc);
 	}
-	protected void clearPoints(String playername)
-	{
+
+	protected void clearPoints(String playername) {
 		loc1.remove(playername);
 		loc2.remove(playername);
 	}
-	
-	protected Location[] getLocations(Player player, boolean oneBlockHigh)
-	{
+
+	protected Location[] getLocations(Player player, boolean oneBlockHigh) {
 		try {
 			Location[] locs = sortLoc(player);
-			if (oneBlockHigh && !isOneBlockHigh(locs))
-			{
+			if (oneBlockHigh && !isOneBlockHigh(locs)) {
 				return null;
 			}
 			return locs;
-		} catch (Exception e){
+		} catch (Exception e) {
 		}
 		return null;
 	}
-	
-	//0 is min, 1 is max
-	private Location[] sortLoc(Player player)
-	{
+
+	// 0 is min, 1 is max
+	private Location[] sortLoc(Player player) {
 		Double xmin = loc1.get(player.getName()).getX();
 		Double xmax = loc2.get(player.getName()).getX();
-		if (xmin > xmax) 
-		{
+		if (xmin > xmax) {
 			Double temp = xmax;
 			xmax = xmin;
 			xmin = temp;
 		}
 		Double ymin = loc1.get(player.getName()).getY();
 		Double ymax = loc2.get(player.getName()).getY();
-		if (ymin > ymax) 
-		{
+		if (ymin > ymax) {
 			Double temp = ymax;
 			ymax = ymin;
 			ymin = temp;
 		}
 		Double zmin = loc1.get(player.getName()).getZ();
 		Double zmax = loc2.get(player.getName()).getZ();
-		if (zmin > zmax) 
-		{
+		if (zmin > zmax) {
 			Double temp = zmax;
 			zmax = zmin;
 			zmin = temp;
 		}
-		
-		
+
 		Location[] locs = new Location[2];
-		locs[0] = new Location(loc1.get(player.getName()).getWorld(),xmin,ymin,zmin);
-		locs[1] = new Location(loc1.get(player.getName()).getWorld(),xmax,ymax,zmax);
+		locs[0] = new Location(loc1.get(player.getName()).getWorld(), xmin,
+				ymin, zmin);
+		locs[1] = new Location(loc1.get(player.getName()).getWorld(), xmax,
+				ymax, zmax);
 		locs[0].distanceSquared(locs[1]);
 		return locs;
-		
+
 	}
-	
-	private boolean isOneBlockHigh(Location[] locs)
-	{
+
+	private boolean isOneBlockHigh(Location[] locs) {
 		int y1 = locs[0].getBlockY();
 		int y2 = locs[1].getBlockY();
-		if (y1==y2) {return true;}
+		if (y1 == y2) {
+			return true;
+		}
 		return false;
 	}
-	
+
 }

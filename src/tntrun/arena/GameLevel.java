@@ -32,159 +32,146 @@ import org.bukkit.util.Vector;
 public class GameLevel {
 
 	private String name;
-	public GameLevel(String name)
-	{
+
+	public GameLevel(String name) {
 		this.name = name;
 	}
-	public String getGameLevelName()
-	{
+
+	public String getGameLevelName() {
 		return name;
 	}
 
-	
 	private Vector gp1 = null;
 	private Vector gp2 = null;
-	
+
 	private Vector p1 = null;
-	public Vector getP1()
-	{
+
+	public Vector getP1() {
 		return p1;
 	}
+
 	private Vector p2 = null;
-	public Vector getP2()
-	{
+
+	public Vector getP2() {
 		return p2;
 	}
 
 	private Vector glb1 = null;
 	private Vector glb2 = null;
-	private boolean isInsideGamelevel(Location loc)
-	{
-		if (loc.getBlock().getLocation().toVector().isInAABB(glb1, glb2))
-		{
+
+	private boolean isInsideGamelevel(Location loc) {
+		if (loc.getBlock().getLocation().toVector().isInAABB(glb1, glb2)) {
 			return true;
 		}
 		return false;
 	}
-	protected boolean isSandLocation(Location loc)
-	{
-		return loc.toVector().isInAABB(gp1, gp2.clone().add(new Vector(0,1,0)));
+
+	protected boolean isSandLocation(Location loc) {
+		return loc.toVector().isInAABB(gp1, gp2.clone().add(new Vector(0, 1, 0)));
 	};
 
 	private HashSet<Block> blockstodestroy = new HashSet<Block>();
-	protected void destroyBlock(Location loc, final Arena arena)
-	{
+
+	protected void destroyBlock(Location loc, final Arena arena) {
 		final Location blockUnderFeetLocation = getPlayerStandOnBlockLocation(loc);
-		if (blockUnderFeetLocation != null)
-		{
+		if (blockUnderFeetLocation != null) {
 			final Block block = blockUnderFeetLocation.getBlock();
-			if (!blockstodestroy.contains(block))
-			{
+			if (!blockstodestroy.contains(block)) {
 				blockstodestroy.add(block);
-				Bukkit.getScheduler().scheduleSyncDelayedTask(arena.plugin, new Runnable()
-				{
-					public void run()
-					{
-						blockstodestroy.remove(block);
-						if (arena.isArenaRunning() && block.getType() != Material.AIR)
-						{
-							removeGLBlocks(block);
+				Bukkit.getScheduler().scheduleSyncDelayedTask(
+					arena.plugin,
+					new Runnable() {
+						public void run() {
+							blockstodestroy.remove(block);
+							if (arena.isArenaRunning()
+									&& block.getType() != Material.AIR) {
+								removeGLBlocks(block);
+							}
 						}
-					}
-				},arena.getGameLevelDestroyDelay());
+					}, arena.getGameLevelDestroyDelay()
+				);
 			}
 		}
 	}
-	private Location getPlayerStandOnBlockLocation(Location locationUnderPlayer)
-	{
+
+	private Location getPlayerStandOnBlockLocation(Location locationUnderPlayer) {
 		locationUnderPlayer.setY(gp1.getY());
-		Location b11 = locationUnderPlayer.clone().add(0.3,0,-0.3);
-		if (b11.getBlock().getType() != Material.AIR && isInsideGamelevel(b11))
-		{
+		Location b11 = locationUnderPlayer.clone().add(0.3, 0, -0.3);
+		if (b11.getBlock().getType() != Material.AIR && isInsideGamelevel(b11)) {
 			return b11;
-		} 
-		Location b12 = locationUnderPlayer.clone().add(-0.3,0,-0.3);
-		if (b12.getBlock().getType() != Material.AIR && isInsideGamelevel(b12))
-		{
+		}
+		Location b12 = locationUnderPlayer.clone().add(-0.3, 0, -0.3);
+		if (b12.getBlock().getType() != Material.AIR && isInsideGamelevel(b12)) {
 			return b12;
 		}
-		Location b21 = locationUnderPlayer.clone().add(0.3,0,0.3);
-		if (b21.getBlock().getType() != Material.AIR && isInsideGamelevel(b21))
-		{
+		Location b21 = locationUnderPlayer.clone().add(0.3, 0, 0.3);
+		if (b21.getBlock().getType() != Material.AIR && isInsideGamelevel(b21)) {
 			return b21;
 		}
-		Location b22 = locationUnderPlayer.clone().add(-0.3,0,+0.3);
-		if (b22.getBlock().getType() != Material.AIR && isInsideGamelevel(b22))
-		{
+		Location b22 = locationUnderPlayer.clone().add(-0.3, 0, +0.3);
+		if (b22.getBlock().getType() != Material.AIR && isInsideGamelevel(b22)) {
 			return b22;
 		}
 		return null;
 	}
+
 	private HashSet<BlockState> blocks = new HashSet<BlockState>(800);
-	private void removeGLBlocks(Block block)
-	{
+
+	private void removeGLBlocks(Block block) {
 		blocks.add(block.getState());
 		block.setType(Material.AIR);
 		block = block.getRelative(BlockFace.DOWN);
 		blocks.add(block.getState());
 		block.setType(Material.AIR);
 	}
-	protected void regen()
-	{
-		for (BlockState bs : blocks)
-		{
+
+	protected void regen() {
+		for (BlockState bs : blocks) {
 			bs.update(true);
 		}
 		blocks.clear();
 	}
-	
-	protected void setGameLocation(Location p1, Location p2)
-	{
+
+	protected void setGameLocation(Location p1, Location p2) {
 		this.p1 = p1.toVector();
 		this.p2 = p2.toVector();
 		this.gp1 = p1.add(0, 1, 0).toVector();
 		this.gp2 = p2.add(0, 1, 0).toVector();
-		this.glb1 = gp1.clone().add(new Vector(1,0,1));
-		this.glb2 = gp2.clone().add(new Vector(-1,0,-1));
+		this.glb1 = gp1.clone().add(new Vector(1, 0, 1));
+		this.glb2 = gp2.clone().add(new Vector(-1, 0, -1));
 		fillArea(p1.getWorld());
 	}
-	private void fillArea(World w)
-	{
+
+	private void fillArea(World w) {
 		int y = p1.getBlockY();
-		for (int x = p1.getBlockX()+1; x<p2.getBlockX(); x++)
-		{
-			for (int z = p1.getBlockZ()+1; z<p2.getBlockZ(); z++)
-			{
+		for (int x = p1.getBlockX() + 1; x < p2.getBlockX(); x++) {
+			for (int z = p1.getBlockZ() + 1; z < p2.getBlockZ(); z++) {
 				Block b = w.getBlockAt(x, y, z);
-				if (b.getType() == Material.AIR) 
-				{
+				if (b.getType() == Material.AIR) {
 					b.setType(Material.TNT);
 				}
 				b = b.getRelative(BlockFace.UP);
-				if (b.getType() == Material.AIR) 
-				{
+				if (b.getType() == Material.AIR) {
 					b.setType(Material.SAND);
 				}
 			}
 		}
 	}
 
-	protected void saveToConfig(FileConfiguration config)
-	{
-		config.set("gamelevels."+name+".p1", p1);
-		config.set("gamelevels."+name+".p2", p2);
+	protected void saveToConfig(FileConfiguration config) {
+		config.set("gamelevels." + name + ".p1", p1);
+		config.set("gamelevels." + name + ".p2", p2);
 	}
-	
-	protected void loadFromConfig(FileConfiguration config)
-	{
-		Vector p1 = config.getVector("gamelevels."+name+".p1", null);
-		Vector p2 = config.getVector("gamelevels."+name+".p2", null);
+
+	protected void loadFromConfig(FileConfiguration config) {
+		Vector p1 = config.getVector("gamelevels." + name + ".p1", null);
+		Vector p2 = config.getVector("gamelevels." + name + ".p2", null);
 		this.p1 = p1;
 		this.p2 = p2;
-		this.gp1 = p1.clone().add(new Vector(0,1,0));
-		this.gp2 = p2.clone().add(new Vector(0,1,0));
-		this.glb1 = gp1.clone().add(new Vector(1,0,1));
-		this.glb2 = gp2.clone().add(new Vector(-1,0,-1));
+		this.gp1 = p1.clone().add(new Vector(0, 1, 0));
+		this.gp2 = p2.clone().add(new Vector(0, 1, 0));
+		this.glb1 = gp1.clone().add(new Vector(1, 0, 1));
+		this.glb2 = gp2.clone().add(new Vector(-1, 0, -1));
 	}
-	
+
 }

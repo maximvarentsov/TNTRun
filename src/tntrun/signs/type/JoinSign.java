@@ -30,49 +30,41 @@ import tntrun.messages.Messages;
 public class JoinSign {
 
 	private TNTRun plugin;
-	public JoinSign(TNTRun plugin)
-	{
+
+	public JoinSign(TNTRun plugin) {
 		this.plugin = plugin;
 	}
 
-	
-	public void handleCreation(SignChangeEvent e)
-	{
+	public void handleCreation(SignChangeEvent e) {
 		Arena arena = plugin.pdata.getArenaByName(e.getLine(2));
-		if (arena!=null)
-		{
-			e.setLine(0, ChatColor.BLUE+"[TNTRun]");
+		if (arena != null) {
+			e.setLine(0, ChatColor.BLUE + "[TNTRun]");
 			e.getPlayer().sendMessage("Sign succesfully created");
 			plugin.signEditor.addSign(e.getBlock(), arena.getArenaName());
 			plugin.signEditor.modifySigns(arena.getArenaName());
-		} else
-		{
+		} else {
 			e.getPlayer().sendMessage("Arena does not exist");
 			e.setCancelled(true);
 			e.getBlock().breakNaturally();
 		}
 	}
-	
-	public void handleClick(PlayerInteractEvent e)
-	{
-		Arena arena = plugin.pdata.getArenaByName(((Sign)e.getClickedBlock().getState()).getLine(2));
-		if (arena!=null)
-		{
+
+	public void handleClick(PlayerInteractEvent e) {
+		Arena arena = plugin.pdata.getArenaByName(((Sign) e.getClickedBlock()
+				.getState()).getLine(2));
+		if (arena != null) {
 			boolean canJoin = arena.arenaph.checkJoin(e.getPlayer());
-			if (canJoin)
-			{
+			if (canJoin) {
 				arena.arenaph.spawnPlayer(e.getPlayer(), Messages.playerjoinedtoplayer, Messages.playerjoinedtoothers);
 			}
 			e.setCancelled(true);
-		} else
-		{
+		} else {
 			e.getPlayer().sendMessage("Arena does not exist");
 		}
 	}
-	
-	public void handleDestroy(Block b) 
-	{
-		plugin.signEditor.removeSign(b, ((Sign)b.getState()).getLine(2));
+
+	public void handleDestroy(Block b) {
+		plugin.signEditor.removeSign(b, ((Sign) b.getState()).getLine(2));
 	}
-	
+
 }

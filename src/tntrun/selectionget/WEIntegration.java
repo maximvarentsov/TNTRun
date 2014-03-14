@@ -15,7 +15,6 @@
  * 
  */
 
-
 package tntrun.selectionget;
 
 import org.bukkit.Bukkit;
@@ -28,37 +27,34 @@ import com.sk89q.worldedit.bukkit.selections.Selection;
 public class WEIntegration {
 
 	private WorldEditPlugin we = (WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit");
-	
-	protected Location[] getLocations(Player player, boolean oneBlockHigh)
-	{
+
+	protected Location[] getLocations(Player player, boolean oneBlockHigh) {
 		try {
 			Location[] locs = getPlayerSelection(player);
-			if (oneBlockHigh && !isOneBlockHigh(locs))
-			{
+			if (oneBlockHigh && !isOneBlockHigh(locs)) {
 				return null;
 			}
 			return locs;
-		} catch (Exception e){
+		} catch (Exception e) {
 		}
 		return null;
 	}
-	
-	private Location[] getPlayerSelection(Player player)
-	{
+
+	private Location[] getPlayerSelection(Player player) {
 		Location[] locs = new Location[2];
 		Selection psel = we.getSelection(player);
 		locs[0] = psel.getMinimumPoint();
 		locs[1] = psel.getMaximumPoint();
 		return locs;
 	}
-	
-	private boolean isOneBlockHigh(Location[] locs)
-	{
+
+	private boolean isOneBlockHigh(Location[] locs) {
 		int y1 = locs[0].getBlockY();
 		int y2 = locs[1].getBlockY();
-		if (y1==y2) {return true;}
+		if (y1 == y2) {
+			return true;
+		}
 		return false;
 	}
-	
-	
+
 }

@@ -31,88 +31,74 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 public class Rewards {
 
 	private Object economy = null;
-	public Rewards()
-	{
-		if (Bukkit.getPluginManager().getPlugin("Vault") != null)
-		{
-	        RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-	        if (economyProvider != null) {
-	            economy = economyProvider.getProvider();
-	        }
+
+	public Rewards() {
+		if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
+			RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+			if (economyProvider != null) {
+				economy = economyProvider.getProvider();
+			}
 		}
 	}
-	
+
 	private List<ItemStack> itemrewards = new ArrayList<ItemStack>();
-	public List<ItemStack> getItemRewads()
-	{
+
+	public List<ItemStack> getItemRewads() {
 		return itemrewards;
 	}
+
 	private int moneyreward = 0;
-	public int getMoneyReward()
-	{
+
+	public int getMoneyReward() {
 		return moneyreward;
 	}
-	
-	protected void setRewards(ItemStack[] rewards)
-	{
+
+	protected void setRewards(ItemStack[] rewards) {
 		this.itemrewards.clear();
-		for (ItemStack reward : rewards)
-		{
-			if (reward != null)
-			{
+		for (ItemStack reward : rewards) {
+			if (reward != null) {
 				this.itemrewards.add(reward);
 			}
 		}
 	}
-	protected void setRewards(int money)
-	{
+
+	protected void setRewards(int money) {
 		this.moneyreward = money;
 	}
-	
-	
-	protected void rewardPlayer(Player player)
-	{
-		for (ItemStack reward : itemrewards)
-		{
-			if (player.getInventory().firstEmpty() != -1)
-			{
+
+	protected void rewardPlayer(Player player) {
+		for (ItemStack reward : itemrewards) {
+			if (player.getInventory().firstEmpty() != -1) {
 				player.getInventory().addItem(reward);
-			}
-			else
-			{
-				player.getWorld().dropItemNaturally(player.getLocation(), reward);
+			} else {
+				player.getWorld().dropItemNaturally(player.getLocation(),
+						reward);
 			}
 		}
-		if (moneyreward != 0)
-		{
+		if (moneyreward != 0) {
 			rewardMoney(player.getName(), moneyreward);
 		}
 	}
-	private void rewardMoney(String playername, int money)
-	{
-		if (economy != null)
-		{
+
+	private void rewardMoney(String playername, int money) {
+		if (economy != null) {
 			Economy econ = (Economy) economy;
 			econ.depositPlayer(playername, money);
 		}
 	}
-	
-	
-	protected void saveToConfig(FileConfiguration config)
-	{
+
+	protected void saveToConfig(FileConfiguration config) {
 		config.set("reward.money", moneyreward);
 		config.set("reward.items", itemrewards);
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	protected void loadFromConfig(FileConfiguration config)
-	{
+	protected void loadFromConfig(FileConfiguration config) {
 		moneyreward = config.getInt("reward.money", moneyreward);
 		Object obj = config.get("reward.items");
-		if (obj != null)
-		{
+		if (obj != null) {
 			itemrewards = (List<ItemStack>) obj;
 		}
 	}
-	
+
 }

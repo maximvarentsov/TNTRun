@@ -26,21 +26,18 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 
 public class WorldUnloadHandler implements Listener {
-	
+
 	private TNTRun plugin;
-	public WorldUnloadHandler(TNTRun plugin)
-	{
+
+	public WorldUnloadHandler(TNTRun plugin) {
 		this.plugin = plugin;
 	}
-	
-	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled = true)
-	public void onWorldUnload(WorldUnloadEvent e)
-	{
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onWorldUnload(WorldUnloadEvent e) {
 		String worldname = e.getWorld().getName();
-		for (Arena arena : plugin.pdata.getArenas())
-		{
-			if (arena.getWorld().getName().equals(worldname))
-			{
+		for (Arena arena : plugin.pdata.getArenas()) {
+			if (arena.getWorld().getName().equals(worldname)) {
 				arena.disableArena();
 				arena.enableArena();
 			}

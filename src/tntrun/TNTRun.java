@@ -40,9 +40,8 @@ import tntrun.signs.editor.SignEditor;
 
 public class TNTRun extends JavaPlugin {
 
-	
 	private Logger log;
-	
+
 	public PlayerDataStore pdata;
 	public SetupCommands scommands;
 	public GameCommands gcommands;
@@ -54,10 +53,9 @@ public class TNTRun extends JavaPlugin {
 	public SignHandler signs;
 	public GlobalLobby globallobby;
 	public SignEditor signEditor;
-	
+
 	@Override
-	public void onEnable()
-	{
+	public void onEnable() {
 		log = getLogger();
 		signEditor = new SignEditor(this);
 		globallobby = new GlobalLobby(this);
@@ -80,44 +78,43 @@ public class TNTRun extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(wuhandler, this);
 		signs = new SignHandler(this);
 		getServer().getPluginManager().registerEvents(signs, this);
-		//load arenas
-		final File arenasfolder = new File(this.getDataFolder()+File.separator+"arenas");
+		// load arenas
+		final File arenasfolder = new File(this.getDataFolder() + File.separator + "arenas");
 		arenasfolder.mkdirs();
 		final TNTRun instance = this;
-		this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable()
-		{
-			public void run()
-			{
-				//load globallobyy
-				globallobby.loadFromConfig();
-				//load arenas
-				for (String file : arenasfolder.list())
-				{
-					Arena arena = new Arena(file.substring(0,file.length()-4), instance);
-					arena.loadFromConfig();
+		this.getServer().getScheduler().scheduleSyncDelayedTask(
+			this, 
+			new Runnable() {
+				public void run() {
+					// load globallobyy
+					globallobby.loadFromConfig();
+					// load arenas
+					for (String file : arenasfolder.list()) {
+						Arena arena = new Arena(file.substring(0, file.length() - 4), instance);
+						arena.loadFromConfig();
+					}
+					// load signs
+					signEditor.loadConfiguration();
 				}
-				//load signs
-				signEditor.loadConfiguration();
-			}
-		},20);
+			}, 
+			20
+		);
 	}
-	
+
 	@Override
-	public void onDisable()
-	{
-		//save arenas
-		for (Arena arena : pdata.getArenas())
-		{
+	public void onDisable() {
+		// save arenas
+		for (Arena arena : pdata.getArenas()) {
 			arena.disableArena();
 			arena.saveToConfig();
 		}
-		//save lobby
+		// save lobby
 		globallobby.saveToConfig();
 		globallobby = null;
-		//save signs
+		// save signs
 		signEditor.saveConfiguration();
 		signEditor = null;
-		//unload other things
+		// unload other things
 		HandlerList.unregisterAll(this);
 		scommands = null;
 		gcommands = null;
@@ -128,10 +125,9 @@ public class TNTRun extends JavaPlugin {
 		pdata = null;
 		log = null;
 	}
-	
-	public void logSevere(String message)
-	{
+
+	public void logSevere(String message) {
 		log.severe(message);
 	}
-	
+
 }

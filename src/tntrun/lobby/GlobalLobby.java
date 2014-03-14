@@ -30,59 +30,56 @@ import tntrun.TNTRun;
 public class GlobalLobby {
 
 	private File lobbyFile;
-	public GlobalLobby(TNTRun plugin)
-	{
-		lobbyFile = new File(plugin.getDataFolder()+File.separator+"lobby.yml");
+
+	public GlobalLobby(TNTRun plugin) {
+		lobbyFile = new File(plugin.getDataFolder() + File.separator + "lobby.yml");
 	}
-	
+
 	private LobbyLocation lobbyLocation;
-	public boolean isLobbyLocationWorldAvailable()
-	{
-		if (isLobbyLocationSet())
-		{
+
+	public boolean isLobbyLocationWorldAvailable() {
+		if (isLobbyLocationSet()) {
 			return lobbyLocation.isWorldAvailable();
 		}
 		return false;
 	}
-	public boolean isLobbyLocationSet()
-	{
+
+	public boolean isLobbyLocationSet() {
 		return lobbyLocation != null;
 	}
-	public Location getLobbyLocation()
-	{
+
+	public Location getLobbyLocation() {
 		return lobbyLocation.getLocation();
 	}
-	
-	public void setLobbyLocation(Location location)
-	{
-		this.lobbyLocation = new LobbyLocation(location.getWorld().getName(), location.toVector(), location.getYaw(), location.getPitch());
+
+	public void setLobbyLocation(Location location) {
+		this.lobbyLocation = new LobbyLocation(location.getWorld().getName(),
+				location.toVector(), location.getYaw(), location.getPitch());
 	}
-	
-	
-	public void saveToConfig()
-	{
+
+	public void saveToConfig() {
 		FileConfiguration config = new YamlConfiguration();
-		if (isLobbyLocationSet())
-		{
+		if (isLobbyLocationSet()) {
 			config.set("lobby.world", lobbyLocation.getWorldName());
 			config.set("lobby.vector", lobbyLocation.getVector());
 			config.set("lobby.yaw", lobbyLocation.getYaw());
 			config.set("lobby.pitch", lobbyLocation.getPitch());
-			try {config.save(lobbyFile);} catch (IOException e) {}
+			try {
+				config.save(lobbyFile);
+			} catch (IOException e) {
+			}
 		}
 	}
-	
-	public void loadFromConfig()
-	{
+
+	public void loadFromConfig() {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(lobbyFile);
-		String worldname = config.getString("lobby.world",null);
+		String worldname = config.getString("lobby.world", null);
 		Vector vector = config.getVector("lobby.vector", null);
-		float yaw = (float) config.getDouble("lobby.yaw",0.0);
+		float yaw = (float) config.getDouble("lobby.yaw", 0.0);
 		float pitch = (float) config.getDouble("lobby.pitch", 0.0);
-		if (worldname != null && vector != null)
-		{
+		if (worldname != null && vector != null) {
 			lobbyLocation = new LobbyLocation(worldname, vector, yaw, pitch);
 		}
 	}
-	
+
 }

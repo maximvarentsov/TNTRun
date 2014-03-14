@@ -7,29 +7,32 @@ import org.bukkit.util.Vector;
 public class LobbyLocation {
 
 	private String worldname;
-	protected String getWorldName()
-	{
+
+	protected String getWorldName() {
 		return worldname;
 	}
+
 	private double x;
 	private double y;
 	private double z;
-	protected Vector getVector()
-	{
-		return new Vector(x,y,z);
+
+	protected Vector getVector() {
+		return new Vector(x, y, z);
 	}
+
 	private float yaw;
-	protected float getYaw()
-	{
+
+	protected float getYaw() {
 		return yaw;
 	}
+
 	private float pitch;
-	protected float getPitch()
-	{
+
+	protected float getPitch() {
 		return pitch;
 	}
-	public LobbyLocation(String worldname, Vector vector, float yaw, float pitch)
-	{
+
+	public LobbyLocation(String worldname, Vector vector, float yaw, float pitch) {
 		this.worldname = worldname;
 		this.x = vector.getX();
 		this.y = vector.getY();
@@ -37,16 +40,14 @@ public class LobbyLocation {
 		this.yaw = yaw;
 		this.pitch = pitch;
 	}
-	
-	protected boolean isWorldAvailable()
-	{
+
+	protected boolean isWorldAvailable() {
 		return Bukkit.getWorld(worldname) != null;
 	}
-	protected Location getLocation()
-	{
-		if (isWorldAvailable())
-		{
-			return new Location(Bukkit.getWorld(worldname),x,y,z,yaw,pitch);
+
+	protected Location getLocation() {
+		if (isWorldAvailable()) {
+			return new Location(Bukkit.getWorld(worldname), x, y, z, yaw, pitch);
 		}
 		return null;
 	}

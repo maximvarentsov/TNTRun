@@ -28,29 +28,24 @@ import tntrun.messages.Messages;
 public class LeaveSign {
 
 	private TNTRun plugin;
-	public LeaveSign(TNTRun plugin)
-	{
+
+	public LeaveSign(TNTRun plugin) {
 		this.plugin = plugin;
 	}
 
-	
-	public void handleCreation(SignChangeEvent e)
-	{
-		e.setLine(0, ChatColor.BLUE+"[TNTRun]");
+	public void handleCreation(SignChangeEvent e) {
+		e.setLine(0, ChatColor.BLUE + "[TNTRun]");
 		e.getPlayer().sendMessage("Sign succesfully created");
 	}
-	
-	public void handleClick(PlayerInteractEvent e)
-	{
+
+	public void handleClick(PlayerInteractEvent e) {
 		Arena arena = plugin.pdata.getPlayerArena(e.getPlayer().getName());
-		if (arena!=null)
-		{
+		if (arena != null) {
 			arena.arenaph.leavePlayer(e.getPlayer(), Messages.playerlefttoplayer, Messages.playerlefttoothers);
 			e.setCancelled(true);
-		} else
-		{
+		} else {
 			e.getPlayer().sendMessage("You are not in arena");
 		}
 	}
-	
+
 }

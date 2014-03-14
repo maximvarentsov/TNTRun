@@ -34,49 +34,57 @@ import tntrun.arena.Arena;
 public class RestrictionHandler implements Listener {
 
 	private TNTRun plugin;
-	public RestrictionHandler(TNTRun plugin)
-	{
+
+	public RestrictionHandler(TNTRun plugin) {
 		this.plugin = plugin;
 	}
-	
-	private HashSet<String> allowedcommands = new HashSet<String>(Arrays.asList("/tntrun leave","/tntrun vote","/tr leave","/tr vote"));
-	//player should not be able to issue any commands besides /tr leave and /tr vote while in arena
-	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled = true)
-	public void onPlayerCommand(PlayerCommandPreprocessEvent e)
-	{
+
+	private HashSet<String> allowedcommands = new HashSet<String>(
+			Arrays.asList("/tntrun leave", "/tntrun vote", "/tr leave",
+					"/tr vote"));
+
+	// player should not be able to issue any commands besides /tr leave and /tr
+	// vote while in arena
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onPlayerCommand(PlayerCommandPreprocessEvent e) {
 		Player player = e.getPlayer();
 		Arena arena = plugin.pdata.getPlayerArena(player.getName());
-		//ignore if player is not in arena
-		if (arena == null) {return;}
-		//allow use any command if player has permission
-		if (player.hasPermission("tntrun.cmdblockbypass")) {return;}
-		//now check command
-		if (!allowedcommands.contains(e.getMessage().toLowerCase()))
-		{
+		// ignore if player is not in arena
+		if (arena == null) {
+			return;
+		}
+		// allow use any command if player has permission
+		if (player.hasPermission("tntrun.cmdblockbypass")) {
+			return;
+		}
+		// now check command
+		if (!allowedcommands.contains(e.getMessage().toLowerCase())) {
 			e.setCancelled(true);
 		}
 	}
-	
-	//player should not be able to break blocks while in arena
-	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled = true)
-	public void onPlayerBlockBreak(BlockBreakEvent e)
-	{
+
+	// player should not be able to break blocks while in arena
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onPlayerBlockBreak(BlockBreakEvent e) {
 		Player player = e.getPlayer();
 		Arena arena = plugin.pdata.getPlayerArena(player.getName());
-		//ignore if player is not in arena
-		if (arena == null) {return;}
+		// ignore if player is not in arena
+		if (arena == null) {
+			return;
+		}
 		e.setCancelled(true);
 	}
-	
-	//player should not be able to place block while in arena
-	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled = true)
-	public void onPlayerBlockPlayer(BlockPlaceEvent e)
-	{
+
+	// player should not be able to place block while in arena
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onPlayerBlockPlayer(BlockPlaceEvent e) {
 		Player player = e.getPlayer();
 		Arena arena = plugin.pdata.getPlayerArena(player.getName());
-		//ignore if player is not in arena
-		if (arena == null) {return;}
+		// ignore if player is not in arena
+		if (arena == null) {
+			return;
+		}
 		e.setCancelled(true);
 	}
-	
+
 }

@@ -29,38 +29,31 @@ import tntrun.TNTRun;
 public class PlayerStatusHandler implements Listener {
 
 	private TNTRun plugin;
-	public PlayerStatusHandler(TNTRun plugin)
-	{
+
+	public PlayerStatusHandler(TNTRun plugin) {
 		this.plugin = plugin;
 	}
-	
-	//player should be invincible while in arena
-	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled = true)
-	public void onPlayerDamage(EntityDamageEvent e)
-	{
-		if (e.getEntity() instanceof Player)
-		{
+
+	// player should be invincible while in arena
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onPlayerDamage(EntityDamageEvent e) {
+		if (e.getEntity() instanceof Player) {
 			Player player = (Player) e.getEntity();
-			if (plugin.pdata.getPlayerArena(player.getName()) != null)
-			{
+			if (plugin.pdata.getPlayerArena(player.getName()) != null) {
 				e.setCancelled(true);
 			}
 		}
 	}
-	
-	//player should have infinite food while in arena
-	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled = true)
-	public void onPlayerDamage(FoodLevelChangeEvent e)
-	{
-		if (e.getEntity() instanceof Player)
-		{
+
+	// player should have infinite food while in arena
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onPlayerDamage(FoodLevelChangeEvent e) {
+		if (e.getEntity() instanceof Player) {
 			Player player = (Player) e.getEntity();
-			if (plugin.pdata.getPlayerArena(player.getName()) != null)
-			{
+			if (plugin.pdata.getPlayerArena(player.getName()) != null) {
 				e.setCancelled(true);
 			}
 		}
 	}
-	
-	
+
 }

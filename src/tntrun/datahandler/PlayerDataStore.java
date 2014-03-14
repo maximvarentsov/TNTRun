@@ -36,116 +36,118 @@ public class PlayerDataStore {
 	private HashMap<String, Arena> plingame = new HashMap<String, Arena>();
 	private HashMap<String, Arena> arenanames = new HashMap<String, Arena>();
 	private HashMap<Arena, HashSet<String>> arenaplayers = new HashMap<Arena, HashSet<String>>();
-	public Arena getPlayerArena(String player)
-	{
+	
+	public void registerArena(Arena arena) {
+		arenanames.put(arena.getArenaName(), arena);
+		arenaplayers.put(arena, new HashSet<String>());
+	}
+
+	public void unregisterArena(Arena arena) {
+		arenanames.remove(arena.getArenaName());
+		arenaplayers.remove(arena);
+	}
+
+	public Arena getPlayerArena(String player) {
 		return plingame.get(player);
 	}
-	public void setPlayerArena(String player, Arena arena)
-	{
+
+	public void setPlayerArena(String player, Arena arena) {
 		plingame.put(player, arena);
 		arenaplayers.get(arena).add(player);
 	}
-	public void removePlayerFromArena(String player)
-	{
+
+	public void removePlayerFromArena(String player) {
 		Arena arena = plingame.get(player);
 		arenaplayers.get(arena).remove(player);
 		plingame.remove(player);
 	}
-	public HashSet<String> getArenaPlayers(Arena arena)
-	{
+
+	public HashSet<String> getArenaPlayers(Arena arena) {
 		return arenaplayers.get(arena);
 	}
-	public void putArenaInHashMap(Arena arena)
-	{
-		arenanames.put(arena.getArenaName(), arena);
-		arenaplayers.put(arena, new HashSet<String>());
-	}
-	public void removeArenaFromHashMap(Arena arena)
-	{
-		arenanames.remove(arena.getArenaName());
-		arenaplayers.remove(arena);
-	}
-	public Set<Arena> getArenas()
-	{
+
+	public Set<Arena> getArenas() {
 		return arenaplayers.keySet();
 	}
-	public Set<String> getArenasNames()
-	{
+
+	public Set<String> getArenasNames() {
 		return arenanames.keySet();
 	}
-	public Arena getArenaByName(String name)
-	{
+
+	public Arena getArenaByName(String name) {
 		return arenanames.get(name);
 	}
-	
+
 	private HashMap<String, ItemStack[]> plinv = new HashMap<String, ItemStack[]>();
 	private HashMap<String, ItemStack[]> plarmor = new HashMap<String, ItemStack[]>();
 	private HashMap<String, Collection<PotionEffect>> pleffects = new HashMap<String, Collection<PotionEffect>>();
 	private HashMap<String, Location> plloc = new HashMap<String, Location>();
 	private HashMap<String, Integer> plhunger = new HashMap<String, Integer>();
 	private HashMap<String, GameMode> plgamemode = new HashMap<String, GameMode>();
-	public void storePlayerInventory(String player)
-	{
+
+	public void storePlayerInventory(String player) {
 		PlayerInventory pinv = Bukkit.getPlayerExact(player).getInventory();
 		plinv.put(player, pinv.getContents());
 		pinv.clear();
 	}
-	public void storePlayerArmor(String player)
-	{
+
+	public void storePlayerArmor(String player) {
 		PlayerInventory pinv = Bukkit.getPlayerExact(player).getInventory();
 		plarmor.put(player, pinv.getArmorContents());
 		pinv.setArmorContents(null);
 	}
-	public void storePlayerPotionEffects(String player)
-	{
-		Collection<PotionEffect> peff = Bukkit.getPlayerExact(player).getActivePotionEffects();
+
+	public void storePlayerPotionEffects(String player) {
+		Collection<PotionEffect> peff = Bukkit.getPlayerExact(player)
+				.getActivePotionEffects();
 		pleffects.put(player, peff);
-		for (PotionEffect peffect : peff)
-		{
+		for (PotionEffect peffect : peff) {
 			Bukkit.getPlayerExact(player).removePotionEffect(peffect.getType());
 		}
 	}
-	public void storePlayerLocation(String player)
-	{
+
+	public void storePlayerLocation(String player) {
 		plloc.put(player, Bukkit.getPlayerExact(player).getLocation());
 	}
-	public void storePlayerHunger(String player)
-	{
+
+	public void storePlayerHunger(String player) {
 		plhunger.put(player, Bukkit.getPlayerExact(player).getFoodLevel());
 		Bukkit.getPlayerExact(player).setFoodLevel(20);
 	}
-	public void storePlayerGameMode(String player)
-	{
+
+	public void storePlayerGameMode(String player) {
 		plgamemode.put(player, Bukkit.getPlayerExact(player).getGameMode());
 		Bukkit.getPlayerExact(player).setGameMode(GameMode.SURVIVAL);
 	}
-	public void restorePlayerInventory(String player)
-	{
-		Bukkit.getPlayerExact(player).getInventory().setContents(plinv.get(player));
+
+	public void restorePlayerInventory(String player) {
+		Bukkit.getPlayerExact(player).getInventory()
+				.setContents(plinv.get(player));
 		plinv.remove(player);
 	}
-	public void restorePlayerArmor(String player)
-	{
-		Bukkit.getPlayerExact(player).getInventory().setArmorContents(plarmor.get(player));
+
+	public void restorePlayerArmor(String player) {
+		Bukkit.getPlayerExact(player).getInventory()
+				.setArmorContents(plarmor.get(player));
 		plarmor.remove(player);
 	}
-	public void restorePlayerPotionEffects(String player)
-	{
+
+	public void restorePlayerPotionEffects(String player) {
 		Bukkit.getPlayerExact(player).addPotionEffects(pleffects.get(player));
 		pleffects.remove(player);
 	}
-	public void restorePlayerLocation(String player)
-	{
+
+	public void restorePlayerLocation(String player) {
 		Bukkit.getPlayerExact(player).teleport(plloc.get(player));
 		plloc.remove(player);
 	}
-	public void restorePlayerHunger(String player)
-	{
+
+	public void restorePlayerHunger(String player) {
 		Bukkit.getPlayerExact(player).setFoodLevel(plhunger.get(player));
 		plhunger.remove(player);
-	}	
-	public void restorePlayerGameMode(String player)
-	{
+	}
+
+	public void restorePlayerGameMode(String player) {
 		Bukkit.getPlayerExact(player).setGameMode(plgamemode.get(player));
 		plgamemode.remove(player);
 	}

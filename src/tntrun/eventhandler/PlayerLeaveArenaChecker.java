@@ -30,32 +30,33 @@ import tntrun.messages.Messages;
 public class PlayerLeaveArenaChecker implements Listener {
 
 	private TNTRun plugin;
-	public PlayerLeaveArenaChecker(TNTRun plugin)
-	{
+
+	public PlayerLeaveArenaChecker(TNTRun plugin) {
 		this.plugin = plugin;
 	}
 
-
-	//remove player from arena on quit
-	@EventHandler(priority=EventPriority.LOWEST,ignoreCancelled = true)
-	public void onPlayerQuitEvent(PlayerQuitEvent e)
-	{
+	// remove player from arena on quit
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPlayerQuitEvent(PlayerQuitEvent e) {
 		Player player = e.getPlayer();
 		Arena arena = plugin.pdata.getPlayerArena(player.getName());
-		//ignore if player is not in arena
-		if (arena == null) {return;}
+		// ignore if player is not in arena
+		if (arena == null) {
+			return;
+		}
 		arena.arenaph.leavePlayer(player, "", Messages.playerlefttoothers);
 	}
-	
-	//remove player from arena if he died (/kill command sux)
-	@EventHandler(priority=EventPriority.LOWEST,ignoreCancelled = true)
-	public void onPlayerDeathEvent(PlayerDeathEvent e)
-	{
+
+	// remove player from arena if he died (/kill command sux)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPlayerDeathEvent(PlayerDeathEvent e) {
 		Player player = e.getEntity();
 		Arena arena = plugin.pdata.getPlayerArena(player.getName());
-		//ignore if player is not in arena
-		if (arena == null) {return;}
+		// ignore if player is not in arena
+		if (arena == null) {
+			return;
+		}
 		arena.arenaph.leavePlayer(player, "", Messages.playerlefttoothers);
 	}
-	
+
 }

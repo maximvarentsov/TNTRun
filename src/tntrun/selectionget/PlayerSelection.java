@@ -15,7 +15,6 @@
  * 
  */
 
-
 package tntrun.selectionget;
 
 import org.bukkit.Bukkit;
@@ -26,51 +25,42 @@ public class PlayerSelection {
 
 	private WEIntegration weintegration = null;
 	private OwnLocations ownlocations = new OwnLocations();
-	public PlayerSelection()
-	{
-		if (Bukkit.getPluginManager().getPlugin("WorldEdit") != null)
-		{
+
+	public PlayerSelection() {
+		if (Bukkit.getPluginManager().getPlugin("WorldEdit") != null) {
 			weintegration = new WEIntegration();
 		}
 	}
-	
-	
-	public PlayerCuboidSelection getPlayerSelection(Player player, boolean oneBlockHigh)
-	{
-		//try to get own locations
+
+	public PlayerCuboidSelection getPlayerSelection(Player player,
+			boolean oneBlockHigh) {
+		// try to get own locations
 		Location[] locs = ownlocations.getLocations(player, oneBlockHigh);
-		if (locs != null)
-		{
-			return new  PlayerCuboidSelection(locs[0],locs[1]);
+		if (locs != null) {
+			return new PlayerCuboidSelection(locs[0], locs[1]);
 		}
-		//now check worldedit selection
-		if (weintegration != null)
-		{
+		// now check worldedit selection
+		if (weintegration != null) {
 			locs = weintegration.getLocations(player, oneBlockHigh);
-			if (locs != null)
-			{
-				return new  PlayerCuboidSelection(locs[0],locs[1]);
+			if (locs != null) {
+				return new PlayerCuboidSelection(locs[0], locs[1]);
 			}
 		}
 		return null;
 	}
-	
-	
+
 	@SuppressWarnings("deprecation")
-	public void setSelectionPoint1(Player player)
-	{
+	public void setSelectionPoint1(Player player) {
 		ownlocations.putPlayerLoc1(player.getName(), player.getTargetBlock(null, 30).getLocation());
 	}
+
 	@SuppressWarnings("deprecation")
-	public void setSelectionPoint2(Player player)
-	{
+	public void setSelectionPoint2(Player player) {
 		ownlocations.putPlayerLoc2(player.getName(), player.getTargetBlock(null, 30).getLocation());
 	}
-	public void clearSelectionPoints(Player player)
-	{
+
+	public void clearSelectionPoints(Player player) {
 		ownlocations.clearPoints(player.getName());
 	}
 
-	
-	
 }

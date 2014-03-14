@@ -12,16 +12,16 @@ import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 
 public class Messages {
-	
+
 	public static String nopermission = "&4You don't have permission to do this";
-	
+
 	public static String teleporttolobby = "&6Teleported to lobby";
-	
+
 	public static String availablearenas = "&6Available arenas:&r ";
 	public static String arenadisabled = "&6Arena is disabled";
-	public static String arenarunning = "&6Arena already running"; 
+	public static String arenarunning = "&6Arena already running";
 	public static String arenadisabling = "&6Arena is disabling";
-	
+
 	public static String playerscount = "&6Current players count:&r ";
 	public static String limitreached = "&6Slot limit reached.";
 	public static String playerjoinedtoplayer = "&6You joined the arena";
@@ -37,18 +37,20 @@ public class Messages {
 	public static String playerlosttoplayer = "&6You lost the game";
 	public static String playerlosttoothers = "&6Player {PLAYER} lost the game";
 	public static String playerwonbroadcast = "&9[TNTRun] &a{PLAYER}&r won the game on arena &c{ARENA}";
-	
+
 	public static void sendMessage(Player player, String message) {
 		if (!message.equals("")) {
 			player.sendMessage(FormattingCodesParser.parseFormattingCodes(message));
 		}
 	}
+
 	public static void sendMessage(Player player, String plname, String message) {
 		if (!message.equals("")) {
 			message = message.replace("{PLAYER}", plname);
 			player.sendMessage(FormattingCodesParser.parseFormattingCodes(message));
 		}
 	}
+
 	public static void sendMessage(Player player, String message, int c) {
 		if (!message.equals("")) {
 			message = message.replace("{TIMELIMIT}", String.valueOf(c));
@@ -56,9 +58,8 @@ public class Messages {
 			player.sendMessage(FormattingCodesParser.parseFormattingCodes(message));
 		}
 	}
-	
-	public static void broadsactMessage(String plname, String arena, String message)
-	{
+
+	public static void broadsactMessage(String plname, String arena, String message) {
 		if (!message.equals("")) {
 			message = message.replace("{PLAYER}", plname);
 			message = message.replace("{ARENA}", arena);
@@ -66,62 +67,61 @@ public class Messages {
 		}
 	}
 
-	public static void loadMessages(TNTRun plugin)
-	{
-		File messageconfig = new File(plugin.getDataFolder(),"configmsg.yml");
+	public static void loadMessages(TNTRun plugin) {
+		File messageconfig = new File(plugin.getDataFolder(), "configmsg.yml");
 		FileConfiguration config = YamlConfiguration.loadConfiguration(messageconfig);
-		nopermission = config.getString("nopermission",nopermission);
-		teleporttolobby = config.getString("teleporttolobby",teleporttolobby);
-		availablearenas = config.getString("availablearenas",availablearenas);
-		arenadisabled = config.getString("arenadisabled",arenadisabled);
-		arenarunning = config.getString("arenarunning",arenarunning);
-		arenadisabling = config.getString("arenadisabling",arenadisabling);
-		playerscount = config.getString("playerscount",playerscount);
-		limitreached = config.getString("limitreached",limitreached );
-		playerjoinedtoplayer = config.getString("playerjoinedtoplayer",playerjoinedtoplayer);
-		playerjoinedtoothers = config.getString("playerjoinedtoothers",playerjoinedtoothers);
-		playerlefttoplayer = config.getString("playerlefttoplayer",playerlefttoplayer);
-		playerlefttoothers = config.getString("playerlefttoothers",playerlefttoothers);
-		playervotedforstart = config.getString("playervotedforstart",playervotedforstart);
-		playeralreadyvotedforstart = config.getString("playeralreadyvotedforstart",playeralreadyvotedforstart);
-		arenastarted = config.getString("arenastarted",arenastarted);
-		arenacountdown = config.getString("arenacountdown",arenacountdown);
-		arenatimeout = config.getString("arenatimeout",arenatimeout);
-		playerwontoplayer = config.getString("playerwontoplayer",playerwontoplayer);
-		playerlosttoplayer = config.getString("playerlosttoplayer",playerlosttoplayer);
-		playerlosttoothers = config.getString("playerlosttoothers",playerlosttoothers);
-		playerwonbroadcast = config.getString("playerwonbroadcast",playerwonbroadcast);
+		nopermission = config.getString("nopermission", nopermission);
+		teleporttolobby = config.getString("teleporttolobby", teleporttolobby);
+		availablearenas = config.getString("availablearenas", availablearenas);
+		arenadisabled = config.getString("arenadisabled", arenadisabled);
+		arenarunning = config.getString("arenarunning", arenarunning);
+		arenadisabling = config.getString("arenadisabling", arenadisabling);
+		playerscount = config.getString("playerscount", playerscount);
+		limitreached = config.getString("limitreached", limitreached);
+		playerjoinedtoplayer = config.getString("playerjoinedtoplayer", playerjoinedtoplayer);
+		playerjoinedtoothers = config.getString("playerjoinedtoothers", playerjoinedtoothers);
+		playerlefttoplayer = config.getString("playerlefttoplayer", playerlefttoplayer);
+		playerlefttoothers = config.getString("playerlefttoothers", playerlefttoothers);
+		playervotedforstart = config.getString("playervotedforstart", playervotedforstart);
+		playeralreadyvotedforstart = config.getString("playeralreadyvotedforstart", playeralreadyvotedforstart);
+		arenastarted = config.getString("arenastarted", arenastarted);
+		arenacountdown = config.getString("arenacountdown", arenacountdown);
+		arenatimeout = config.getString("arenatimeout", arenatimeout);
+		playerwontoplayer = config.getString("playerwontoplayer", playerwontoplayer);
+		playerlosttoplayer = config.getString("playerlosttoplayer", playerlosttoplayer);
+		playerlosttoothers = config.getString("playerlosttoothers", playerlosttoothers);
+		playerwonbroadcast = config.getString("playerwonbroadcast", playerwonbroadcast);
 		saveMessages(messageconfig);
 	}
-	private static void saveMessages(File messageconfig)
-	{
+
+	private static void saveMessages(File messageconfig) {
 		FileConfiguration config = new YamlConfiguration();
-		config.set("nopermission",nopermission);
-		config.set("teleporttolobby",teleporttolobby);
-		config.set("availablearenas",availablearenas);
-		config.set("arenadisabled",arenadisabled);
-		config.set("arenarunning",arenarunning);
-		config.set("arenadisabling",arenadisabling);
-		config.set("playerscount",playerscount);
-		config.set("limitreached",limitreached );
-		config.set("playerjoinedtoplayer",playerjoinedtoplayer);
-		config.set("playerjoinedtoothers",playerjoinedtoothers);
-		config.set("playerlefttoplayer",playerlefttoplayer);
-		config.set("playerlefttoothers",playerlefttoothers);
-		config.set("playervotedforstart",playervotedforstart);
-		config.set("playeralreadyvotedforstart",playeralreadyvotedforstart);
-		config.set("arenastarted",arenastarted);
-		config.set("arenacountdown",arenacountdown);
-		config.set("arenatimeout",arenatimeout);
-		config.set("playerwontoplayer",playerwontoplayer);
-		config.set("playerlosttoplayer",playerlosttoplayer);
-		config.set("playerlosttoothers",playerlosttoothers);
-		config.set("playerwonbroadcast",playerwonbroadcast);
+		config.set("nopermission", nopermission);
+		config.set("teleporttolobby", teleporttolobby);
+		config.set("availablearenas", availablearenas);
+		config.set("arenadisabled", arenadisabled);
+		config.set("arenarunning", arenarunning);
+		config.set("arenadisabling", arenadisabling);
+		config.set("playerscount", playerscount);
+		config.set("limitreached", limitreached);
+		config.set("playerjoinedtoplayer", playerjoinedtoplayer);
+		config.set("playerjoinedtoothers", playerjoinedtoothers);
+		config.set("playerlefttoplayer", playerlefttoplayer);
+		config.set("playerlefttoothers", playerlefttoothers);
+		config.set("playervotedforstart", playervotedforstart);
+		config.set("playeralreadyvotedforstart", playeralreadyvotedforstart);
+		config.set("arenastarted", arenastarted);
+		config.set("arenacountdown", arenacountdown);
+		config.set("arenatimeout", arenatimeout);
+		config.set("playerwontoplayer", playerwontoplayer);
+		config.set("playerlosttoplayer", playerlosttoplayer);
+		config.set("playerlosttoothers", playerlosttoothers);
+		config.set("playerwonbroadcast", playerwonbroadcast);
 		try {
 			config.save(messageconfig);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

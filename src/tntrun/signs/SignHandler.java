@@ -39,82 +39,71 @@ public class SignHandler implements Listener {
 	private JoinSign joinsign;
 	private LeaveSign leavesign;
 	private VoteSign votesign;
-	public SignHandler(TNTRun plugin)
-	{
+
+	public SignHandler(TNTRun plugin) {
 		joinsign = new JoinSign(plugin);
 		leavesign = new LeaveSign(plugin);
 		votesign = new VoteSign(plugin);
 	}
-	
-	
-	//handle sign change
-	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-	public void onTNTRunSignCreate(SignChangeEvent e)
-	{
+
+	// handle sign change
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onTNTRunSignCreate(SignChangeEvent e) {
 		Player player = e.getPlayer();
-		if (e.getLine(0).equalsIgnoreCase("[TNTRun]"))
-		{
-			if (!player.hasPermission("tntrun.setup")) 
-			{
+		if (e.getLine(0).equalsIgnoreCase("[TNTRun]")) {
+			if (!player.hasPermission("tntrun.setup")) {
 				Messages.sendMessage(player, Messages.nopermission);
 				e.setCancelled(true);
 				e.getBlock().breakNaturally();
 				return;
 			}
-			
-			if (e.getLine(1).equalsIgnoreCase("[join]") && e.getLine(2) != null)
-			{
+
+			if (e.getLine(1).equalsIgnoreCase("[join]") && e.getLine(2) != null) {
 				joinsign.handleCreation(e);
-			}
-			else if (e.getLine(1).equalsIgnoreCase("[leave]"))
-			{
+			} else if (e.getLine(1).equalsIgnoreCase("[leave]")) {
 				leavesign.handleCreation(e);
-			}
-			else if (e.getLine(1).equalsIgnoreCase("[vote]"))
-			{
+			} else if (e.getLine(1).equalsIgnoreCase("[vote]")) {
 				votesign.handleCreation(e);
 			}
 		}
 	}
-	
-	//handle sign click
-	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-	public void onSignClick(PlayerInteractEvent e)
-	{
-		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {return;}
-		if (!(e.getClickedBlock().getState() instanceof Sign)) {return;}
+
+	// handle sign click
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onSignClick(PlayerInteractEvent e) {
+		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
+			return;
+		}
+		if (!(e.getClickedBlock().getState() instanceof Sign)) {
+			return;
+		}
 		Sign sign = (Sign) e.getClickedBlock().getState();
 		Player player = e.getPlayer();
-		if (sign.getLine(0).equalsIgnoreCase(ChatColor.BLUE+"[TNTRun]"))
-		{
-			if (!player.hasPermission("tntrun.game")) 
-			{
+		if (sign.getLine(0).equalsIgnoreCase(ChatColor.BLUE + "[TNTRun]")) {
+			if (!player.hasPermission("tntrun.game")) {
 				player.sendMessage("You don't have permission to do this");
 				e.setCancelled(true);
 				return;
 			}
-			
-			if (sign.getLine(1).equalsIgnoreCase("[join]") && sign.getLine(2) != null)
-			{
+
+			if (sign.getLine(1).equalsIgnoreCase("[join]")
+					&& sign.getLine(2) != null) {
 				joinsign.handleClick(e);
-			}
-			else if (sign.getLine(1).equalsIgnoreCase("[leave]"))
-			{
+			} else if (sign.getLine(1).equalsIgnoreCase("[leave]")) {
 				leavesign.handleClick(e);
-			}
-			else if (sign.getLine(1).equalsIgnoreCase("[vote]"))
-			{
+			} else if (sign.getLine(1).equalsIgnoreCase("[vote]")) {
 				votesign.handleClick(e);
 			}
 		}
 	}
-	
-	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onSignDestroy(BlockBreakEvent e) {
-		if (!(e.getBlock().getState() instanceof Sign)) {return;}
+		if (!(e.getBlock().getState() instanceof Sign)) {
+			return;
+		}
 		Sign sign = (Sign) e.getBlock().getState();
-		if (sign.getLine(0).equalsIgnoreCase(ChatColor.BLUE+"[TNTRun]") && sign.getLine(1).equalsIgnoreCase("[join]") && sign.getLine(2) != null)
-		{
+		if (sign.getLine(0).equalsIgnoreCase(ChatColor.BLUE + "[TNTRun]") && sign.getLine(1).equalsIgnoreCase("[join]")) {
 			joinsign.handleDestroy(e.getBlock());
 		}
 	}

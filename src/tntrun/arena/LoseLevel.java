@@ -24,44 +24,38 @@ import org.bukkit.util.Vector;
 public class LoseLevel {
 
 	private Vector p1 = null;
-	public Vector getP1()
-	{
+
+	public Vector getP1() {
 		return p1;
 	}
+
 	private Vector p2 = null;
-	public Vector getP2()
-	{
+
+	public Vector getP2() {
 		return p2;
 	}
-	
-	
-	protected boolean isConfigured()
-	{
+
+	protected boolean isConfigured() {
 		return (p1 != null && p2 != null);
 	}
-	
-	
-	protected boolean isLooseLocation(Location loc)
-	{
+
+	protected boolean isLooseLocation(Location loc) {
 		return loc.getY() < Math.max(p2.getBlockY(), p1.getBlockY()) + 1;
 	};
-	
-	protected void setLooseLocation(Location p1, Location p2)
-	{
+
+	protected void setLooseLocation(Location p1, Location p2) {
 		this.p1 = p1.toVector();
 		this.p2 = p2.toVector();
-	}	
-	
-	protected void saveToConfig(FileConfiguration config)
-	{
+	}
+
+	protected void saveToConfig(FileConfiguration config) {
 		config.set("loselevel.p1", p1);
 		config.set("loselevel.p2", p2);
 	}
-	
-	protected void loadFromConfig(FileConfiguration config)
-	{
+
+	protected void loadFromConfig(FileConfiguration config) {
 		p1 = config.getVector("loselevel.p1", null);
 		p2 = config.getVector("loselevel.p2", null);
 	}
-	
+
 }

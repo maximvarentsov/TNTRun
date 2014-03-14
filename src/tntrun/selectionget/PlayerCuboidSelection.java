@@ -15,7 +15,6 @@
  * 
  */
 
-
 package tntrun.selectionget;
 
 import org.bukkit.Location;
@@ -24,20 +23,18 @@ public class PlayerCuboidSelection {
 
 	private Location minpoint;
 	private Location maxpoint;
-	public PlayerCuboidSelection(Location minpoint, Location maxpoint)
-	{
+
+	public PlayerCuboidSelection(Location minpoint, Location maxpoint) {
 		this.minpoint = minpoint;
 		this.maxpoint = maxpoint;
 	}
-	
-	public Location getMinimumLocation()
-	{
+
+	public Location getMinimumLocation() {
 		return minpoint;
 	}
-	
-	public Location getMaximumLocation()
-	{
+
+	public Location getMaximumLocation() {
 		return maxpoint;
 	}
-	
+
 }
