@@ -18,7 +18,6 @@ public class StatusManager {
 	private boolean running = false;
 	private boolean regenerating = false;
 
-	// arena status handler
 	public boolean isArenaEnabled() {
 		return enabled;
 	}

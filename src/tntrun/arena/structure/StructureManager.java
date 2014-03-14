@@ -205,8 +205,7 @@ public class StructureManager {
 	}
 	
 	
-	
-	// arena config handlers
+
 	private File arenafile;
 	public void setArenaFile(File file) {
 		if (arenafile != null) {
