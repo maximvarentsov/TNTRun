@@ -14,13 +14,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 public class StructureManager {
-	
+
 	private String world;
 
 	public String getWorldName() {
 		return world;
 	}
-	
+
 	public World getWorld() {
 		return Bukkit.getWorld(world);
 	}
@@ -60,7 +60,7 @@ public class StructureManager {
 	public Vector getSpawnPointVector() {
 		return spawnpoint;
 	}
-	
+
 	public Location getSpawnPoint() {
 		Location spawn = new Location(getWorld(), spawnpoint.getX(), spawnpoint.getY(), spawnpoint.getZ());
 		return spawn;
@@ -101,7 +101,7 @@ public class StructureManager {
 	public Rewards getRewards() {
 		return rewards;
 	}
-	
+
 	// arena structure handler
 	// main
 	public boolean isInArenaBounds(Location loc) {
@@ -203,8 +203,8 @@ public class StructureManager {
 	public void setRewards(int money) {
 		this.rewards.setRewards(money);
 	}
-	
-	
+
+
 
 	private File arenafile;
 	public void setArenaFile(File file) {
@@ -298,5 +298,5 @@ public class StructureManager {
 		// load rewards
 		rewards.loadFromConfig(config);
 	}
-	
+
 }

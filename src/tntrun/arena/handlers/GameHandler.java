@@ -3,16 +3,16 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  */
 
 package tntrun.arena.handlers;
@@ -44,6 +44,7 @@ public class GameHandler {
 	public void startArenaAntiLeaveHandler() {
 		leavetaskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin,
 				new Runnable() {
+					@Override
 					public void run() {
 						for (Player player : Bukkit.getOnlinePlayers()) {
 							if (arena.getPlayersManager().isPlayerInArena(player.getName())) {
@@ -69,6 +70,7 @@ public class GameHandler {
 		runtaskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(
 			plugin,
 			new Runnable() {
+				@Override
 				public void run() {
 					// check if countdown should be stopped for some various reasons
 					if (!arena.getStatusManager().isArenaEnabled()) {
@@ -98,7 +100,7 @@ public class GameHandler {
 						count--;
 					}
 				}
-			}, 
+			},
 			0, 20
 		);
 	}
@@ -124,6 +126,7 @@ public class GameHandler {
 		timelimit = arena.getStructureManager().getTimeLimit() * 20; // timelimit is in ticks
 		arenahandler = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin,
 				new Runnable() {
+					@Override
 					public void run() {
 						if (timelimit < 0) {
 							for (Player player : Bukkit.getOnlinePlayers()) {
@@ -204,6 +207,7 @@ public class GameHandler {
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		// start arena regen
 		Thread regen = new Thread() {
+			@Override
 			public void run() {
 				try {
 					// regen
@@ -213,6 +217,7 @@ public class GameHandler {
 						}
 						int regentask = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,
 							new Runnable() {
+								@Override
 								public void run() {
 									if (arena.getStatusManager().isArenaEnabled()) {
 										gl.regen();
@@ -232,6 +237,7 @@ public class GameHandler {
 					// update arena status
 					Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,
 						new Runnable() {
+							@Override
 							public void run() {
 								// set not regenerating status
 								arena.getStatusManager().setRegenerating(false);

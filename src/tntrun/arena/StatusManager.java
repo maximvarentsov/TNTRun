@@ -12,7 +12,7 @@ public class StatusManager {
 	public StatusManager(Arena arena) {
 		this.arena = arena;
 	}
-	
+
 	private boolean enabled = false;
 	private boolean starting = false;
 	private boolean running = false;
@@ -77,5 +77,5 @@ public class StatusManager {
 	public void setRegenerating(boolean regenerating) {
 		this.regenerating = regenerating;
 	}
-	
+
 }

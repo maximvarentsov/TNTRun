@@ -27,5 +27,5 @@ public class PlayersManager {
 	public void removePlayerFromArena(String name) {
 		players.remove(name);
 	}
-	
+
 }

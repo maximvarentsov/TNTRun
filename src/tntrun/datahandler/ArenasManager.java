@@ -9,11 +9,11 @@ import tntrun.arena.Arena;
 public class ArenasManager {
 
 	private HashMap<String, Arena> arenanames = new HashMap<String, Arena>();
-	
+
 	public void registerArena(Arena arena) {
 		arenanames.put(arena.getArenaName(), arena);
 	}
-	
+
 	public void unregisterArena(Arena arena) {
 		arenanames.remove(arena.getArenaName());
 	}
@@ -29,7 +29,7 @@ public class ArenasManager {
 	public Arena getArenaByName(String name) {
 		return arenanames.get(name);
 	}
-	
+
 	public Arena getPlayerArena(String name) {
 		for (Arena arena : arenanames.values()) {
 			if (arena.getPlayersManager().isPlayerInArena(name)) {
@@ -38,5 +38,5 @@ public class ArenasManager {
 		}
 		return null;
 	}
-	
+
 }
