@@ -101,9 +101,18 @@ public class StructureManager {
 	public Rewards getRewards() {
 		return rewards;
 	}
+	
+	
+	private TeleportDestination teleportDest = TeleportDestination.PREVIOUS;
+	
+	public TeleportDestination getTeleportDestination() {
+		return teleportDest;
+	}
+	
+	public static enum TeleportDestination {
+		PREVIOUS, LOBBY;
+	}
 
-	// arena structure handler
-	// main
 	public boolean isInArenaBounds(Location loc) {
 		if (loc.toVector().isInAABB(getP1(), getP2())) {
 			return true;
@@ -112,7 +121,7 @@ public class StructureManager {
 	}
 
 	public String isArenaConfigured() {
-		if (getP1() == null ||getP2() == null || world == null) {
+		if (getP1() == null || getP2() == null || world == null) {
 			return "Arena bounds not set";
 		}
 		if (gamelevels.size() == 0) {
@@ -175,7 +184,6 @@ public class StructureManager {
 		return false;
 	}
 
-	// additional
 	public void setMaxPlayers(int maxplayers) {
 		this.maxPlayers = maxplayers;
 	}
@@ -202,6 +210,10 @@ public class StructureManager {
 
 	public void setRewards(int money) {
 		this.rewards.setRewards(money);
+	}
+	
+	public void setTeleportDestination(TeleportDestination teleportDest) {
+		this.teleportDest = teleportDest;
 	}
 
 
@@ -251,6 +263,8 @@ public class StructureManager {
 		config.set("timelimit", timelimit);
 		// save countdown
 		config.set("countdown", countdown);
+		// save teleport destination
+		config.set("teleportto", teleportDest.toString());
 		// save rewards
 		rewards.saveToConfig(config);
 		try {
@@ -295,6 +309,8 @@ public class StructureManager {
 		timelimit = config.getInt("timelimit", timelimit);
 		// load countdown
 		countdown = config.getInt("countdown", countdown);
+		// load teleport destination
+		teleportDest = TeleportDestination.valueOf(config.getString("teleportto", "PREVIOUS"));
 		// load rewards
 		rewards.loadFromConfig(config);
 	}

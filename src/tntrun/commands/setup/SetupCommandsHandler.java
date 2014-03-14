@@ -41,6 +41,7 @@ import tntrun.commands.setup.arena.SetMaxPlayers;
 import tntrun.commands.setup.arena.SetMinPlayers;
 import tntrun.commands.setup.arena.SetMoneyRewards;
 import tntrun.commands.setup.arena.SetSpawn;
+import tntrun.commands.setup.arena.SetTeleport;
 import tntrun.commands.setup.arena.SetTimeLimit;
 import tntrun.commands.setup.arena.SetVotePercent;
 import tntrun.commands.setup.lobby.SetLobby;
@@ -79,6 +80,7 @@ public class SetupCommandsHandler implements CommandExecutor {
 		commandHandlers.put("setitemsrewards", new SetItemsRewards(plugin));
 		commandHandlers.put("setmoneyrewards", new SetMoneyRewards(plugin));
 		commandHandlers.put("settimelimit", new SetTimeLimit(plugin));
+		commandHandlers.put("setteleport", new SetTeleport(plugin));
 		commandHandlers.put("finish", new Finish(plugin));
 		commandHandlers.put("disable", new Disable(plugin));
 		commandHandlers.put("enable", new Enable(plugin));
