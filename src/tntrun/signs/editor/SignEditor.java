@@ -55,9 +55,8 @@ public class SignEditor {
 			sign.setLine(3, "");
 			sign.update();
 		}
-		SignInfo signinfo = new SignInfo(block);
 		addArena(arena);
-		getSigns(arena).remove(signinfo);
+		getSigns(arena).remove(getSignInfo(block, arena));
 	}
 
 	public HashSet<Block> getSignsBlocks(String arena) {
@@ -69,6 +68,15 @@ public class SignEditor {
 			}
 		}
 		return signs;
+	}
+
+	private SignInfo getSignInfo(Block block, String arena) {
+		for (SignInfo si : getSigns(arena)) {
+			if (si.getBlock() == block) {
+				return si;
+			}
+		}
+		return new SignInfo(block);
 	}
 
 	private void addSignInfo(SignInfo si, String arena) {
