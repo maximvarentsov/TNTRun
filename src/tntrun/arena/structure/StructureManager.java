@@ -218,11 +218,9 @@ public class StructureManager {
 
 
 
-	private File arenafile;
+	private File arenafile = null;
 	public void setArenaFile(File file) {
-		if (arenafile == null) {
-			arenafile = file;
-		}
+		arenafile = file;
 	}
 
 	public void saveToConfig() {
