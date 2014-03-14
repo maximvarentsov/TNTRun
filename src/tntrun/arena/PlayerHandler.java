@@ -58,7 +58,7 @@ public class PlayerHandler {
 			player.sendMessage("You can't join the game while sitting inside vehicle");
 			return false;
 		}
-		if (arena.getPlayersCount() == arena.getMaxPlayers()) {
+		if (arena.getPlayersManager().getPlayersCount() == arena.getMaxPlayers()) {
 			Messages.sendMessage(player, Messages.limitreached);
 			return false;
 		}
@@ -84,25 +84,25 @@ public class PlayerHandler {
 		// send message to player
 		Messages.sendMessage(player, msgtoplayer);
 		// send message to other players and update bar
-		for (String pname : arena.getPlayersInArena()) {
+		for (String pname : arena.getPlayersManager().getPlayersInArena()) {
 			Messages.sendMessage(Bukkit.getPlayerExact(pname), player.getName(), msgtoarenaplayers);
 		}
 		// set player on arena data
-		arena.addPlayerToArena(player.getName());
+		arena.getPlayersManager().addPlayerToArena(player.getName());
 		// send message about arena player count
-		Messages.sendMessage(player, Messages.playerscount + arena.getPlayersCount());
+		Messages.sendMessage(player, Messages.playerscount + arena.getPlayersManager().getPlayersCount());
 		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		// modify bars
 		if (!arena.isArenaStarting()) {
 			for (Player oplayer : Bukkit.getOnlinePlayers()) {
-				if (arena.isPlayerInArena(oplayer.getName())) {
-					Bars.setBar(oplayer, Bars.waiting, arena.getPlayersCount(), 0, arena.getPlayersCount() * 100 / arena.getMinPlayers());
+				if (arena.getPlayersManager().isPlayerInArena(oplayer.getName())) {
+					Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getMinPlayers());
 				}
 			}
 		}
 		// check for game start
-		if (!arena.isArenaStarting() && (arena.getPlayersCount() == arena.getMaxPlayers() || arena.getPlayersCount() == arena.getMinPlayers())) {
+		if (!arena.isArenaStarting() && (arena.getPlayersManager().getPlayersCount() == arena.getMaxPlayers() || arena.getPlayersManager().getPlayersCount() == arena.getMinPlayers())) {
 			arena.arenagh.runArenaCountdown();
 		}
 	}
@@ -117,10 +117,10 @@ public class PlayerHandler {
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		// send message to other players and update bars
 		for (Player oplayer : Bukkit.getOnlinePlayers()) {
-			if (arena.isPlayerInArena(oplayer.getName())) {
+			if (arena.getPlayersManager().isPlayerInArena(oplayer.getName())) {
 				Messages.sendMessage(oplayer, player.getName(), msgtoarenaplayers);
 				if (!arena.isArenaStarting() && !arena.isArenaRunning()) {
-					Bars.setBar(oplayer, Bars.waiting, arena.getPlayersCount(), 0, arena.getPlayersCount() * 100 / arena.getMinPlayers());
+					Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getMinPlayers());
 				}
 			}
 		}
@@ -142,7 +142,7 @@ public class PlayerHandler {
 		// remove bar
 		Bars.removeBar(player);
 		// remove player on arena data
-		arena.removePlayerFromArena(player.getName());
+		arena.getPlayersManager().removePlayerFromArena(player.getName());
 		// restore location
 		plugin.pdata.restorePlayerLocation(player.getName());
 		// restore player status
@@ -165,7 +165,7 @@ public class PlayerHandler {
 	public boolean vote(Player player) {
 		if (!votes.contains(player.getName())) {
 			votes.add(player.getName());
-			if (!arena.isArenaStarting() && (arena.getPlayersCount() > 1 && (votes.size() >= arena.getPlayersCount() * arena.getVotePercent()))) {
+			if (!arena.isArenaStarting() && (arena.getPlayersManager().getPlayersCount() > 1 && (votes.size() >= arena.getPlayersManager().getPlayersCount() * arena.getVotePercent()))) {
 				arena.arenagh.runArenaCountdown();
 			}
 			return true;

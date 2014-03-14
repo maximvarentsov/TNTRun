@@ -51,6 +51,29 @@ public class Arena {
 		plugin.pdata.registerArena(this);
 	}
 	
+	private PlayersManager playersManager = new PlayersManager();
+	public PlayersManager getPlayersManager() {
+		return playersManager;
+	}
+	public class PlayersManager {
+		private HashSet<String> players = new HashSet<String>();
+		public boolean isPlayerInArena(String name) {
+			return players.contains(name);
+		}
+		public int getPlayersCount() {
+			return players.size();
+		}
+		public Set<String> getPlayersInArena() {
+			return Collections.unmodifiableSet(players);
+		}
+		public void addPlayerToArena(String name) {
+			players.add(name);
+		}
+		public void removePlayerFromArena(String name) {
+			players.remove(name);
+		}
+	}
+
 	private boolean enabled = false;
 	private boolean starting = false;
 	private boolean running = false;
@@ -78,23 +101,6 @@ public class Arena {
 
 	public Vector getP2() {
 		return p2;
-	}
-	
-	private HashSet<String> players = new HashSet<String>();
-	public boolean isPlayerInArena(String name) {
-		return players.contains(name);
-	}
-	public int getPlayersCount() {
-		return players.size();
-	}
-	public Set<String> getPlayersInArena() {
-		return Collections.unmodifiableSet(players);
-	}
-	public void addPlayerToArena(String name) {
-		players.add(name);
-	}
-	public void removePlayerFromArena(String name) {
-		players.remove(name);
 	}
 
 	private HashSet<GameLevel> gamelevels = new HashSet<GameLevel>();
@@ -177,7 +183,7 @@ public class Arena {
 		enabled = false;
 		// drop players
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (players.contains(player.getName())) {
+			if (getPlayersManager().isPlayerInArena(player.getName())) {
 				arenaph.leavePlayer(player, Messages.arenadisabling, "");
 			}
 		}

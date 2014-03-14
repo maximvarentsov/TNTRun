@@ -56,7 +56,7 @@ public class PlayerDataStore {
 	
 	public Arena getPlayerArena(String name) {
 		for (Arena arena : arenanames.values()) {
-			if (arena.isPlayerInArena(name)) {
+			if (arena.getPlayersManager().isPlayerInArena(name)) {
 				return arena;
 			}
 		}
