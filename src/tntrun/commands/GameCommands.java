@@ -41,11 +41,6 @@ public class GameCommands implements CommandExecutor {
 			return true;
 		}
 		Player player = (Player) sender;
-		// check permissions
-		if (!player.hasPermission("tntrun.game")) {
-			Messages.sendMessage(player, Messages.nopermission);
-			return true;
-		}
 		// handle commands
 		// help command
 		if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
