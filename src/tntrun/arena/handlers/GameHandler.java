@@ -226,13 +226,14 @@ public class GameHandler {
 		Bukkit.getScheduler().scheduleSyncDelayedTask(
 			arena.plugin,
 			new Runnable() {
+				@Override
 				public void run() {
 					// set not regenerating status
 					arena.getStatusManager().setRegenerating(false);
 					// modify signs
 					plugin.signEditor.modifySigns(arena.getArenaName());
 				}
-			}, 
+			},
 			delay
 		);
 	}

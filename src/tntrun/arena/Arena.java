@@ -40,12 +40,12 @@ public class Arena {
 	public String getArenaName() {
 		return arenaname;
 	}
-	
+
 	private GameHandler arenagh;
 	public GameHandler getGameHandler() {
 		return arenagh;
 	}
-	
+
 	private PlayerHandler arenaph;
 	public PlayerHandler getPlayerHandler() {
 		return arenaph;
