@@ -205,52 +205,36 @@ public class GameHandler {
 		arena.getStatusManager().setRegenerating(true);
 		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
-		// start arena regen
-		Thread regen = new Thread() {
-			@Override
-			public void run() {
-				try {
-					// regen
-					for (final GameLevel gl : arena.getStructureManager().getGameLevels()) {
-						if (!arena.getStatusManager().isArenaEnabled()) {
-							break;
+		// schedule gamelevels regen
+		int delay = 1;
+		for (final GameLevel gl : arena.getStructureManager().getGameLevels()) {
+			Bukkit.getScheduler().scheduleSyncDelayedTask(
+				arena.plugin,
+				new Runnable() {
+					@Override
+					public void run() {
+						if (arena.getStatusManager().isArenaEnabled()) {
+							gl.regen();
 						}
-						int regentask = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,
-							new Runnable() {
-								@Override
-								public void run() {
-									if (arena.getStatusManager().isArenaEnabled()) {
-										gl.regen();
-									}
-								}
-							}
-						);
-						while (Bukkit.getScheduler().isCurrentlyRunning(regentask) || Bukkit.getScheduler().isQueued(regentask)) {
-							Thread.sleep(10);
-						}
-						Thread.sleep(100);
 					}
-					Thread.sleep(100);
-					if (!arena.getStatusManager().isArenaEnabled()) {
-						return;
-					}
-					// update arena status
-					Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,
-						new Runnable() {
-							@Override
-							public void run() {
-								// set not regenerating status
-								arena.getStatusManager().setRegenerating(false);
-								// modify signs
-								plugin.signEditor.modifySigns(arena.getArenaName());
-							}
-						}
-					);
-				} catch (Exception e) {
+				},
+				delay
+			);
+			delay++;
+		}
+		// schedule arena regen finished
+		Bukkit.getScheduler().scheduleSyncDelayedTask(
+			arena.plugin,
+			new Runnable() {
+				public void run() {
+					// set not regenerating status
+					arena.getStatusManager().setRegenerating(false);
+					// modify signs
+					plugin.signEditor.modifySigns(arena.getArenaName());
 				}
-			}
-		};
-		regen.start();
+			}, 
+			delay
+		);
 	}
 
 }
