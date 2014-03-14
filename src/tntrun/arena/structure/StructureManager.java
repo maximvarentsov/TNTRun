@@ -1,6 +1,5 @@
 package tntrun.arena.structure;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 
@@ -13,8 +12,15 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import tntrun.arena.Arena;
+
 public class StructureManager {
 
+	private Arena arena;
+	public StructureManager(Arena arena) {
+		this.arena = arena;
+	}
+	
 	private String world;
 
 	public String getWorldName() {
@@ -216,13 +222,6 @@ public class StructureManager {
 		this.teleportDest = teleportDest;
 	}
 
-
-
-	private File arenafile = null;
-	public void setArenaFile(File file) {
-		arenafile = file;
-	}
-
 	public void saveToConfig() {
 		FileConfiguration config = new YamlConfiguration();
 		// save arena bounds
@@ -266,14 +265,14 @@ public class StructureManager {
 		// save rewards
 		rewards.saveToConfig(config);
 		try {
-			config.save(arenafile);
+			config.save(arena.getArenaFile());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void loadFromConfig() {
-		FileConfiguration config = YamlConfiguration.loadConfiguration(arenafile);
+		FileConfiguration config = YamlConfiguration.loadConfiguration(arena.getArenaFile());
 		// load arena world location
 		world = config.getString("world", null);
 		// load arena bounds

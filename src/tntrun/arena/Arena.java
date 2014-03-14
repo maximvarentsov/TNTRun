@@ -33,12 +33,17 @@ public class Arena {
 		this.plugin = plugin;
 		arenagh = new GameHandler(plugin, this);
 		arenaph = new PlayerHandler(plugin, this);
-		structureManager.setArenaFile(new File(plugin.getDataFolder() + File.separator + "arenas" + File.separator + arenaname + ".yml"));
+		arenafile = new File(plugin.getDataFolder() + File.separator + "arenas" + File.separator + arenaname + ".yml");
 	}
 
 	private String arenaname;
 	public String getArenaName() {
 		return arenaname;
+	}
+	
+	private File arenafile;
+	public File getArenaFile() {
+		return arenafile;
 	}
 
 	private GameHandler arenagh;
@@ -56,7 +61,7 @@ public class Arena {
 		return statusManager;
 	}
 
-	private StructureManager structureManager = new StructureManager();
+	private StructureManager structureManager = new StructureManager(this);
 	public StructureManager getStructureManager() {
 		return structureManager;
 	}
