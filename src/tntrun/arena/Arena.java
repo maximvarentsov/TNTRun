@@ -22,6 +22,8 @@ import java.io.File;
 import tntrun.TNTRun;
 import tntrun.arena.handlers.GameHandler;
 import tntrun.arena.handlers.PlayerHandler;
+import tntrun.arena.status.PlayersManager;
+import tntrun.arena.status.StatusManager;
 import tntrun.arena.structure.StructureManager;
 
 public class Arena {

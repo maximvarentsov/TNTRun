@@ -1,8 +1,9 @@
-package tntrun.arena;
+package tntrun.arena.status;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import tntrun.arena.Arena;
 import tntrun.arena.structure.GameLevel;
 import tntrun.messages.Messages;
 
