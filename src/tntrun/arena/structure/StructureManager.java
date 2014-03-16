@@ -37,7 +37,7 @@ public class StructureManager {
 	public StructureManager(Arena arena) {
 		this.arena = arena;
 	}
-	
+
 	private String world;
 
 	public String getWorldName() {
@@ -124,14 +124,14 @@ public class StructureManager {
 	public Rewards getRewards() {
 		return rewards;
 	}
-	
-	
+
+
 	private TeleportDestination teleportDest = TeleportDestination.PREVIOUS;
-	
+
 	public TeleportDestination getTeleportDestination() {
 		return teleportDest;
 	}
-	
+
 	public static enum TeleportDestination {
 		PREVIOUS, LOBBY;
 	}
@@ -234,7 +234,7 @@ public class StructureManager {
 	public void setRewards(int money) {
 		this.rewards.setRewards(money);
 	}
-	
+
 	public void setTeleportDestination(TeleportDestination teleportDest) {
 		this.teleportDest = teleportDest;
 	}

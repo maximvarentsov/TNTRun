@@ -89,7 +89,7 @@ public class PlayerDataStore {
 		player.teleport(plloc.get(player.getName()));
 		plloc.remove(player.getName());
 	}
-	
+
 	public void clearPlayerLocation(Player player) {
 		plloc.remove(player.getName());
 	}

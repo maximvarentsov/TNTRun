@@ -42,7 +42,7 @@ public class Arena {
 	public String getArenaName() {
 		return arenaname;
 	}
-	
+
 	private File arenafile;
 	public File getArenaFile() {
 		return arenafile;
