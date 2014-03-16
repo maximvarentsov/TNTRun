@@ -17,6 +17,8 @@
 
 package tntrun.signs;
 
+import java.util.HashMap;
+
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -32,18 +34,17 @@ import tntrun.TNTRun;
 import tntrun.messages.Messages;
 import tntrun.signs.type.JoinSign;
 import tntrun.signs.type.LeaveSign;
+import tntrun.signs.type.SignType;
 import tntrun.signs.type.VoteSign;
 
 public class SignHandler implements Listener {
 
-	private JoinSign joinsign;
-	private LeaveSign leavesign;
-	private VoteSign votesign;
-
+	private HashMap<String, SignType> signs = new HashMap<String, SignType>();
+	
 	public SignHandler(TNTRun plugin) {
-		joinsign = new JoinSign(plugin);
-		leavesign = new LeaveSign(plugin);
-		votesign = new VoteSign(plugin);
+		signs.put("[join]", new JoinSign(plugin));
+		signs.put("[leave]", new LeaveSign(plugin));
+		signs.put("[vote]", new VoteSign(plugin));
 	}
 
 	// handle sign change
@@ -57,13 +58,9 @@ public class SignHandler implements Listener {
 				e.getBlock().breakNaturally();
 				return;
 			}
-
-			if (e.getLine(1).equalsIgnoreCase("[join]") && e.getLine(2) != null) {
-				joinsign.handleCreation(e);
-			} else if (e.getLine(1).equalsIgnoreCase("[leave]")) {
-				leavesign.handleCreation(e);
-			} else if (e.getLine(1).equalsIgnoreCase("[vote]")) {
-				votesign.handleCreation(e);
+			String line = e.getLine(1).toLowerCase();
+			if (signs.containsKey(line)) {
+				signs.get(line).handleCreation(e);
 			}
 		}
 	}
@@ -79,24 +76,31 @@ public class SignHandler implements Listener {
 		}
 		Sign sign = (Sign) e.getClickedBlock().getState();
 		if (sign.getLine(0).equalsIgnoreCase(ChatColor.BLUE + "[TNTRun]")) {
-			if (sign.getLine(1).equalsIgnoreCase("[join]") && sign.getLine(2) != null) {
-				joinsign.handleClick(e);
-			} else if (sign.getLine(1).equalsIgnoreCase("[leave]")) {
-				leavesign.handleClick(e);
-			} else if (sign.getLine(1).equalsIgnoreCase("[vote]")) {
-				votesign.handleClick(e);
+			String line = sign.getLine(1).toLowerCase();
+			if (signs.containsKey(line)) {
+				signs.get(line).handleClick(e);
 			}
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onSignDestroy(BlockBreakEvent e) {
+		Player player = e.getPlayer();
 		if (!(e.getBlock().getState() instanceof Sign)) {
 			return;
 		}
 		Sign sign = (Sign) e.getBlock().getState();
-		if (sign.getLine(0).equalsIgnoreCase(ChatColor.BLUE + "[TNTRun]") && sign.getLine(1).equalsIgnoreCase("[join]")) {
-			joinsign.handleDestroy(e.getBlock());
+		if (sign.getLine(0).equalsIgnoreCase(ChatColor.BLUE + "[TNTRun]")) {
+			if (!player.hasPermission("tntrun.setup")) {
+				Messages.sendMessage(player, Messages.nopermission);
+				e.setCancelled(true);
+				return;
+			}
+			String line = sign.getLine(1).toLowerCase();
+			if (signs.containsKey(line)) {
+				signs.get(line).handleDestroy(e.getBlock());
+			}
 		}
 	}
+
 }
