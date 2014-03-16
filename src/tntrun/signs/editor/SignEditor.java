@@ -89,7 +89,7 @@ public class SignEditor {
 
 	private SignInfo getSignInfo(Block block, String arena) {
 		for (SignInfo si : getSigns(arena)) {
-			if (si.getBlock() == block) {
+			if (si.getBlock().equals(block)) {
 				return si;
 			}
 		}
