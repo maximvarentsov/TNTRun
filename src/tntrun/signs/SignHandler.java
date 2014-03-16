@@ -83,10 +83,10 @@ public class SignHandler implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onSignDestroy(BlockBreakEvent e) {
-		Player player = e.getPlayer();
 		if (!(e.getBlock().getState() instanceof Sign)) {
 			return;
 		}
+		Player player = e.getPlayer();
 		Sign sign = (Sign) e.getBlock().getState();
 		if (sign.getLine(0).equalsIgnoreCase(ChatColor.BLUE + "[TNTRun]")) {
 			if (!player.hasPermission("tntrun.setup")) {
