@@ -104,7 +104,7 @@ public class PlayerHandler {
 			}
 		}
 		// check for game start
-		if (!arena.getStatusManager().isArenaStarting() && (arena.getPlayersManager().getPlayersCount() == arena.getStructureManager().getMaxPlayers() || arena.getPlayersManager().getPlayersCount() == arena.getStructureManager().getMinPlayers())) {
+		if (!arena.getStatusManager().isArenaStarting() && arena.getPlayersManager().getPlayersCount() == arena.getStructureManager().getMinPlayers()) {
 			arena.getGameHandler().runArenaCountdown();
 		}
 	}
@@ -172,7 +172,7 @@ public class PlayerHandler {
 	public boolean vote(Player player) {
 		if (!votes.contains(player.getName())) {
 			votes.add(player.getName());
-			if (!arena.getStatusManager().isArenaStarting() && (arena.getPlayersManager().getPlayersCount() > 1 && (votes.size() >= arena.getPlayersManager().getPlayersCount() * arena.getStructureManager().getVotePercent()))) {
+			if (!arena.getStatusManager().isArenaStarting() && arena.getPlayersManager().getPlayersCount() > 1 && votes.size() >= arena.getPlayersManager().getPlayersCount() * arena.getStructureManager().getVotePercent()) {
 				arena.getGameHandler().runArenaCountdown();
 			}
 			return true;
