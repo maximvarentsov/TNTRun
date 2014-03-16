@@ -73,9 +73,7 @@ public class GameHandler {
 				@Override
 				public void run() {
 					// check if countdown should be stopped for some various reasons
-					if (!arena.getStatusManager().isArenaEnabled()) {
-						stopArenaCountdown();
-					} else if (arena.getPlayersManager().getPlayersCount() < arena.getStructureManager().getMinPlayers()) {
+					if (arena.getPlayersManager().getPlayersCount() < arena.getStructureManager().getMinPlayers()) {
 						for (Player player : Bukkit.getOnlinePlayers()) {
 							if (arena.getPlayersManager().isPlayerInArena(player.getName())) {
 								Bars.setBar(player, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
