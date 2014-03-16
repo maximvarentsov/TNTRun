@@ -80,6 +80,10 @@ public class GameCommands implements CommandExecutor {
 		}
 		// join arena
 		else if (args.length == 2 && args[0].equalsIgnoreCase("join")) {
+			if (player.hasPermission("tntrun.onlysignjoin")) {
+				player.sendMessage("You can join the game only by using a sign");
+				return true;
+			}
 			Arena arena = plugin.amanager.getArenaByName(args[1]);
 			if (arena != null) {
 				boolean canJoin = arena.getPlayerHandler().checkJoin(player);
