@@ -18,7 +18,7 @@
 package tntrun.signs.type;
 
 import org.bukkit.ChatColor;
-import org.bukkit.block.Block;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -52,7 +52,7 @@ public class LeaveSign implements SignType {
 	}
 
 	@Override
-	public void handleDestroy(Block b) {
+	public void handleDestroy(BlockBreakEvent e) {
 	}
 
 }

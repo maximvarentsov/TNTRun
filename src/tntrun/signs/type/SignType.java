@@ -17,7 +17,7 @@
 
 package tntrun.signs.type;
 
-import org.bukkit.block.Block;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -27,6 +27,6 @@ public interface SignType {
 
 	public void handleClick(PlayerInteractEvent e);
 
-	public void handleDestroy(Block b);
+	public void handleDestroy(BlockBreakEvent e);
 
 }

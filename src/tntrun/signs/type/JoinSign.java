@@ -20,6 +20,7 @@ package tntrun.signs.type;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -65,8 +66,10 @@ public class JoinSign implements SignType {
 	}
 
 	@Override
-	public void handleDestroy(Block b) {
+	public void handleDestroy(BlockBreakEvent e) {
+		Block b = e.getBlock();
 		plugin.signEditor.removeSign(b, ((Sign) b.getState()).getLine(2));
+		e.getPlayer().sendMessage("Sign succesfully removed");
 	}
 
 }
