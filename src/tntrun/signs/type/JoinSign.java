@@ -44,10 +44,11 @@ public class JoinSign implements SignType {
 			e.setLine(0, ChatColor.BLUE + "[TNTRun]");
 			e.getPlayer().sendMessage("Sign succesfully created");
 			plugin.signEditor.addSign(e.getBlock(), arena.getArenaName());
-			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, 
+			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,
 				new Runnable() {
+					@Override
 					public void run() {
-						plugin.signEditor.modifySigns(arena.getArenaName());	
+						plugin.signEditor.modifySigns(arena.getArenaName());
 					}
 				}
 			);
