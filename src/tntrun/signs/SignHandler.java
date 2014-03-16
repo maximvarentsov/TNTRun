@@ -47,7 +47,6 @@ public class SignHandler implements Listener {
 		signs.put("[vote]", new VoteSign(plugin));
 	}
 
-	// handle sign change
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onTNTRunSignCreate(SignChangeEvent e) {
 		Player player = e.getPlayer();
@@ -65,7 +64,6 @@ public class SignHandler implements Listener {
 		}
 	}
 
-	// handle sign click
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onSignClick(PlayerInteractEvent e) {
 		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
