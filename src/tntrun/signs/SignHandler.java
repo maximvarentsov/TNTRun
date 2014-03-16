@@ -78,16 +78,8 @@ public class SignHandler implements Listener {
 			return;
 		}
 		Sign sign = (Sign) e.getClickedBlock().getState();
-		Player player = e.getPlayer();
 		if (sign.getLine(0).equalsIgnoreCase(ChatColor.BLUE + "[TNTRun]")) {
-			if (!player.hasPermission("tntrun.game")) {
-				player.sendMessage("You don't have permission to do this");
-				e.setCancelled(true);
-				return;
-			}
-
-			if (sign.getLine(1).equalsIgnoreCase("[join]")
-					&& sign.getLine(2) != null) {
+			if (sign.getLine(1).equalsIgnoreCase("[join]") && sign.getLine(2) != null) {
 				joinsign.handleClick(e);
 			} else if (sign.getLine(1).equalsIgnoreCase("[leave]")) {
 				leavesign.handleClick(e);
