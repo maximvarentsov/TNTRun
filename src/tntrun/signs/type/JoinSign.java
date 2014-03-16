@@ -27,7 +27,7 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
 
-public class JoinSign {
+public class JoinSign implements SignType {
 
 	private TNTRun plugin;
 
@@ -35,6 +35,7 @@ public class JoinSign {
 		this.plugin = plugin;
 	}
 
+	@Override
 	public void handleCreation(SignChangeEvent e) {
 		Arena arena = plugin.amanager.getArenaByName(e.getLine(2));
 		if (arena != null) {
@@ -49,6 +50,7 @@ public class JoinSign {
 		}
 	}
 
+	@Override
 	public void handleClick(PlayerInteractEvent e) {
 		Arena arena = plugin.amanager.getArenaByName(((Sign) e.getClickedBlock().getState()).getLine(2));
 		if (arena != null) {
@@ -62,6 +64,7 @@ public class JoinSign {
 		}
 	}
 
+	@Override
 	public void handleDestroy(Block b) {
 		plugin.signEditor.removeSign(b, ((Sign) b.getState()).getLine(2));
 	}

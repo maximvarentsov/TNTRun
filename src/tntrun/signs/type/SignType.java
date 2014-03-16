@@ -17,42 +17,16 @@
 
 package tntrun.signs.type;
 
-import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import tntrun.TNTRun;
-import tntrun.arena.Arena;
-import tntrun.messages.Messages;
+public interface SignType {
 
-public class LeaveSign implements SignType {
+	public void handleCreation(SignChangeEvent e);
 
-	private TNTRun plugin;
+	public void handleClick(PlayerInteractEvent e);
 
-	public LeaveSign(TNTRun plugin) {
-		this.plugin = plugin;
-	}
-
-	@Override
-	public void handleCreation(SignChangeEvent e) {
-		e.setLine(0, ChatColor.BLUE + "[TNTRun]");
-		e.getPlayer().sendMessage("Sign succesfully created");
-	}
-
-	@Override
-	public void handleClick(PlayerInteractEvent e) {
-		Arena arena = plugin.amanager.getPlayerArena(e.getPlayer().getName());
-		if (arena != null) {
-			arena.getPlayerHandler().leavePlayer(e.getPlayer(), Messages.playerlefttoplayer, Messages.playerlefttoothers);
-			e.setCancelled(true);
-		} else {
-			e.getPlayer().sendMessage("You are not in arena");
-		}
-	}
-
-	@Override
-	public void handleDestroy(Block b) {
-	}
+	public void handleDestroy(Block b);
 
 }
