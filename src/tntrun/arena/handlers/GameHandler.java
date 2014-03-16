@@ -79,7 +79,6 @@ public class GameHandler {
 								Bars.setBar(player, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
 							}
 						}
-						plugin.signEditor.modifySigns(arena.getArenaName());
 						stopArenaCountdown();
 					} else
 					// start arena if countdown is 0
