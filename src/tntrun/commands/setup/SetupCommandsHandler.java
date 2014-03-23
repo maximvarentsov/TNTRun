@@ -64,6 +64,7 @@ public class SetupCommandsHandler implements CommandExecutor {
 		commandHandlers.put("setp2", new SetP2(plselection));
 		commandHandlers.put("clear", new Clear(plselection));
 		commandHandlers.put("setlobby", new SetLobby(plugin));
+		commandHandlers.put("deletelobby", new DeleteArena(plugin));
 		commandHandlers.put("reloadmsg", new ReloadMSG(plugin));
 		commandHandlers.put("reloadbars", new ReloadBars(plugin));
 		commandHandlers.put("create", new CreateArena(plugin));
