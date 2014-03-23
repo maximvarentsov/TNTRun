@@ -27,14 +27,14 @@ public class OwnLocations {
 	private HashMap<String, Location> loc1 = new HashMap<String, Location>();
 
 	protected void putPlayerLoc1(String playername, Location loc) {
-		loc.setY(loc.getBlockY());
+		loc = loc.getBlock().getLocation();
 		loc1.put(playername, loc);
 	}
 
 	private HashMap<String, Location> loc2 = new HashMap<String, Location>();
 
 	protected void putPlayerLoc2(String playername, Location loc) {
-		loc.setY(loc.getBlockY());
+		loc = loc.getBlock().getLocation();
 		loc2.put(playername, loc);
 	}
 
