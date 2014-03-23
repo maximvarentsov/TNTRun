@@ -26,11 +26,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
-import tntrun.commands.setup.arena.Create;
-import tntrun.commands.setup.arena.Delete;
-import tntrun.commands.setup.arena.Disable;
-import tntrun.commands.setup.arena.Enable;
-import tntrun.commands.setup.arena.Finish;
+import tntrun.commands.setup.arena.CreateArena;
+import tntrun.commands.setup.arena.DeleteArena;
+import tntrun.commands.setup.arena.DisableArena;
+import tntrun.commands.setup.arena.EnableArena;
+import tntrun.commands.setup.arena.FinishArena;
 import tntrun.commands.setup.arena.SetArena;
 import tntrun.commands.setup.arena.SetCountdown;
 import tntrun.commands.setup.arena.SetGameLevel;
@@ -66,8 +66,8 @@ public class SetupCommandsHandler implements CommandExecutor {
 		commandHandlers.put("setlobby", new SetLobby(plugin));
 		commandHandlers.put("reloadmsg", new ReloadMSG(plugin));
 		commandHandlers.put("reloadbars", new ReloadBars(plugin));
-		commandHandlers.put("create", new Create(plugin));
-		commandHandlers.put("delete", new Delete(plugin));
+		commandHandlers.put("create", new CreateArena(plugin));
+		commandHandlers.put("delete", new DeleteArena(plugin));
 		commandHandlers.put("setarena", new SetArena(plugin, plselection));
 		commandHandlers.put("setgamelevel", new SetGameLevel(plugin, plselection));
 		commandHandlers.put("setgameleveldestroydelay", new SetGameLevelDestroyDelay(plugin));
@@ -81,9 +81,9 @@ public class SetupCommandsHandler implements CommandExecutor {
 		commandHandlers.put("setmoneyrewards", new SetMoneyRewards(plugin));
 		commandHandlers.put("settimelimit", new SetTimeLimit(plugin));
 		commandHandlers.put("setteleport", new SetTeleport(plugin));
-		commandHandlers.put("finish", new Finish(plugin));
-		commandHandlers.put("disable", new Disable(plugin));
-		commandHandlers.put("enable", new Enable(plugin));
+		commandHandlers.put("finish", new FinishArena(plugin));
+		commandHandlers.put("disable", new DisableArena(plugin));
+		commandHandlers.put("enable", new EnableArena(plugin));
 	}
 
 	@Override

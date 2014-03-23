@@ -23,10 +23,10 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
 
-public class Finish implements CommandHandlerInterface {
+public class DisableArena implements CommandHandlerInterface {
 
 	private TNTRun plugin;
-	public Finish(TNTRun plugin) {
+	public DisableArena(TNTRun plugin) {
 		this.plugin = plugin;
 	}
 
@@ -34,17 +34,11 @@ public class Finish implements CommandHandlerInterface {
 	public boolean handleCommand(Player player, String[] args) {
 		Arena arena = plugin.amanager.getArenaByName(args[0]);
 		if (arena != null) {
-			if (!arena.getStatusManager().isArenaEnabled()) {
-				if (arena.getStructureManager().isArenaConfigured().equalsIgnoreCase("yes")) {
-					arena.getStructureManager().saveToConfig();
-					plugin.amanager.registerArena(arena);
-					arena.getStatusManager().enableArena();
-					player.sendMessage("Arena saved and enabled");
-				} else {
-					player.sendMessage("Arena is not configured. Reason: " + arena.getStructureManager().isArenaConfigured());
-				}
+			if (arena.getStatusManager().isArenaEnabled()) {
+				arena.getStatusManager().disableArena();
+				player.sendMessage("Arena disabled");
 			} else {
-				player.sendMessage("Disable arena first");
+				player.sendMessage("Arena already disabled");
 			}
 		} else {
 			player.sendMessage("Arena does not exist");

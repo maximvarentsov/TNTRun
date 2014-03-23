@@ -23,23 +23,29 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
 
-public class Create implements CommandHandlerInterface {
+public class EnableArena implements CommandHandlerInterface {
 
 	private TNTRun plugin;
-	public Create(TNTRun plugin) {
+	public EnableArena(TNTRun plugin) {
 		this.plugin = plugin;
 	}
 
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
-		Arena arenac = plugin.amanager.getArenaByName(args[0]);
-		if (arenac != null) {
-			player.sendMessage("Arena already exists");
-			return true;
+		Arena arena = plugin.amanager.getArenaByName(args[0]);
+		if (arena != null) {
+			if (arena.getStatusManager().isArenaEnabled()) {
+				player.sendMessage("Arena already enabled.");
+			} else {
+				if (arena.getStatusManager().enableArena()) {
+					player.sendMessage("Arena enabled");
+				} else {
+					player.sendMessage("Arena is not configured. Reason: " + arena.getStructureManager().isArenaConfigured());
+				}
+			}
+		} else {
+			player.sendMessage("Arena does not exist");
 		}
-		Arena arena = new Arena(args[0], plugin);
-		plugin.amanager.registerArena(arena);
-		player.sendMessage("Arena created");
 		return true;
 	}
 
