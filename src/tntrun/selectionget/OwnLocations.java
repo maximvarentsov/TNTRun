@@ -27,12 +27,14 @@ public class OwnLocations {
 	private HashMap<String, Location> loc1 = new HashMap<String, Location>();
 
 	protected void putPlayerLoc1(String playername, Location loc) {
+		loc.setY(loc.getBlockY());
 		loc1.put(playername, loc);
 	}
 
 	private HashMap<String, Location> loc2 = new HashMap<String, Location>();
 
 	protected void putPlayerLoc2(String playername, Location loc) {
+		loc.setY(loc.getBlockY());
 		loc2.put(playername, loc);
 	}
 
@@ -78,13 +80,10 @@ public class OwnLocations {
 		}
 
 		Location[] locs = new Location[2];
-		locs[0] = new Location(loc1.get(player.getName()).getWorld(), xmin,
-				ymin, zmin);
-		locs[1] = new Location(loc1.get(player.getName()).getWorld(), xmax,
-				ymax, zmax);
+		locs[0] = new Location(loc1.get(player.getName()).getWorld(), xmin, ymin, zmin);
+		locs[1] = new Location(loc1.get(player.getName()).getWorld(), xmax, ymax, zmax);
 		locs[0].distanceSquared(locs[1]);
 		return locs;
-
 	}
 
 	private boolean isOneBlockHigh(Location[] locs) {
