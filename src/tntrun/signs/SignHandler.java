@@ -64,7 +64,7 @@ public class SignHandler implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onSignClick(PlayerInteractEvent e) {
 		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
