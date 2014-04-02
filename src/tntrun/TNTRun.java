@@ -20,7 +20,6 @@ package tntrun;
 import java.io.File;
 import java.util.logging.Logger;
 
-import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import tntrun.arena.Arena;
@@ -45,14 +44,6 @@ public class TNTRun extends JavaPlugin {
 
 	public PlayerDataStore pdata;
 	public ArenasManager amanager;
-	public SetupCommandsHandler scommands;
-	public GameCommands gcommands;
-	public ConsoleCommands ccommands;
-	public PlayerStatusHandler pshandler;
-	public RestrictionHandler rhandler;
-	public PlayerLeaveArenaChecker plachecker;
-	public WorldUnloadHandler wuhandler;
-	public SignHandler signs;
 	public GlobalLobby globallobby;
 	public SignEditor signEditor;
 
@@ -65,22 +56,14 @@ public class TNTRun extends JavaPlugin {
 		Bars.loadBars(this);
 		pdata = new PlayerDataStore();
 		amanager = new ArenasManager();
-		scommands = new SetupCommandsHandler(this);
-		getCommand("tntrunsetup").setExecutor(scommands);
-		gcommands = new GameCommands(this);
-		getCommand("tntrun").setExecutor(gcommands);
-		ccommands = new ConsoleCommands(this);
-		getCommand("tntrunconsole").setExecutor(ccommands);
-		pshandler = new PlayerStatusHandler(this);
-		getServer().getPluginManager().registerEvents(pshandler, this);
-		rhandler = new RestrictionHandler(this);
-		getServer().getPluginManager().registerEvents(rhandler, this);
-		plachecker = new PlayerLeaveArenaChecker(this);
-		getServer().getPluginManager().registerEvents(plachecker, this);
-		wuhandler = new WorldUnloadHandler(this);
-		getServer().getPluginManager().registerEvents(wuhandler, this);
-		signs = new SignHandler(this);
-		getServer().getPluginManager().registerEvents(signs, this);
+		getCommand("tntrunsetup").setExecutor(new SetupCommandsHandler(this));
+		getCommand("tntrun").setExecutor(new GameCommands(this));
+		getCommand("tntrunconsole").setExecutor(new ConsoleCommands(this));
+		getServer().getPluginManager().registerEvents(new PlayerStatusHandler(this), this);
+		getServer().getPluginManager().registerEvents(new RestrictionHandler(this), this);
+		getServer().getPluginManager().registerEvents(new PlayerLeaveArenaChecker(this), this);
+		getServer().getPluginManager().registerEvents(new WorldUnloadHandler(this), this);
+		getServer().getPluginManager().registerEvents(new SignHandler(this), this);
 		// load arenas
 		final File arenasfolder = new File(this.getDataFolder() + File.separator + "arenas");
 		arenasfolder.mkdirs();
@@ -121,13 +104,6 @@ public class TNTRun extends JavaPlugin {
 		signEditor.saveConfiguration();
 		signEditor = null;
 		// unload other things
-		HandlerList.unregisterAll(this);
-		scommands = null;
-		gcommands = null;
-		pshandler = null;
-		rhandler = null;
-		plachecker = null;
-		signs = null;
 		pdata = null;
 		amanager = null;
 		log = null;

@@ -17,9 +17,11 @@
 
 package tntrun.arena.status;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 public class PlayersManager {
 
@@ -33,8 +35,16 @@ public class PlayersManager {
 		return players.size();
 	}
 
-	public Set<String> getPlayersInArena() {
-		return Collections.unmodifiableSet(players);
+	public Set<String> getPlayerNamesInArena() {
+		return new HashSet<String>(players);
+	}
+	
+	public Set<Player> getPlayersInArena() {
+		HashSet<Player> playersset = new HashSet<Player>();
+		for (String playerName : players) {
+			playersset.add(Bukkit.getPlayerExact(playerName));
+		}
+		return playersset;
 	}
 
 	public void addPlayerToArena(String name) {

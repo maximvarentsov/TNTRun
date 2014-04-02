@@ -46,11 +46,9 @@ public class GameHandler {
 				new Runnable() {
 					@Override
 					public void run() {
-						for (Player player : Bukkit.getOnlinePlayers()) {
-							if (arena.getPlayersManager().isPlayerInArena(player.getName())) {
-								if (!arena.getStructureManager().isInArenaBounds(player.getLocation())) {
-									arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
-								}
+						for (Player player : arena.getPlayersManager().getPlayersInArena()) {
+							if (!arena.getStructureManager().isInArenaBounds(player.getLocation())) {
+								arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
 							}
 						}
 					}
@@ -74,10 +72,8 @@ public class GameHandler {
 				public void run() {
 					// check if countdown should be stopped for some various reasons
 					if (arena.getPlayersManager().getPlayersCount() < arena.getStructureManager().getMinPlayers()) {
-						for (Player player : Bukkit.getOnlinePlayers()) {
-							if (arena.getPlayersManager().isPlayerInArena(player.getName())) {
-								Bars.setBar(player, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
-							}
+						for (Player player : arena.getPlayersManager().getPlayersInArena()) {
+							Bars.setBar(player, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
 						}
 						stopArenaCountdown();
 					} else
@@ -88,11 +84,9 @@ public class GameHandler {
 					} else
 					// countdown
 					{
-						for (Player player : Bukkit.getOnlinePlayers()) {
-							if (arena.getPlayersManager().isPlayerInArena(player.getName())) {
-								Messages.sendMessage(player, Messages.arenacountdown, count);
-								Bars.setBar(player, Bars.starting, 0, count, count * 100 / arena.getStructureManager().getCountdown());
-							}
+						for (Player player : arena.getPlayersManager().getPlayersInArena()) {
+							Messages.sendMessage(player, Messages.arenacountdown, count);
+							Bars.setBar(player, Bars.starting, 0, count, count * 100 / arena.getStructureManager().getCountdown());
 						}
 						count--;
 					}
@@ -114,10 +108,8 @@ public class GameHandler {
 
 	public void startArena() {
 		arena.getStatusManager().setRunning(true);
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (arena.getPlayersManager().isPlayerInArena(player.getName())) {
-				Messages.sendMessage(player, Messages.arenastarted, arena.getStructureManager().getTimeLimit());
-			}
+		for (Player player : arena.getPlayersManager().getPlayersInArena()) {
+			Messages.sendMessage(player, Messages.arenastarted, arena.getStructureManager().getTimeLimit());
 		}
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		timelimit = arena.getStructureManager().getTimeLimit() * 20; // timelimit is in ticks
@@ -126,11 +118,9 @@ public class GameHandler {
 					@Override
 					public void run() {
 						if (timelimit < 0) {
-							for (Player player : Bukkit.getOnlinePlayers()) {
-								if (arena.getPlayersManager().isPlayerInArena(player.getName())) {
-									// kick player
-									arena.getPlayerHandler().leavePlayer(player,Messages.arenatimeout, "");
-								}
+							for (Player player : arena.getPlayersManager().getPlayersInArena()) {
+								// kick player
+								arena.getPlayerHandler().leavePlayer(player,Messages.arenatimeout, "");
 							}
 							// stop arena
 							stopArena();
@@ -143,13 +133,11 @@ public class GameHandler {
 							return;
 						}
 						// handle players
-						for (Player player : Bukkit.getOnlinePlayers()) {
-							if (arena.getPlayersManager().isPlayerInArena(player.getName())) {
-								// update bar
-								Bars.setBar(player, Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit());
-								// handle player
-								handlePlayer(player);
-							}
+						for (Player player : arena.getPlayersManager().getPlayersInArena()) {
+							// update bar
+							Bars.setBar(player, Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit());
+							// handle player
+							handlePlayer(player);
 						}
 						// decrease timelimit
 						timelimit--;

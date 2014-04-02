@@ -17,7 +17,6 @@
 
 package tntrun.arena.status;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import tntrun.arena.Arena;
@@ -41,7 +40,7 @@ public class StatusManager {
 	}
 
 	public boolean enableArena() {
-		if (arena.getStructureManager().isArenaConfigured().equalsIgnoreCase("yes")) {
+		if (arena.getStructureManager().isArenaConfigured()) {
 			enabled = true;
 			arena.getGameHandler().startArenaAntiLeaveHandler();
 			arena.plugin.signEditor.modifySigns(arena.getArenaName());
@@ -53,15 +52,17 @@ public class StatusManager {
 	public void disableArena() {
 		enabled = false;
 		// drop players
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (arena.getPlayersManager().isPlayerInArena(player.getName())) {
-				arena.getPlayerHandler().leavePlayer(player, Messages.arenadisabling, "");
-			}
+		for (Player player : arena.getPlayersManager().getPlayersInArena()) {
+			arena.getPlayerHandler().leavePlayer(player, Messages.arenadisabling, "");
 		}
 		// stop arena
-		arena.getGameHandler().stopArena();
+		if (arena.getStatusManager().isArenaRunning()) {
+			arena.getGameHandler().stopArena();
+		}
 		// stop countdown
-		arena.getGameHandler().stopArenaCountdown();
+		if (arena.getStatusManager().isArenaStarting()) {
+			arena.getGameHandler().stopArenaCountdown();
+		}
 		// stop antileave handler
 		arena.getGameHandler().stopArenaAntiLeaveHandler();
 		// regen gamelevels

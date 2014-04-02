@@ -37,9 +37,11 @@ public class WorldUnloadHandler implements Listener {
 	public void onWorldUnload(WorldUnloadEvent e) {
 		String worldname = e.getWorld().getName();
 		for (Arena arena : plugin.amanager.getArenas()) {
-			if (arena.getStructureManager().getWorld().getName().equals(worldname)) {
-				arena.getStatusManager().disableArena();
-				arena.getStatusManager().enableArena();
+			if (arena.getStructureManager().isArenaConfigured()) {
+				if (arena.getStructureManager().getWorld().getName().equals(worldname)) {
+					arena.getStatusManager().disableArena();
+					arena.getStatusManager().enableArena();
+				}
 			}
 		}
 	}

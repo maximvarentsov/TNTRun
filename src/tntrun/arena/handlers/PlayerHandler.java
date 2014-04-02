@@ -19,7 +19,6 @@ package tntrun.arena.handlers;
 
 import java.util.HashSet;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
@@ -85,9 +84,9 @@ public class PlayerHandler {
 		player.updateInventory();
 		// send message to player
 		Messages.sendMessage(player, msgtoplayer);
-		// send message to other players and update bar
-		for (String pname : arena.getPlayersManager().getPlayersInArena()) {
-			Messages.sendMessage(Bukkit.getPlayerExact(pname), player.getName(), msgtoarenaplayers);
+		// send message to other players
+		for (Player oplayer : arena.getPlayersManager().getPlayersInArena()) {
+			Messages.sendMessage(oplayer, player.getName(), msgtoarenaplayers);
 		}
 		// set player on arena data
 		arena.getPlayersManager().addPlayerToArena(player.getName());
@@ -97,10 +96,8 @@ public class PlayerHandler {
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		// modify bars
 		if (!arena.getStatusManager().isArenaStarting()) {
-			for (Player oplayer : Bukkit.getOnlinePlayers()) {
-				if (arena.getPlayersManager().isPlayerInArena(oplayer.getName())) {
-					Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
-				}
+			for (Player oplayer : arena.getPlayersManager().getPlayersInArena()) {
+				Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
 			}
 		}
 		// check for game start
@@ -118,12 +115,10 @@ public class PlayerHandler {
 		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		// send message to other players and update bars
-		for (Player oplayer : Bukkit.getOnlinePlayers()) {
-			if (arena.getPlayersManager().isPlayerInArena(oplayer.getName())) {
-				Messages.sendMessage(oplayer, player.getName(), msgtoarenaplayers);
-				if (!arena.getStatusManager().isArenaStarting() && !arena.getStatusManager().isArenaRunning()) {
-					Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
-				}
+		for (Player oplayer : arena.getPlayersManager().getPlayersInArena()) {
+			Messages.sendMessage(oplayer, player.getName(), msgtoarenaplayers);
+			if (!arena.getStatusManager().isArenaStarting() && !arena.getStatusManager().isArenaRunning()) {
+				Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
 			}
 		}
 	}

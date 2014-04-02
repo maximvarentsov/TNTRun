@@ -35,13 +35,13 @@ public class FinishArena implements CommandHandlerInterface {
 		Arena arena = plugin.amanager.getArenaByName(args[0]);
 		if (arena != null) {
 			if (!arena.getStatusManager().isArenaEnabled()) {
-				if (arena.getStructureManager().isArenaConfigured().equalsIgnoreCase("yes")) {
+				if (arena.getStructureManager().isArenaConfigured()) {
 					arena.getStructureManager().saveToConfig();
 					plugin.amanager.registerArena(arena);
 					arena.getStatusManager().enableArena();
 					player.sendMessage("Arena saved and enabled");
 				} else {
-					player.sendMessage("Arena is not configured. Reason: " + arena.getStructureManager().isArenaConfigured());
+					player.sendMessage("Arena is not configured. Reason: " + arena.getStructureManager().isArenaConfiguredString());
 				}
 			} else {
 				player.sendMessage("Disable arena first");
