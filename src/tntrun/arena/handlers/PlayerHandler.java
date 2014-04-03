@@ -69,6 +69,9 @@ public class PlayerHandler {
 	// spawn player on arena
 	@SuppressWarnings("deprecation")
 	public void spawnPlayer(final Player player, String msgtoplayer, String msgtoarenaplayers) {
+		// teleport player to arena
+		plugin.pdata.storePlayerLocation(player);
+		player.teleport(arena.getStructureManager().getSpawnPoint());
 		// change player status
 		plugin.pdata.storePlayerGameMode(player);
 		player.setFlying(false);
@@ -77,9 +80,6 @@ public class PlayerHandler {
 		plugin.pdata.storePlayerArmor(player);
 		plugin.pdata.storePlayerPotionEffects(player);
 		plugin.pdata.storePlayerHunger(player);
-		// teleport player to arena
-		plugin.pdata.storePlayerLocation(player);
-		player.teleport(arena.getStructureManager().getSpawnPoint());
 		// update inventory
 		player.updateInventory();
 		// send message to player
@@ -140,13 +140,6 @@ public class PlayerHandler {
 		Bars.removeBar(player);
 		// remove player on arena data
 		arena.getPlayersManager().removePlayerFromArena(player.getName());
-		// restore location ot teleport to lobby
-		if (arena.getStructureManager().getTeleportDestination() == TeleportDestination.LOBBY && plugin.globallobby.isLobbyLocationWorldAvailable()) {
-			player.teleport(plugin.globallobby.getLobbyLocation());
-			plugin.pdata.clearPlayerLocation(player);
-		} else {
-			plugin.pdata.restorePlayerLocation(player);
-		}
 		// restore player status
 		plugin.pdata.restorePlayerHunger(player);
 		plugin.pdata.restorePlayerPotionEffects(player);
@@ -157,6 +150,13 @@ public class PlayerHandler {
 			arena.getStructureManager().getRewards().rewardPlayer(player);
 		}
 		plugin.pdata.restorePlayerGameMode(player);
+		// restore location ot teleport to lobby
+		if (arena.getStructureManager().getTeleportDestination() == TeleportDestination.LOBBY && plugin.globallobby.isLobbyLocationWorldAvailable()) {
+			player.teleport(plugin.globallobby.getLobbyLocation());
+			plugin.pdata.clearPlayerLocation(player);
+		} else {
+			plugin.pdata.restorePlayerLocation(player);
+		}
 		// update inventory
 		player.updateInventory();
 	}
