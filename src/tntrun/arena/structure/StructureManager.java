@@ -182,6 +182,15 @@ public class StructureManager {
 		return false;
 	}
 
+	public boolean removeGameLevel(String glname) {
+		GameLevel gl = getGameLevelByName(glname);
+		if (gl != null) {
+			gamelevels.remove(gl);
+			return true;
+		}
+		return false;
+	}
+
 	private GameLevel getGameLevelByName(String name) {
 		for (GameLevel gl : gamelevels) {
 			if (gl.getGameLevelName().equals(name)) {

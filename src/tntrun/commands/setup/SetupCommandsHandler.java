@@ -28,6 +28,7 @@ import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.commands.setup.arena.CreateArena;
 import tntrun.commands.setup.arena.DeleteArena;
+import tntrun.commands.setup.arena.DeleteGameLevel;
 import tntrun.commands.setup.arena.DisableArena;
 import tntrun.commands.setup.arena.EnableArena;
 import tntrun.commands.setup.arena.FinishArena;
@@ -73,6 +74,7 @@ public class SetupCommandsHandler implements CommandExecutor {
 		commandHandlers.put("setarena", new SetArena(plugin, plselection));
 		commandHandlers.put("setgamelevel", new SetGameLevel(plugin, plselection));
 		commandHandlers.put("setgameleveldestroydelay", new SetGameLevelDestroyDelay(plugin));
+		commandHandlers.put("deletegamelevel", new DeleteGameLevel(plugin));
 		commandHandlers.put("setloselevel", new SetLoseLevel(plugin, plselection));
 		commandHandlers.put("setspawn", new SetSpawn(plugin));
 		commandHandlers.put("setmaxplayers", new SetMaxPlayers(plugin));
