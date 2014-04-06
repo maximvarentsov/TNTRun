@@ -84,8 +84,10 @@ public class GameHandler {
 					} else
 					// countdown
 					{
+						String message = Messages.arenacountdown;
+						message = message.replace("{COUNTDOWN}", String.valueOf(count));
 						for (Player player : arena.getPlayersManager().getPlayersInArena()) {
-							Messages.sendMessage(player, Messages.arenacountdown, count);
+							Messages.sendMessage(player, message);
 							Bars.setBar(player, Bars.starting, 0, count, count * 100 / arena.getStructureManager().getCountdown());
 						}
 						count--;
@@ -108,8 +110,10 @@ public class GameHandler {
 
 	public void startArena() {
 		arena.getStatusManager().setRunning(true);
+		String message = Messages.arenastarted;
+		message = message.replace("{TIMELIMIT}", String.valueOf(arena.getStructureManager().getTimeLimit()));
 		for (Player player : arena.getPlayersManager().getPlayersInArena()) {
-			Messages.sendMessage(player, Messages.arenastarted, arena.getStructureManager().getTimeLimit());
+			Messages.sendMessage(player, message);
 		}
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		timelimit = arena.getStructureManager().getTimeLimit() * 20; // timelimit is in ticks
@@ -182,7 +186,12 @@ public class GameHandler {
 	}
 
 	private void broadcastWin(Player player) {
-		Messages.broadsactMessage(player.getName(), arena.getArenaName(), Messages.playerwonbroadcast);
+		String message = Messages.playerwonbroadcast;
+		message = message.replace("{PLAYER}", player.getName());
+		message = message.replace("{ARENA}", arena.getArenaName());
+		if (!message.isEmpty()) {
+			Bukkit.broadcastMessage(message);
+		}
 	}
 
 	private void startArenaRegen() {

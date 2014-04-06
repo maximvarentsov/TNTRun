@@ -86,12 +86,15 @@ public class PlayerHandler {
 		Messages.sendMessage(player, msgtoplayer);
 		// send message to other players
 		for (Player oplayer : arena.getPlayersManager().getPlayersInArena()) {
-			Messages.sendMessage(oplayer, player.getName(), msgtoarenaplayers);
+			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
+			Messages.sendMessage(oplayer, msgtoarenaplayers);
 		}
 		// set player on arena data
 		arena.getPlayersManager().addPlayerToArena(player.getName());
 		// send message about arena player count
-		Messages.sendMessage(player, Messages.playerscount + arena.getPlayersManager().getPlayersCount());
+		String message = Messages.playerscountinarena;
+		message = message.replace("{COUNT}", String.valueOf(arena.getPlayersManager().getPlayersCount()));
+		Messages.sendMessage(player, message);
 		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		// modify bars
@@ -116,7 +119,8 @@ public class PlayerHandler {
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		// send message to other players and update bars
 		for (Player oplayer : arena.getPlayersManager().getPlayersInArena()) {
-			Messages.sendMessage(oplayer, player.getName(), msgtoarenaplayers);
+			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
+			Messages.sendMessage(oplayer, msgtoarenaplayers);
 			if (!arena.getStatusManager().isArenaStarting() && !arena.getStatusManager().isArenaRunning()) {
 				Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
 			}

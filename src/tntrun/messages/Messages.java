@@ -20,7 +20,6 @@ package tntrun.messages;
 import java.io.File;
 import java.io.IOException;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -39,7 +38,7 @@ public class Messages {
 	public static String arenarunning = "&6Arena already running";
 	public static String arenadisabling = "&6Arena is disabling";
 
-	public static String playerscount = "&6Current players count:&r ";
+	public static String playerscountinarena = "&6Current number of players in arena: {COUNT}";
 	public static String limitreached = "&6Slot limit reached.";
 	public static String playerjoinedtoplayer = "&6You joined the arena";
 	public static String playerjoinedtoothers = "&6Player {PLAYER} joined the arena";
@@ -61,29 +60,6 @@ public class Messages {
 		}
 	}
 
-	public static void sendMessage(Player player, String plname, String message) {
-		if (!message.equals("")) {
-			message = message.replace("{PLAYER}", plname);
-			player.sendMessage(FormattingCodesParser.parseFormattingCodes(message));
-		}
-	}
-
-	public static void sendMessage(Player player, String message, int c) {
-		if (!message.equals("")) {
-			message = message.replace("{TIMELIMIT}", String.valueOf(c));
-			message = message.replace("{COUNTDOWN}", String.valueOf(c));
-			player.sendMessage(FormattingCodesParser.parseFormattingCodes(message));
-		}
-	}
-
-	public static void broadsactMessage(String plname, String arena, String message) {
-		if (!message.equals("")) {
-			message = message.replace("{PLAYER}", plname);
-			message = message.replace("{ARENA}", arena);
-			Bukkit.broadcastMessage(FormattingCodesParser.parseFormattingCodes(message));
-		}
-	}
-
 	public static void loadMessages(TNTRun plugin) {
 		File messageconfig = new File(plugin.getDataFolder(), "configmsg.yml");
 		FileConfiguration config = YamlConfiguration.loadConfiguration(messageconfig);
@@ -93,7 +69,7 @@ public class Messages {
 		arenadisabled = config.getString("arenadisabled", arenadisabled);
 		arenarunning = config.getString("arenarunning", arenarunning);
 		arenadisabling = config.getString("arenadisabling", arenadisabling);
-		playerscount = config.getString("playerscount", playerscount);
+		playerscountinarena = config.getString("playerscountinarena", playerscountinarena);
 		limitreached = config.getString("limitreached", limitreached);
 		playerjoinedtoplayer = config.getString("playerjoinedtoplayer", playerjoinedtoplayer);
 		playerjoinedtoothers = config.getString("playerjoinedtoothers", playerjoinedtoothers);
@@ -119,7 +95,7 @@ public class Messages {
 		config.set("arenadisabled", arenadisabled);
 		config.set("arenarunning", arenarunning);
 		config.set("arenadisabling", arenadisabling);
-		config.set("playerscount", playerscount);
+		config.set("playerscountinarena", playerscountinarena);
 		config.set("limitreached", limitreached);
 		config.set("playerjoinedtoplayer", playerjoinedtoplayer);
 		config.set("playerjoinedtoothers", playerjoinedtoothers);
