@@ -53,6 +53,7 @@ public class Messages {
 	public static String playerlosttoplayer = "&6You lost the game";
 	public static String playerlosttoothers = "&6Player {PLAYER} lost the game";
 	public static String playerwonbroadcast = "&9[TNTRun] &a{PLAYER}&r won the game on arena &c{ARENA}";
+	public static String playerrewardmessage = "&6You have been rewarded: {REWARD}";
 
 	public static void sendMessage(Player player, String message) {
 		if (!message.equals("")) {
@@ -84,6 +85,7 @@ public class Messages {
 		playerlosttoplayer = config.getString("playerlosttoplayer", playerlosttoplayer);
 		playerlosttoothers = config.getString("playerlosttoothers", playerlosttoothers);
 		playerwonbroadcast = config.getString("playerwonbroadcast", playerwonbroadcast);
+		playerrewardmessage = config.getString("playerrewardmessage", playerrewardmessage);
 		saveMessages(messageconfig);
 	}
 
@@ -110,6 +112,7 @@ public class Messages {
 		config.set("playerlosttoplayer", playerlosttoplayer);
 		config.set("playerlosttoothers", playerlosttoothers);
 		config.set("playerwonbroadcast", playerwonbroadcast);
+		config.set("playerrewardmessage", playerrewardmessage);
 		try {
 			config.save(messageconfig);
 		} catch (IOException e) {
