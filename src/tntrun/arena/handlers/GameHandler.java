@@ -42,17 +42,20 @@ public class GameHandler {
 	private int leavetaskid;
 
 	public void startArenaAntiLeaveHandler() {
-		leavetaskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin,
-				new Runnable() {
-					@Override
-					public void run() {
-						for (Player player : arena.getPlayersManager().getPlayersInArena()) {
-							if (!arena.getStructureManager().isInArenaBounds(player.getLocation())) {
-								arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
-							}
+		leavetaskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(
+			plugin,
+			new Runnable() {
+				@Override
+				public void run() {
+					for (Player player : arena.getPlayersManager().getPlayersInArena()) {
+						if (!arena.getStructureManager().isInArenaBounds(player.getLocation())) {
+							arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
 						}
 					}
-				}, 0, 1);
+				}
+			},
+			0, 1
+		);
 	}
 
 	public void stopArenaAntiLeaveHandler() {
@@ -117,36 +120,39 @@ public class GameHandler {
 		}
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		timelimit = arena.getStructureManager().getTimeLimit() * 20; // timelimit is in ticks
-		arenahandler = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin,
-				new Runnable() {
-					@Override
-					public void run() {
-						if (timelimit < 0) {
-							for (Player player : arena.getPlayersManager().getPlayersInArena()) {
-								// kick player
-								arena.getPlayerHandler().leavePlayer(player,Messages.arenatimeout, "");
-							}
-							// stop arena
-							stopArena();
-							return;
-						}
-						// stop arena if player count is 0 (just in case)
-						if (arena.getPlayersManager().getPlayersCount() == 0) {
-							// stop arena
-							stopArena();
-							return;
-						}
-						// handle players
+		arenahandler = Bukkit.getScheduler().scheduleSyncRepeatingTask(
+			plugin,
+			new Runnable() {
+				@Override
+				public void run() {
+					if (timelimit < 0) {
 						for (Player player : arena.getPlayersManager().getPlayersInArena()) {
-							// update bar
-							Bars.setBar(player, Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit());
-							// handle player
-							handlePlayer(player);
+							// kick player
+							arena.getPlayerHandler().leavePlayer(player,Messages.arenatimeout, "");
 						}
-						// decrease timelimit
-						timelimit--;
+						// stop arena
+						stopArena();
+						return;
 					}
-				}, 0, 1);
+					// stop arena if player count is 0 (just in case)
+					if (arena.getPlayersManager().getPlayersCount() == 0) {
+						// stop arena
+						stopArena();
+						return;
+					}
+					// handle players
+					for (Player player : arena.getPlayersManager().getPlayersInArena()) {
+						// update bar
+						Bars.setBar(player, Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit());
+						// handle player
+						handlePlayer(player);
+					}
+					// decrease timelimit
+					timelimit--;
+				}
+			},
+			0, 1
+		);
 	}
 
 	public void stopArena() {
