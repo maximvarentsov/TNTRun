@@ -23,10 +23,13 @@ import java.util.List;
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
+
+import tntrun.messages.Messages;
 
 public class Rewards {
 
@@ -67,16 +70,25 @@ public class Rewards {
 	}
 
 	public void rewardPlayer(Player player) {
+		String rewardmessage = "";
 		for (ItemStack reward : itemrewards) {
 			if (player.getInventory().firstEmpty() != -1) {
 				player.getInventory().addItem(reward);
 			} else {
-				player.getWorld().dropItemNaturally(player.getLocation(),
-						reward);
+				player.getWorld().dropItemNaturally(player.getLocation(),reward);
 			}
+			rewardmessage += reward.getAmount() + " x " + reward.getType().toString().replace("_", "").toLowerCase()+ ", ";
 		}
 		if (moneyreward != 0) {
 			rewardMoney(player.getName(), moneyreward);
+			rewardmessage += ChatColor.GOLD.toString() + moneyreward;
+		}
+		if (rewardmessage.endsWith(", ")) {
+			rewardmessage = rewardmessage.substring(0, rewardmessage.length() - 2);
+		}
+		rewardmessage = Messages.playerrewardmessage.replace("{REWARD}", rewardmessage);
+		if (!rewardmessage.isEmpty()) {
+			Messages.sendMessage(player, rewardmessage);
 		}
 	}
 
