@@ -20,6 +20,7 @@ package tntrun.messages;
 import java.io.File;
 import java.io.IOException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -58,6 +59,12 @@ public class Messages {
 	public static void sendMessage(Player player, String message) {
 		if (!message.equals("")) {
 			player.sendMessage(FormattingCodesParser.parseFormattingCodes(message));
+		}
+	}
+
+	public static void broadcastMessage(String message) {
+		if (!message.equals("")) {
+			Bukkit.broadcastMessage(FormattingCodesParser.parseFormattingCodes(message));
 		}
 	}
 

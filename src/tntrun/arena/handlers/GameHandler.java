@@ -195,9 +195,7 @@ public class GameHandler {
 		String message = Messages.playerwonbroadcast;
 		message = message.replace("{PLAYER}", player.getName());
 		message = message.replace("{ARENA}", arena.getArenaName());
-		if (!message.isEmpty()) {
-			Bukkit.broadcastMessage(message);
-		}
+		Messages.broadcastMessage(message);
 	}
 
 	private void startArenaRegen() {
