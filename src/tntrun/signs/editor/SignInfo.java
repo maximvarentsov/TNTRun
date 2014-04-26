@@ -43,6 +43,9 @@ public class SignInfo {
 	}
 
 	public Block getBlock() {
+		if (worldname == null) {
+			return null;
+		}
 		World world = Bukkit.getWorld(worldname);
 		if (world != null) {
 			return world.getBlockAt(x, y, z);
