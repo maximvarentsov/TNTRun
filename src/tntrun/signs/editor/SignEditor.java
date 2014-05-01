@@ -107,34 +107,38 @@ public class SignEditor {
 	}
 
 	public void modifySigns(String arenaname) {
-		Arena arena = plugin.amanager.getArenaByName(arenaname);
-		if (arena == null) {
-			return;
-		}
-
-		String text = null;
-		int players = arena.getPlayersManager().getPlayersCount();
-		int maxPlayers = arena.getStructureManager().getMaxPlayers();
-		if (!arena.getStatusManager().isArenaEnabled()) {
-			text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "Disabled";
-		} else if (arena.getStatusManager().isArenaRunning()) {
-			text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "In Game";
-		} else if (arena.getStatusManager().isArenaRegenerating()) {
-			text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "Regenerating";
-		} else if (players == maxPlayers) {
-			text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + Integer.toString(players) + "/" + Integer.toString(maxPlayers);
-		} else {
-			text = ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + Integer.toString(players) + "/" + Integer.toString(maxPlayers);
-		}
-
-		for (Block block : getSignsBlocks(arenaname)) {
-			if (block.getState() instanceof Sign) {
-				Sign sign = (Sign) block.getState();
-				sign.setLine(3, text);
-				sign.update();
-			} else {
-				removeSign(block, arenaname);
+		try {
+			Arena arena = plugin.amanager.getArenaByName(arenaname);
+			if (arena == null) {
+				return;
 			}
+	
+			String text = null;
+			int players = arena.getPlayersManager().getPlayersCount();
+			int maxPlayers = arena.getStructureManager().getMaxPlayers();
+			if (!arena.getStatusManager().isArenaEnabled()) {
+				text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "Disabled";
+			} else if (arena.getStatusManager().isArenaRunning()) {
+				text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "In Game";
+			} else if (arena.getStatusManager().isArenaRegenerating()) {
+				text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "Regenerating";
+			} else if (players == maxPlayers) {
+				text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + Integer.toString(players) + "/" + Integer.toString(maxPlayers);
+			} else {
+				text = ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + Integer.toString(players) + "/" + Integer.toString(maxPlayers);
+			}
+	
+			for (Block block : getSignsBlocks(arenaname)) {
+				if (block.getState() instanceof Sign) {
+					Sign sign = (Sign) block.getState();
+					sign.setLine(3, text);
+					sign.update();
+				} else {
+					removeSign(block, arenaname);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
