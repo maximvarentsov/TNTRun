@@ -19,6 +19,7 @@ package tntrun.arena.handlers;
 
 import java.util.HashSet;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
@@ -72,6 +73,10 @@ public class PlayerHandler {
 		// teleport player to arena
 		plugin.pdata.storePlayerLocation(player);
 		player.teleport(arena.getStructureManager().getSpawnPoint());
+		// set player visible to everyone
+		for (Player aplayer : Bukkit.getOnlinePlayers()) {
+			aplayer.showPlayer(player);
+		}
 		// change player status
 		plugin.pdata.storePlayerGameMode(player);
 		player.setFlying(false);
