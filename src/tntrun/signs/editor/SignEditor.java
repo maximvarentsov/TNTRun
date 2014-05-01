@@ -112,7 +112,7 @@ public class SignEditor {
 			if (arena == null) {
 				return;
 			}
-	
+
 			String text = null;
 			int players = arena.getPlayersManager().getPlayersCount();
 			int maxPlayers = arena.getStructureManager().getMaxPlayers();
@@ -127,7 +127,7 @@ public class SignEditor {
 			} else {
 				text = ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + Integer.toString(players) + "/" + Integer.toString(maxPlayers);
 			}
-	
+
 			for (Block block : getSignsBlocks(arenaname)) {
 				if (block.getState() instanceof Sign) {
 					Sign sign = (Sign) block.getState();
