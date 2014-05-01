@@ -66,7 +66,7 @@ public class StructureManager {
 		return gamelevels;
 	}
 
-	private int gameleveldestroydelay = 2;
+	private int gameleveldestroydelay = 8;
 
 	public int getGameLevelDestroyDelay() {
 		return gameleveldestroydelay;
