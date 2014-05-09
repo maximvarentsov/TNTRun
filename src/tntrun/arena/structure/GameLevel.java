@@ -18,6 +18,7 @@
 package tntrun.arena.structure;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -117,7 +118,7 @@ public class GameLevel {
 		return null;
 	}
 
-	private HashSet<BlockState> blocks = new HashSet<BlockState>(800);
+	private LinkedList<BlockState> blocks = new LinkedList<BlockState>();
 
 	private void removeGLBlocks(Block block) {
 		blocks.add(block.getState());
