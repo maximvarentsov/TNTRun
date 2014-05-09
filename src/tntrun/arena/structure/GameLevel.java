@@ -60,26 +60,15 @@ public class GameLevel {
 		return p2;
 	}
 
-	private Vector glb1 = null;
-	private Vector glb2 = null;
-
-	private boolean isInsideGamelevel(Location loc) {
-		if (loc.getBlock().getLocation().toVector().isInAABB(glb1, glb2)) {
-			return true;
-		}
-		return false;
-	}
-
 	public boolean isSandLocation(Location loc) {
 		return loc.toVector().isInAABB(gp1, gp2.clone().add(new Vector(0, 1, 0)));
-	};
+	}
 
 	private HashSet<Block> blockstodestroy = new HashSet<Block>();
 
 	public void destroyBlock(Location loc, final Arena arena) {
-		final Location blockUnderFeetLocation = getPlayerStandOnBlockLocation(loc);
-		if (blockUnderFeetLocation != null) {
-			final Block block = blockUnderFeetLocation.getBlock();
+		final Block block = getBlockUnderPlayer(loc);
+		if (block != null) {
 			if (!blockstodestroy.contains(block)) {
 				blockstodestroy.add(block);
 				Bukkit.getScheduler().scheduleSyncDelayedTask(
@@ -98,22 +87,22 @@ public class GameLevel {
 		}
 	}
 
-	private Location getPlayerStandOnBlockLocation(Location locationUnderPlayer) {
-		locationUnderPlayer.setY(gp1.getY());
-		Location b11 = locationUnderPlayer.clone().add(0.3, 0, -0.3);
-		if (b11.getBlock().getType() != Material.AIR && isInsideGamelevel(b11)) {
+	private Block getBlockUnderPlayer(Location location) {
+		ImmutableVector loc = new ImmutableVector(location.getX(), gp1.getY(), location.getZ());
+		Block b11 = loc.add(0.3, 0, -0.3).getBlock(location.getWorld());
+		if (b11.getType() != Material.AIR) {
 			return b11;
 		}
-		Location b12 = locationUnderPlayer.clone().add(-0.3, 0, -0.3);
-		if (b12.getBlock().getType() != Material.AIR && isInsideGamelevel(b12)) {
+		Block b12 = loc.add(-0.3, 0, -0.3).getBlock(location.getWorld());
+		if (b12.getType() != Material.AIR) {
 			return b12;
 		}
-		Location b21 = locationUnderPlayer.clone().add(0.3, 0, 0.3);
-		if (b21.getBlock().getType() != Material.AIR && isInsideGamelevel(b21)) {
+		Block b21 = loc.add(0.3, 0, 0.3).getBlock(location.getWorld());
+		if (b21.getType() != Material.AIR) {
 			return b21;
 		}
-		Location b22 = locationUnderPlayer.clone().add(-0.3, 0, +0.3);
-		if (b22.getBlock().getType() != Material.AIR && isInsideGamelevel(b22)) {
+		Block b22 = loc.add(-0.3, 0, +0.3).getBlock(location.getWorld());
+		if (b22.getType() != Material.AIR) {
 			return b22;
 		}
 		return null;
@@ -143,8 +132,6 @@ public class GameLevel {
 		this.p2 = p2.toVector();
 		this.gp1 = p1.add(0, 1, 0).toVector();
 		this.gp2 = p2.add(0, 1, 0).toVector();
-		this.glb1 = gp1.clone().add(new Vector(1, 0, 1));
-		this.glb2 = gp2.clone().add(new Vector(-1, 0, -1));
 		fillArea(p1.getWorld());
 	}
 
@@ -164,6 +151,28 @@ public class GameLevel {
 		}
 	}
 
+	private static class ImmutableVector {
+
+		private double x;
+		private double y;
+		private double z;
+
+		public ImmutableVector(double x, double y, double z) {
+			this.x = x;
+			this.y = y;
+			this.z = z;
+		}
+
+		public ImmutableVector add(double addx, double addy, double addz) {
+			return new ImmutableVector(x + addx, y + addy, z + addz);
+		}
+
+		public Block getBlock(World world) {
+			return world.getBlockAt((int) x, (int) y, (int) z);
+		}
+
+	}
+
 	public void saveToConfig(FileConfiguration config) {
 		config.set("gamelevels." + name + ".p1", p1);
 		config.set("gamelevels." + name + ".p2", p2);
@@ -176,8 +185,6 @@ public class GameLevel {
 		this.p2 = p2;
 		this.gp1 = p1.clone().add(new Vector(0, 1, 0));
 		this.gp2 = p2.clone().add(new Vector(0, 1, 0));
-		this.glb1 = gp1.clone().add(new Vector(1, 0, 1));
-		this.glb2 = gp2.clone().add(new Vector(-1, 0, -1));
 	}
 
 }
