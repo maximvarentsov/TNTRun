@@ -87,21 +87,22 @@ public class GameLevel {
 		}
 	}
 
+	private static double PLAYER_BOUNDINGBOX_ADD = 0.3;
 	private Block getBlockUnderPlayer(Location location) {
 		ImmutableVector loc = new ImmutableVector(location.getX(), gp1.getY(), location.getZ());
-		Block b11 = loc.add(0.3, 0, -0.3).getBlock(location.getWorld());
+		Block b11 = loc.add(+PLAYER_BOUNDINGBOX_ADD, 0, -PLAYER_BOUNDINGBOX_ADD).getBlock(location.getWorld());
 		if (b11.getType() != Material.AIR) {
 			return b11;
 		}
-		Block b12 = loc.add(-0.3, 0, -0.3).getBlock(location.getWorld());
+		Block b12 = loc.add(-PLAYER_BOUNDINGBOX_ADD, 0, -PLAYER_BOUNDINGBOX_ADD).getBlock(location.getWorld());
 		if (b12.getType() != Material.AIR) {
 			return b12;
 		}
-		Block b21 = loc.add(0.3, 0, 0.3).getBlock(location.getWorld());
+		Block b21 = loc.add(+PLAYER_BOUNDINGBOX_ADD, 0, +PLAYER_BOUNDINGBOX_ADD).getBlock(location.getWorld());
 		if (b21.getType() != Material.AIR) {
 			return b21;
 		}
-		Block b22 = loc.add(-0.3, 0, +0.3).getBlock(location.getWorld());
+		Block b22 = loc.add(-PLAYER_BOUNDINGBOX_ADD, 0, +PLAYER_BOUNDINGBOX_ADD).getBlock(location.getWorld());
 		if (b22.getType() != Material.AIR) {
 			return b22;
 		}
