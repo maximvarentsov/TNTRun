@@ -35,10 +35,6 @@ public class PlayersManager {
 		return players.size();
 	}
 
-	public Set<String> getPlayerNamesInArena() {
-		return new HashSet<String>(players);
-	}
-
 	public Set<Player> getPlayersInArena() {
 		HashSet<Player> playersset = new HashSet<Player>();
 		for (String playerName : players) {
