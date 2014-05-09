@@ -18,6 +18,7 @@
 package tntrun.arena.structure;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.bukkit.Bukkit;
@@ -129,10 +130,12 @@ public class GameLevel {
 	}
 
 	public void regen() {
-		for (BlockState bs : blocks) {
+		Iterator<BlockState> bsit = blocks.iterator();
+		while (bsit.hasNext()) {
+			BlockState bs = bsit.next();
 			bs.update(true);
+			bsit.remove();
 		}
-		blocks.clear();
 	}
 
 	public void setGameLocation(Location p1, Location p2) {
