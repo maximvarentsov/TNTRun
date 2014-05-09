@@ -41,7 +41,7 @@ public class LoseLevel {
 
 	public boolean isLooseLocation(Location loc) {
 		return loc.getY() < Math.max(p2.getBlockY(), p1.getBlockY()) + 1;
-	};
+	}
 
 	public void setLooseLocation(Location p1, Location p2) {
 		this.p1 = p1.toVector();
