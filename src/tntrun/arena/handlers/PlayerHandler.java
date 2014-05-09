@@ -95,7 +95,7 @@ public class PlayerHandler {
 			Messages.sendMessage(oplayer, msgtoarenaplayers);
 		}
 		// set player on arena data
-		arena.getPlayersManager().addPlayerToArena(player.getName());
+		arena.getPlayersManager().addPlayerToArena(player);
 		// send message about arena player count
 		String message = Messages.playerscountinarena;
 		message = message.replace("{COUNT}", String.valueOf(arena.getPlayersManager().getPlayersCount()));
@@ -148,7 +148,7 @@ public class PlayerHandler {
 		// remove bar
 		Bars.removeBar(player);
 		// remove player on arena data
-		arena.getPlayersManager().removePlayerFromArena(player.getName());
+		arena.getPlayersManager().removePlayerFromArena(player);
 		// restore player status
 		plugin.pdata.restorePlayerHunger(player);
 		plugin.pdata.restorePlayerPotionEffects(player);

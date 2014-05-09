@@ -17,38 +17,33 @@
 
 package tntrun.arena.status;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.bukkit.Bukkit;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import org.bukkit.entity.Player;
 
 public class PlayersManager {
 
-	private HashSet<String> players = new HashSet<String>();
+	private HashMap<String, Player> players = new HashMap<String, Player>();
 
 	public boolean isPlayerInArena(String name) {
-		return players.contains(name);
+		return players.containsKey(name);
 	}
 
 	public int getPlayersCount() {
 		return players.size();
 	}
 
-	public Set<Player> getPlayersInArena() {
-		HashSet<Player> playersset = new HashSet<Player>();
-		for (String playerName : players) {
-			playersset.add(Bukkit.getPlayerExact(playerName));
-		}
-		return playersset;
+	public Collection<Player> getPlayersInArena() {
+		return Collections.unmodifiableCollection(players.values());
 	}
 
-	public void addPlayerToArena(String name) {
-		players.add(name);
+	public void addPlayerToArena(Player player) {
+		players.put(player.getName(), player);
 	}
 
-	public void removePlayerFromArena(String name) {
-		players.remove(name);
+	public void removePlayerFromArena(Player player) {
+		players.remove(player.getName());
 	}
 
 }
