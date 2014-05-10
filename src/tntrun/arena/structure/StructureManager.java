@@ -26,6 +26,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -117,6 +118,12 @@ public class StructureManager {
 
 	public int getCountdown() {
 		return countdown;
+	}
+
+	private Kits kits = new Kits();
+
+	public Kits getKits() {
+		return kits;
 	}
 
 	private Rewards rewards = new Rewards();
@@ -240,6 +247,14 @@ public class StructureManager {
 		this.countdown = countdown;
 	}
 
+	public void addKit(String name, Player player) {
+		kits.registerKit(name, player);
+	}
+
+	public void removeKit(String name) {
+		kits.unregisterKit(name);
+	}
+
 	public void setRewards(ItemStack[] rewards) {
 		this.rewards.setRewards(rewards);
 	}
@@ -292,6 +307,8 @@ public class StructureManager {
 		config.set("countdown", countdown);
 		// save teleport destination
 		config.set("teleportto", teleportDest.toString());
+		// save kits
+		kits.saveToConfig(config);
 		// save rewards
 		rewards.saveToConfig(config);
 		try {
@@ -335,6 +352,8 @@ public class StructureManager {
 		countdown = config.getInt("countdown", countdown);
 		// load teleport destination
 		teleportDest = TeleportDestination.valueOf(config.getString("teleportto", "PREVIOUS"));
+		// load kits
+		kits.loadFromConfig(config);
 		// load rewards
 		rewards.loadFromConfig(config);
 	}
