@@ -60,7 +60,7 @@ public class PlayerHandler {
 			player.sendMessage("You can't join the game while sitting inside vehicle");
 			return false;
 		}
-		if (arena.getPlayersManager().getPlayersCount() == arena.getStructureManager().getMaxPlayers()) {
+		if (arena.getPlayersManager().getCount() == arena.getStructureManager().getMaxPlayers()) {
 			Messages.sendMessage(player, Messages.limitreached);
 			return false;
 		}
@@ -90,26 +90,26 @@ public class PlayerHandler {
 		// send message to player
 		Messages.sendMessage(player, msgtoplayer);
 		// send message to other players
-		for (Player oplayer : arena.getPlayersManager().getPlayersInArena()) {
+		for (Player oplayer : arena.getPlayersManager().getPlayers()) {
 			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
 			Messages.sendMessage(oplayer, msgtoarenaplayers);
 		}
 		// set player on arena data
-		arena.getPlayersManager().addPlayerToArena(player);
+		arena.getPlayersManager().add(player);
 		// send message about arena player count
 		String message = Messages.playerscountinarena;
-		message = message.replace("{COUNT}", String.valueOf(arena.getPlayersManager().getPlayersCount()));
+		message = message.replace("{COUNT}", String.valueOf(arena.getPlayersManager().getCount()));
 		Messages.sendMessage(player, message);
 		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		// modify bars
 		if (!arena.getStatusManager().isArenaStarting()) {
-			for (Player oplayer : arena.getPlayersManager().getPlayersInArena()) {
-				Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
+			for (Player oplayer : arena.getPlayersManager().getPlayers()) {
+				Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getCount(), 0, arena.getPlayersManager().getCount() * 100 / arena.getStructureManager().getMinPlayers());
 			}
 		}
 		// check for game start
-		if (!arena.getStatusManager().isArenaStarting() && arena.getPlayersManager().getPlayersCount() == arena.getStructureManager().getMinPlayers()) {
+		if (!arena.getStatusManager().isArenaStarting() && arena.getPlayersManager().getCount() == arena.getStructureManager().getMinPlayers()) {
 			arena.getGameHandler().runArenaCountdown();
 		}
 	}
@@ -123,11 +123,11 @@ public class PlayerHandler {
 		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		// send message to other players and update bars
-		for (Player oplayer : arena.getPlayersManager().getPlayersInArena()) {
+		for (Player oplayer : arena.getPlayersManager().getPlayers()) {
 			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
 			Messages.sendMessage(oplayer, msgtoarenaplayers);
 			if (!arena.getStatusManager().isArenaStarting() && !arena.getStatusManager().isArenaRunning()) {
-				Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
+				Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getCount(), 0, arena.getPlayersManager().getCount() * 100 / arena.getStructureManager().getMinPlayers());
 			}
 		}
 	}
@@ -148,7 +148,7 @@ public class PlayerHandler {
 		// remove bar
 		Bars.removeBar(player);
 		// remove player on arena data
-		arena.getPlayersManager().removePlayerFromArena(player);
+		arena.getPlayersManager().remove(player);
 		// restore player status
 		plugin.pdata.restorePlayerHunger(player);
 		plugin.pdata.restorePlayerPotionEffects(player);
@@ -176,7 +176,7 @@ public class PlayerHandler {
 	public boolean vote(Player player) {
 		if (!votes.contains(player.getName())) {
 			votes.add(player.getName());
-			if (!arena.getStatusManager().isArenaStarting() && arena.getPlayersManager().getPlayersCount() > 1 && votes.size() >= arena.getPlayersManager().getPlayersCount() * arena.getStructureManager().getVotePercent()) {
+			if (!arena.getStatusManager().isArenaStarting() && arena.getPlayersManager().getCount() > 1 && votes.size() >= arena.getPlayersManager().getCount() * arena.getStructureManager().getVotePercent()) {
 				arena.getGameHandler().runArenaCountdown();
 			}
 			return true;

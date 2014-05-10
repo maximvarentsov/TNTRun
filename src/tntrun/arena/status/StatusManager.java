@@ -52,7 +52,7 @@ public class StatusManager {
 	public void disableArena() {
 		enabled = false;
 		// drop players
-		for (Player player : arena.getPlayersManager().getPlayersInArena()) {
+		for (Player player : arena.getPlayersManager().getPlayersCopy()) {
 			arena.getPlayerHandler().leavePlayer(player, Messages.arenadisabling, "");
 		}
 		// stop arena

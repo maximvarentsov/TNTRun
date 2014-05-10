@@ -49,7 +49,7 @@ public class ArenasManager {
 
 	public Arena getPlayerArena(String name) {
 		for (Arena arena : arenanames.values()) {
-			if (arena.getPlayersManager().isPlayerInArena(name)) {
+			if (arena.getPlayersManager().isInArena(name)) {
 				return arena;
 			}
 		}

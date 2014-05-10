@@ -47,7 +47,7 @@ public class GameHandler {
 			new Runnable() {
 				@Override
 				public void run() {
-					for (Player player : arena.getPlayersManager().getPlayersInArena()) {
+					for (Player player : arena.getPlayersManager().getPlayersCopy()) {
 						if (!arena.getStructureManager().isInArenaBounds(player.getLocation())) {
 							arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
 						}
@@ -74,9 +74,9 @@ public class GameHandler {
 				@Override
 				public void run() {
 					// check if countdown should be stopped for some various reasons
-					if (arena.getPlayersManager().getPlayersCount() < arena.getStructureManager().getMinPlayers()) {
-						for (Player player : arena.getPlayersManager().getPlayersInArena()) {
-							Bars.setBar(player, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
+					if (arena.getPlayersManager().getCount() < arena.getStructureManager().getMinPlayers()) {
+						for (Player player : arena.getPlayersManager().getPlayers()) {
+							Bars.setBar(player, Bars.waiting, arena.getPlayersManager().getCount(), 0, arena.getPlayersManager().getCount() * 100 / arena.getStructureManager().getMinPlayers());
 						}
 						stopArenaCountdown();
 					} else
@@ -89,7 +89,7 @@ public class GameHandler {
 					{
 						String message = Messages.arenacountdown;
 						message = message.replace("{COUNTDOWN}", String.valueOf(count));
-						for (Player player : arena.getPlayersManager().getPlayersInArena()) {
+						for (Player player : arena.getPlayersManager().getPlayers()) {
 							Messages.sendMessage(player, message);
 							Bars.setBar(player, Bars.starting, 0, count, count * 100 / arena.getStructureManager().getCountdown());
 						}
@@ -115,7 +115,7 @@ public class GameHandler {
 		arena.getStatusManager().setRunning(true);
 		String message = Messages.arenastarted;
 		message = message.replace("{TIMELIMIT}", String.valueOf(arena.getStructureManager().getTimeLimit()));
-		for (Player player : arena.getPlayersManager().getPlayersInArena()) {
+		for (Player player : arena.getPlayersManager().getPlayers()) {
 			Messages.sendMessage(player, message);
 		}
 		plugin.signEditor.modifySigns(arena.getArenaName());
@@ -126,7 +126,7 @@ public class GameHandler {
 				@Override
 				public void run() {
 					if (timelimit < 0) {
-						for (Player player : arena.getPlayersManager().getPlayersInArena()) {
+						for (Player player : arena.getPlayersManager().getPlayersCopy()) {
 							// kick player
 							arena.getPlayerHandler().leavePlayer(player,Messages.arenatimeout, "");
 						}
@@ -135,15 +135,15 @@ public class GameHandler {
 						return;
 					}
 					// stop arena if player count is 0 (just in case)
-					if (arena.getPlayersManager().getPlayersCount() == 0) {
+					if (arena.getPlayersManager().getCount() == 0) {
 						// stop arena
 						stopArena();
 						return;
 					}
 					// handle players
-					for (Player player : arena.getPlayersManager().getPlayersInArena()) {
+					for (Player player : arena.getPlayersManager().getPlayersCopy()) {
 						// update bar
-						Bars.setBar(player, Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit());
+						Bars.setBar(player, Bars.playing, arena.getPlayersManager().getCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit());
 						// handle player
 						handlePlayer(player);
 					}
@@ -176,7 +176,7 @@ public class GameHandler {
 			}
 		}
 		// check for win
-		if (arena.getPlayersManager().getPlayersCount() == 1) {
+		if (arena.getPlayersManager().getCount() == 1) {
 			// last player won
 			arena.getPlayerHandler().leaveWinner(player, Messages.playerwontoplayer);
 			broadcastWin(player);
