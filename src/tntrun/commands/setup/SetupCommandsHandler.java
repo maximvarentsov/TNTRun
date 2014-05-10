@@ -30,6 +30,7 @@ import tntrun.commands.setup.arena.AddKit;
 import tntrun.commands.setup.arena.CreateArena;
 import tntrun.commands.setup.arena.DeleteArena;
 import tntrun.commands.setup.arena.DeleteGameLevel;
+import tntrun.commands.setup.arena.DeleteKit;
 import tntrun.commands.setup.arena.DisableArena;
 import tntrun.commands.setup.arena.EnableArena;
 import tntrun.commands.setup.arena.FinishArena;
@@ -85,6 +86,7 @@ public class SetupCommandsHandler implements CommandExecutor {
 		commandHandlers.put("setitemsrewards", new SetItemsRewards(plugin));
 		commandHandlers.put("setmoneyrewards", new SetMoneyRewards(plugin));
 		commandHandlers.put("addkit", new AddKit(plugin));
+		commandHandlers.put("deleteKit", new DeleteKit(plugin));
 		commandHandlers.put("settimelimit", new SetTimeLimit(plugin));
 		commandHandlers.put("setteleport", new SetTeleport(plugin));
 		commandHandlers.put("finish", new FinishArena(plugin));
