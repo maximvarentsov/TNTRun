@@ -41,7 +41,7 @@ public class AddKit implements CommandHandlerInterface {
 			player.sendMessage("Disable arena first");
 			return true;
 		}
-		arena.getStructureManager().addKit(args[0], player);
+		arena.getStructureManager().addKit(args[1], player);
 		player.sendMessage("Kit added");
 		return true;
 	}
