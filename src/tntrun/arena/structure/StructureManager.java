@@ -312,12 +312,9 @@ public class StructureManager {
 		ConfigurationSection cs = config.getConfigurationSection("gamelevels");
 		if (cs != null) {
 			for (String glname : cs.getKeys(false)) {
-				try {
-					GameLevel gl = new GameLevel(glname);
-					gl.loadFromConfig(config);
-					gamelevels.add(gl);
-				} catch (Exception e) {
-				}
+				GameLevel gl = new GameLevel(glname);
+				gl.loadFromConfig(config);
+				gamelevels.add(gl);
 			}
 		}
 		// load gamelevel destroy delay
