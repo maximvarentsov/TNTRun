@@ -35,8 +35,13 @@ public class Kits {
 		return kits.containsKey(name);
 	}
 
-	public void registerKit(Player player, String name) {
-		kits.put(name, new Kit(player));
+	public void registerKit(String name, Player player) {
+		Kit kit = new Kit(player.getInventory().getArmorContents(), player.getInventory().getContents(), player.getActivePotionEffects());
+		registerKit(name, kit);
+	}
+
+	public void registerKit(String name, Kit kit) {
+		kits.put(name, kit);
 	}
 
 	public void unregisterKit(String name) {
@@ -59,10 +64,10 @@ public class Kits {
 		protected Kit() {
 		}
 
-		public Kit(Player player) {
-			armor = player.getInventory().getArmorContents();
-			items = player.getInventory().getContents();
-			effects = player.getActivePotionEffects();
+		public Kit(ItemStack[] armor, ItemStack[] items, Collection<PotionEffect> effects) {
+			this.armor = armor;
+			this.items = items;
+			this.effects = effects;
 		}
 
 		public void giveKit(Player player) {
