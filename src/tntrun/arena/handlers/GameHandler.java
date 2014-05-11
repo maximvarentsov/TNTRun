@@ -17,6 +17,8 @@
 
 package tntrun.arena.handlers;
 
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -24,6 +26,7 @@ import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.structure.GameLevel;
+import tntrun.arena.structure.Kits;
 import tntrun.bars.Bars;
 import tntrun.messages.Messages;
 
@@ -111,6 +114,8 @@ public class GameHandler {
 	private int timelimit;
 	private int arenahandler;
 
+	Random rnd = new Random();
+
 	public void startArena() {
 		arena.getStatusManager().setRunning(true);
 		String message = Messages.arenastarted;
@@ -119,6 +124,11 @@ public class GameHandler {
 			Messages.sendMessage(player, message);
 		}
 		plugin.signEditor.modifySigns(arena.getArenaName());
+		Kits kits = arena.getStructureManager().getKits();
+		String[] kitnames = kits.getKits().toArray(new String[kits.getKits().size()]);
+		for (Player player : arena.getPlayersManager().getPlayers()) {
+			kits.giveKit(kitnames[rnd.nextInt(kitnames.length)], player);
+		}
 		timelimit = arena.getStructureManager().getTimeLimit() * 20; // timelimit is in ticks
 		arenahandler = Bukkit.getScheduler().scheduleSyncRepeatingTask(
 			plugin,
