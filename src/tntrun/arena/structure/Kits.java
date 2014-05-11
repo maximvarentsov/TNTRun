@@ -20,6 +20,7 @@ package tntrun.arena.structure;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -33,6 +34,10 @@ public class Kits {
 
 	public boolean isKitExist(String name) {
 		return kits.containsKey(name);
+	}
+
+	public HashSet<String> getKits() {
+		return new HashSet<String>(kits.keySet());
 	}
 
 	public void registerKit(String name, Player player) {
