@@ -125,9 +125,11 @@ public class GameHandler {
 		}
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		Kits kits = arena.getStructureManager().getKits();
-		String[] kitnames = kits.getKits().toArray(new String[kits.getKits().size()]);
-		for (Player player : arena.getPlayersManager().getPlayers()) {
-			kits.giveKit(kitnames[rnd.nextInt(kitnames.length)], player);
+		if (kits.getKits().size() > 0) {
+			String[] kitnames = kits.getKits().toArray(new String[kits.getKits().size()]);
+			for (Player player : arena.getPlayersManager().getPlayers()) {
+				kits.giveKit(kitnames[rnd.nextInt(kitnames.length)], player);
+			}
 		}
 		timelimit = arena.getStructureManager().getTimeLimit() * 20; // timelimit is in ticks
 		arenahandler = Bukkit.getScheduler().scheduleSyncRepeatingTask(
