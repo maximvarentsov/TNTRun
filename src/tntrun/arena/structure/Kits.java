@@ -53,7 +53,7 @@ public class Kits {
 		kits.remove(name);
 	}
 
-	public void giveKit(Player player, String name) {
+	public void giveKit(String name, Player player) {
 		try {
 			kits.get(name).giveKit(player);
 		} catch (Exception e) {
