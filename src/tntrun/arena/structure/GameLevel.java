@@ -29,6 +29,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 
 import tntrun.arena.Arena;
@@ -169,7 +170,7 @@ public class GameLevel {
 		}
 
 		public Block getBlock(World world) {
-			return world.getBlockAt((int) x, (int) y, (int) z);
+			return world.getBlockAt(NumberConversions.floor(x), NumberConversions.floor(y), NumberConversions.floor(z));
 		}
 
 	}
