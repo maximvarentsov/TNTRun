@@ -90,20 +90,20 @@ public class GameLevel {
 
 	private static double PLAYER_BOUNDINGBOX_ADD = 0.3;
 	private Block getBlockUnderPlayer(Location location) {
-		ImmutableVector loc = new ImmutableVector(location.getX(), gp1.getY(), location.getZ());
-		Block b11 = loc.add(+PLAYER_BOUNDINGBOX_ADD, 0, -PLAYER_BOUNDINGBOX_ADD).getBlock(location.getWorld());
+		PlayerPosition loc = new PlayerPosition(location.getX(), gp1.getBlockY(), location.getZ());
+		Block b11 = loc.getBlock(location.getWorld(), +PLAYER_BOUNDINGBOX_ADD, -PLAYER_BOUNDINGBOX_ADD);
 		if (b11.getType() != Material.AIR) {
 			return b11;
 		}
-		Block b12 = loc.add(-PLAYER_BOUNDINGBOX_ADD, 0, -PLAYER_BOUNDINGBOX_ADD).getBlock(location.getWorld());
+		Block b12 = loc.getBlock(location.getWorld(), -PLAYER_BOUNDINGBOX_ADD, +PLAYER_BOUNDINGBOX_ADD);
 		if (b12.getType() != Material.AIR) {
 			return b12;
 		}
-		Block b21 = loc.add(+PLAYER_BOUNDINGBOX_ADD, 0, +PLAYER_BOUNDINGBOX_ADD).getBlock(location.getWorld());
+		Block b21 = loc.getBlock(location.getWorld(), +PLAYER_BOUNDINGBOX_ADD, +PLAYER_BOUNDINGBOX_ADD);
 		if (b21.getType() != Material.AIR) {
 			return b21;
 		}
-		Block b22 = loc.add(-PLAYER_BOUNDINGBOX_ADD, 0, +PLAYER_BOUNDINGBOX_ADD).getBlock(location.getWorld());
+		Block b22 = loc.getBlock(location.getWorld(), -PLAYER_BOUNDINGBOX_ADD, -PLAYER_BOUNDINGBOX_ADD);
 		if (b22.getType() != Material.AIR) {
 			return b22;
 		}
@@ -153,24 +153,20 @@ public class GameLevel {
 		}
 	}
 
-	private static class ImmutableVector {
+	private static class PlayerPosition {
 
 		private double x;
-		private double y;
+		private int y;
 		private double z;
 
-		public ImmutableVector(double x, double y, double z) {
+		public PlayerPosition(double x, int y, double z) {
 			this.x = x;
 			this.y = y;
 			this.z = z;
 		}
 
-		public ImmutableVector add(double addx, double addy, double addz) {
-			return new ImmutableVector(x + addx, y + addy, z + addz);
-		}
-
-		public Block getBlock(World world) {
-			return world.getBlockAt(NumberConversions.floor(x), NumberConversions.floor(y), NumberConversions.floor(z));
+		public Block getBlock(World world, double addx, double addz) {
+			return world.getBlockAt(NumberConversions.floor(x + addx), y, NumberConversions.floor(z + addz));
 		}
 
 	}
