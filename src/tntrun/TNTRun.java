@@ -52,10 +52,12 @@ public class TNTRun extends JavaPlugin {
 		amanager = new ArenasManager();
 		getCommand("tntrunsetup").setExecutor(new SetupCommandsHandler(this));
 		getCommand("tntrun").setExecutor(new GameCommands(this));
-		getServer().getPluginManager().registerEvents(new PlayerStatusHandler(this), this);
-		getServer().getPluginManager().registerEvents(new RestrictionHandler(this), this);
-		getServer().getPluginManager().registerEvents(new PlayerLeaveArenaChecker(this), this);
-		getServer().getPluginManager().registerEvents(new SignHandler(this), this);
+
+        new PlayerStatusHandler(this);
+		new RestrictionHandler(this);
+		new PlayerLeaveArenaChecker(this);
+		new SignHandler(this);
+
 		// load arenas
 		final File arenasfolder = new File(this.getDataFolder() + File.separator + "arenas");
 		arenasfolder.mkdirs();

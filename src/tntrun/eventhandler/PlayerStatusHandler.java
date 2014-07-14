@@ -17,6 +17,7 @@
 
 package tntrun.eventhandler;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -25,35 +26,36 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 import tntrun.TNTRun;
+import tntrun.datahandler.ArenasManager;
 
 public class PlayerStatusHandler implements Listener {
 
-	private TNTRun plugin;
+    private final ArenasManager arenas;
 
-	public PlayerStatusHandler(TNTRun plugin) {
-		this.plugin = plugin;
+	public PlayerStatusHandler(final TNTRun plugin) {
+		arenas = plugin.amanager;
+        Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
-	// player should be invincible while in arena
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onPlayerDamage(EntityDamageEvent e) {
-		if (e.getEntity() instanceof Player) {
-			Player player = (Player) e.getEntity();
-			if (plugin.amanager.getPlayerArena(player.getName()) != null) {
-				e.setCancelled(true);
+	@SuppressWarnings("unused")
+    void onPlayerDamage(final EntityDamageEvent event) {
+		if (event.getEntity() instanceof Player) {
+			Player player = (Player) event.getEntity();
+			if (arenas.getPlayerArena(player.getName()) != null) {
+				event.setCancelled(true);
 			}
 		}
 	}
 
-	// player should have infinite food while in arena
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onPlayerDamage(FoodLevelChangeEvent e) {
-		if (e.getEntity() instanceof Player) {
-			Player player = (Player) e.getEntity();
-			if (plugin.amanager.getPlayerArena(player.getName()) != null) {
-				e.setCancelled(true);
+	@SuppressWarnings("unused")
+    void onPlayerDamage(final FoodLevelChangeEvent event) {
+		if (event.getEntity() instanceof Player) {
+			Player player = (Player) event.getEntity();
+			if (arenas.getPlayerArena(player.getName()) != null) {
+				event.setCancelled(true);
 			}
 		}
 	}
-
 }

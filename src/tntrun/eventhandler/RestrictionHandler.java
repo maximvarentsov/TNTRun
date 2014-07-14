@@ -17,9 +17,8 @@
 
 package tntrun.eventhandler;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
+import com.google.common.collect.ImmutableList;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,64 +26,56 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
+import tntrun.datahandler.ArenasManager;
+
+import java.util.Collection;
 
 public class RestrictionHandler implements Listener {
 
-	private TNTRun plugin;
+    private final ArenasManager arenas;
+    private final Collection<String> allowedcommands = ImmutableList.of(
+            "/tntrun leave", "/tntrun vote", "/tr leave", "/tr vote"
+    );
 
-	public RestrictionHandler(TNTRun plugin) {
-		this.plugin = plugin;
+    public RestrictionHandler(final TNTRun plugin) {
+        arenas = plugin.amanager;
+        Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
-	private HashSet<String> allowedcommands = new HashSet<String>(
-			Arrays.asList("/tntrun leave", "/tntrun vote", "/tr leave",
-					"/tr vote"));
-
-	// player should not be able to issue any commands besides /tr leave and /tr
-	// vote while in arena
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onPlayerCommand(PlayerCommandPreprocessEvent e) {
-		Player player = e.getPlayer();
-		Arena arena = plugin.amanager.getPlayerArena(player.getName());
-		// ignore if player is not in arena
-		if (arena == null) {
-			return;
-		}
-		// allow use any command if player has permission
-		if (player.hasPermission("tntrun.cmdblockbypass")) {
-			return;
-		}
-		// now check command
-		if (!allowedcommands.contains(e.getMessage().toLowerCase())) {
-			e.setCancelled(true);
+	@SuppressWarnings("unused")
+    void onPlayerCommand(final PlayerCommandPreprocessEvent event) {
+		Player player = event.getPlayer();
+		Arena arena = arenas.getPlayerArena(player.getName());
+		if (arena != null) {
+            if (player.hasPermission("tntrun.cmdblockbypass")) {
+                return;
+            }
+            if (!allowedcommands.contains(event.getMessage().toLowerCase())) {
+                event.setCancelled(true);
+            }
 		}
 	}
 
-	// player should not be able to break blocks while in arena
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onPlayerBlockBreak(BlockBreakEvent e) {
-		Player player = e.getPlayer();
-		Arena arena = plugin.amanager.getPlayerArena(player.getName());
-		// ignore if player is not in arena
-		if (arena == null) {
-			return;
+	@SuppressWarnings("unused")
+    void onBlockBreak(BlockBreakEvent event) {
+		Player player = event.getPlayer();
+		Arena arena = arenas.getPlayerArena(player.getName());
+		if (arena != null) {
+            event.setCancelled(true);
 		}
-		e.setCancelled(true);
 	}
 
-	// player should not be able to place block while in arena
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onPlayerBlockPlayer(BlockPlaceEvent e) {
-		Player player = e.getPlayer();
-		Arena arena = plugin.amanager.getPlayerArena(player.getName());
-		// ignore if player is not in arena
-		if (arena == null) {
-			return;
+    @SuppressWarnings("unused")
+    void onBlockPlace(final BlockPlaceEvent event) {
+		Player player = event.getPlayer();
+		Arena arena = arenas.getPlayerArena(player.getName());
+		if (arena != null) {
+            event.setCancelled(true);
 		}
-		e.setCancelled(true);
 	}
-
 }

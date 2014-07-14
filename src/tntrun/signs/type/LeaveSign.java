@@ -26,6 +26,7 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
 
+@Deprecated
 public class LeaveSign implements SignType {
 
 	private TNTRun plugin;

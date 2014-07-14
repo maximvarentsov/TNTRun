@@ -17,8 +17,8 @@
 
 package tntrun.signs;
 
-import java.util.HashMap;
-
+import com.google.common.collect.ImmutableMap;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -29,74 +29,83 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-
 import tntrun.TNTRun;
+import tntrun.datahandler.ArenasManager;
 import tntrun.messages.Messages;
 import tntrun.signs.type.JoinSign;
 import tntrun.signs.type.LeaveSign;
 import tntrun.signs.type.SignType;
 import tntrun.signs.type.VoteSign;
 
+import java.util.Map;
+
+@Deprecated
 public class SignHandler implements Listener {
 
-	private HashMap<String, SignType> signs = new HashMap<String, SignType>();
+	private final Map<String, SignType> signs;
 
-	public SignHandler(TNTRun plugin) {
-		signs.put("[join]", new JoinSign(plugin));
-		signs.put("[leave]", new LeaveSign(plugin));
-		signs.put("[vote]", new VoteSign(plugin));
+	public SignHandler(final TNTRun plugin) {
+        Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
+		signs = ImmutableMap.of(
+            "[join]", new JoinSign(plugin),
+            "[leave]", new LeaveSign(plugin),
+            "[vote]", new VoteSign(plugin)
+        );
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onTNTRunSignCreate(SignChangeEvent e) {
-		Player player = e.getPlayer();
-		if (e.getLine(0).equalsIgnoreCase("[TNTRun]")) {
+    @SuppressWarnings("unused")
+	void onTNTRunSignCreate(final SignChangeEvent event) {
+		Player player = event.getPlayer();
+		if (event.getLine(0).equalsIgnoreCase("[TNTRun]")) {
 			if (!player.hasPermission("tntrun.setup")) {
 				Messages.sendMessage(player, Messages.nopermission);
-				e.setCancelled(true);
-				e.getBlock().breakNaturally();
+				event.setCancelled(true);
+				event.getBlock().breakNaturally();
 				return;
 			}
-			String line = e.getLine(1).toLowerCase();
+			String line = event.getLine(1).toLowerCase();
 			if (signs.containsKey(line)) {
-				signs.get(line).handleCreation(e);
+				signs.get(line).handleCreation(event);
 			}
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onSignClick(PlayerInteractEvent e) {
-		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
+    @SuppressWarnings("unused")
+    void onSignClick(final PlayerInteractEvent event) {
+		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
 		}
-		if (!(e.getClickedBlock().getState() instanceof Sign)) {
+		if (!(event.getClickedBlock().getState() instanceof Sign)) {
 			return;
 		}
-		Sign sign = (Sign) e.getClickedBlock().getState();
+		Sign sign = (Sign) event.getClickedBlock().getState();
 		if (sign.getLine(0).equalsIgnoreCase(ChatColor.BLUE + "[TNTRun]")) {
 			String line = sign.getLine(1).toLowerCase();
 			if (signs.containsKey(line)) {
-				signs.get(line).handleClick(e);
+				signs.get(line).handleClick(event);
 			}
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onSignDestroy(BlockBreakEvent e) {
-		if (!(e.getBlock().getState() instanceof Sign)) {
+    @SuppressWarnings("unused")
+    void onSignDestroy(final BlockBreakEvent event) {
+		if (!(event.getBlock().getState() instanceof Sign)) {
 			return;
 		}
-		Player player = e.getPlayer();
-		Sign sign = (Sign) e.getBlock().getState();
+		Player player = event.getPlayer();
+		Sign sign = (Sign) event.getBlock().getState();
 		if (sign.getLine(0).equalsIgnoreCase(ChatColor.BLUE + "[TNTRun]")) {
 			if (!player.hasPermission("tntrun.setup")) {
 				Messages.sendMessage(player, Messages.nopermission);
-				e.setCancelled(true);
+				event.setCancelled(true);
 				return;
 			}
 			String line = sign.getLine(1).toLowerCase();
 			if (signs.containsKey(line)) {
-				signs.get(line).handleDestroy(e);
+				signs.get(line).handleDestroy(event);
 			}
 		}
 	}

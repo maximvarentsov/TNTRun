@@ -26,6 +26,7 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
 
+@Deprecated
 public class VoteSign implements SignType {
 
 	private TNTRun plugin;

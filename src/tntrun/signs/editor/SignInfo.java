@@ -21,6 +21,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
+@Deprecated
 public class SignInfo {
 
 	private String worldname;

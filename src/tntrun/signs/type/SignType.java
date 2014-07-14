@@ -21,6 +21,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+@Deprecated
 public interface SignType {
 
 	public void handleCreation(SignChangeEvent e);
