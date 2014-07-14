@@ -34,7 +34,7 @@ public class DeleteArena implements CommandHandlerInterface {
 
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
-		Arena arena = plugin.amanager.getArenaByName(args[0]);
+		Arena arena = plugin.arenas.getArenaByName(args[0]);
 		if (arena == null) {
 			player.sendMessage("Arena does not exist");
 			return true;
@@ -45,7 +45,7 @@ public class DeleteArena implements CommandHandlerInterface {
 		}
 		new File(plugin.getDataFolder() + File.separator + "arenas" + File.separator + arena.getArenaName() + ".yml").delete();
 		plugin.signEditor.removeArena(arena.getArenaName());
-		plugin.amanager.unregisterArena(arena);
+		plugin.arenas.unregisterArena(arena);
 		player.sendMessage("Arena deleted");
 		return true;
 	}

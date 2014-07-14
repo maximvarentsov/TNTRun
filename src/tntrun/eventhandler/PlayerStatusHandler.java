@@ -33,7 +33,7 @@ public class PlayerStatusHandler implements Listener {
     private final ArenasManager arenas;
 
 	public PlayerStatusHandler(final TNTRun plugin) {
-		arenas = plugin.amanager;
+		arenas = plugin.arenas;
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 

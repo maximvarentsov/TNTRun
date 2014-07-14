@@ -33,7 +33,7 @@ public class SetTeleport implements CommandHandlerInterface {
 
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
-		Arena arena = plugin.amanager.getArenaByName(args[0]);
+		Arena arena = plugin.arenas.getArenaByName(args[0]);
 		if (arena != null) {
 			if (arena.getStatusManager().isArenaEnabled()) {
 				player.sendMessage("Disable arena first");

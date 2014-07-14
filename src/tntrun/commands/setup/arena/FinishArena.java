@@ -32,12 +32,12 @@ public class FinishArena implements CommandHandlerInterface {
 
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
-		Arena arena = plugin.amanager.getArenaByName(args[0]);
+		Arena arena = plugin.arenas.getArenaByName(args[0]);
 		if (arena != null) {
 			if (!arena.getStatusManager().isArenaEnabled()) {
 				if (arena.getStructureManager().isArenaConfigured()) {
 					arena.getStructureManager().saveToConfig();
-					plugin.amanager.registerArena(arena);
+					plugin.arenas.registerArena(arena);
 					arena.getStatusManager().enableArena();
 					player.sendMessage("Arena saved and enabled");
 				} else {

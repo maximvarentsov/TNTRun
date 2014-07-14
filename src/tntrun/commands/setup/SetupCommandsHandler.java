@@ -17,36 +17,13 @@
 
 package tntrun.commands.setup;
 
-import java.util.Arrays;
-import java.util.HashMap;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
-
 import tntrun.TNTRun;
-import tntrun.commands.setup.arena.AddKit;
-import tntrun.commands.setup.arena.CreateArena;
-import tntrun.commands.setup.arena.DeleteArena;
-import tntrun.commands.setup.arena.DeleteGameLevel;
-import tntrun.commands.setup.arena.DeleteKit;
-import tntrun.commands.setup.arena.DisableArena;
-import tntrun.commands.setup.arena.EnableArena;
-import tntrun.commands.setup.arena.FinishArena;
-import tntrun.commands.setup.arena.SetArena;
-import tntrun.commands.setup.arena.SetCountdown;
-import tntrun.commands.setup.arena.SetGameLevel;
-import tntrun.commands.setup.arena.SetGameLevelDestroyDelay;
-import tntrun.commands.setup.arena.SetItemsRewards;
-import tntrun.commands.setup.arena.SetLoseLevel;
-import tntrun.commands.setup.arena.SetMaxPlayers;
-import tntrun.commands.setup.arena.SetMinPlayers;
-import tntrun.commands.setup.arena.SetMoneyRewards;
-import tntrun.commands.setup.arena.SetSpawn;
-import tntrun.commands.setup.arena.SetTeleport;
-import tntrun.commands.setup.arena.SetTimeLimit;
-import tntrun.commands.setup.arena.SetVotePercent;
+import tntrun.commands.setup.arena.*;
 import tntrun.commands.setup.lobby.DeleteLobby;
 import tntrun.commands.setup.lobby.SetLobby;
 import tntrun.commands.setup.reload.ReloadBars;
@@ -57,13 +34,20 @@ import tntrun.commands.setup.selection.SetP2;
 import tntrun.messages.Messages;
 import tntrun.selectionget.PlayerSelection;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 public class SetupCommandsHandler implements CommandExecutor {
 
-	private PlayerSelection plselection = new PlayerSelection();
+	private final PlayerSelection plselection = new PlayerSelection();
+	private final Map<String, CommandHandlerInterface> commandHandlers = new HashMap<>();
 
-	private HashMap<String, CommandHandlerInterface> commandHandlers = new HashMap<String, CommandHandlerInterface>();
+	public SetupCommandsHandler(final TNTRun plugin) {
 
-	public SetupCommandsHandler(TNTRun plugin) {
+        PluginCommand pluginCommand = plugin.getCommand("tntrunsetup");
+        pluginCommand.setExecutor(this);
+
 		commandHandlers.put("setp1", new SetP1(plselection));
 		commandHandlers.put("setp2", new SetP2(plselection));
 		commandHandlers.put("clear", new Clear(plselection));
@@ -101,18 +85,20 @@ public class SetupCommandsHandler implements CommandExecutor {
 			return true;
 		}
 		Player player = (Player) sender;
-		// check permissions
-		if (!player.hasPermission("tntrun.setup")) {
+
+        if (!player.hasPermission("tntrun.setup")) {
 			Messages.sendMessage(player, Messages.nopermission);
 			return true;
 		}
+
 		//execute command
 		if (args.length > 0 && commandHandlers.containsKey(args[0])) {
 			CommandHandlerInterface commandh = commandHandlers.get(args[0]);
 			boolean result = commandh.handleCommand(player, Arrays.copyOfRange(args, 1, args.length));
 			return result;
 		}
-		return false;
+
+        return false;
 	}
 
 }

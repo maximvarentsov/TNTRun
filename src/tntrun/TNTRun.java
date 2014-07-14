@@ -36,9 +36,8 @@ import java.io.File;
 
 public class TNTRun extends JavaPlugin {
 
-
 	public PlayerDataStore pdata;
-	public ArenasManager amanager;
+	public ArenasManager arenas;
 	public GlobalLobby globallobby;
 	public SignEditor signEditor;
 
@@ -49,51 +48,40 @@ public class TNTRun extends JavaPlugin {
 		Messages.loadMessages(this);
 		Bars.loadBars(this);
 		pdata = new PlayerDataStore();
-		amanager = new ArenasManager();
-		getCommand("tntrunsetup").setExecutor(new SetupCommandsHandler(this));
-		getCommand("tntrun").setExecutor(new GameCommands(this));
+		arenas = new ArenasManager();
+
+        new SetupCommandsHandler(this);
+		new GameCommands(this);
 
         new PlayerStatusHandler(this);
 		new RestrictionHandler(this);
 		new PlayerLeaveArenaChecker(this);
 		new SignHandler(this);
 
-		// load arenas
-		final File arenasfolder = new File(this.getDataFolder() + File.separator + "arenas");
-		arenasfolder.mkdirs();
-		final TNTRun instance = this;
-		this.getServer().getScheduler().scheduleSyncDelayedTask(
-			this,
-			new Runnable() {
-				@Override
-				public void run() {
-					// load globallobyy
-					globallobby.loadFromConfig();
-					// load arenas
-					for (String file : arenasfolder.list()) {
-						Arena arena = new Arena(file.substring(0, file.length() - 4), instance);
-						arena.getStructureManager().loadFromConfig();
-						arena.getStatusManager().enableArena();
-						amanager.registerArena(arena);
-					}
-					// load signs
-					signEditor.loadConfiguration();
-				}
-			},
-			20
-		);
+		File arenas = new File(getDataFolder(), "arenas");
+		arenas.mkdirs();
+
+        globallobby.loadFromConfig();
+
+        for (String file : arenas.list()) {
+            Arena arena = new Arena(file.substring(0, file.length() - 4), this);
+            arena.getStructureManager().loadFromConfig();
+            arena.getStatusManager().enableArena();
+            this.arenas.registerArena(arena);
+        }
+
+        signEditor.loadConfiguration();
 	}
 
 	@Override
 	public void onDisable() {
-		// save arenas
-		for (Arena arena : amanager.getArenas()) {
+		for (Arena arena : arenas.getArenas()) {
 			arena.getStatusManager().disableArena();
 			arena.getStructureManager().saveToConfig();
 		}
-		// save lobby
-		globallobby.saveToConfig();
-		// save signs
-		signEditor.saveConfiguration();
+
+        globallobby.saveToConfig();
+
+        signEditor.saveConfiguration();
 	}
 }

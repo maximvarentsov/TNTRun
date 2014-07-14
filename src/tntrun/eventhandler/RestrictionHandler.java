@@ -40,7 +40,7 @@ public class RestrictionHandler implements Listener {
     );
 
     public RestrictionHandler(final TNTRun plugin) {
-        arenas = plugin.amanager;
+        arenas = plugin.arenas;
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 

@@ -20,6 +20,7 @@ package tntrun.commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
@@ -28,10 +29,14 @@ import tntrun.messages.Messages;
 
 public class GameCommands implements CommandExecutor {
 
-	private TNTRun plugin;
+	private final TNTRun plugin;
 
-	public GameCommands(TNTRun plugin) {
-		this.plugin = plugin;
+	public GameCommands(final TNTRun plugin) {
+
+        PluginCommand pluginCommand = plugin.getCommand("tntrunsetup");
+        pluginCommand.setExecutor(this);
+
+        this.plugin = plugin;
 	}
 
 	@Override
@@ -68,7 +73,7 @@ public class GameCommands implements CommandExecutor {
 		else if (args.length == 1 && args[0].equalsIgnoreCase("list")) {
 			StringBuilder message = new StringBuilder(200);
 			message.append(Messages.availablearenas);
-			for (Arena arena : plugin.amanager.getArenas()) {
+			for (Arena arena : plugin.arenas.getArenas()) {
 				if (arena.getStatusManager().isArenaEnabled()) {
 					message.append("&a" + arena.getArenaName() + " ");
 				} else {
@@ -84,7 +89,7 @@ public class GameCommands implements CommandExecutor {
 				player.sendMessage("You can join the game only by using a sign");
 				return true;
 			}
-			Arena arena = plugin.amanager.getArenaByName(args[1]);
+			Arena arena = plugin.arenas.getArenaByName(args[1]);
 			if (arena != null) {
 				boolean canJoin = arena.getPlayerHandler().checkJoin(player);
 				if (canJoin) {
@@ -98,7 +103,7 @@ public class GameCommands implements CommandExecutor {
 		}
 		// leave arena
 		else if (args.length == 1 && args[0].equalsIgnoreCase("leave")) {
-			Arena arena = plugin.amanager.getPlayerArena(player.getName());
+			Arena arena = plugin.arenas.getPlayerArena(player.getName());
 			if (arena != null) {
 				arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
 				return true;
@@ -109,7 +114,7 @@ public class GameCommands implements CommandExecutor {
 		}
 		// vote
 		else if (args.length == 1 && args[0].equalsIgnoreCase("vote")) {
-			Arena arena = plugin.amanager.getPlayerArena(player.getName());
+			Arena arena = plugin.arenas.getPlayerArena(player.getName());
 			if (arena != null) {
 				if (arena.getPlayerHandler().vote(player)) {
 					Messages.sendMessage(player, Messages.playervotedforstart);

@@ -108,7 +108,7 @@ public class SignEditor {
 
 	public void modifySigns(String arenaname) {
 		try {
-			Arena arena = plugin.amanager.getArenaByName(arenaname);
+			Arena arena = plugin.arenas.getArenaByName(arenaname);
 			if (arena == null) {
 				return;
 			}

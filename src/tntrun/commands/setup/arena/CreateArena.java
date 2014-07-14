@@ -32,13 +32,13 @@ public class CreateArena implements CommandHandlerInterface {
 
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
-		Arena arenac = plugin.amanager.getArenaByName(args[0]);
+		Arena arenac = plugin.arenas.getArenaByName(args[0]);
 		if (arenac != null) {
 			player.sendMessage("Arena already exists");
 			return true;
 		}
 		Arena arena = new Arena(args[0], plugin);
-		plugin.amanager.registerArena(arena);
+		plugin.arenas.registerArena(arena);
 		player.sendMessage("Arena created");
 		return true;
 	}

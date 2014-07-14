@@ -40,7 +40,7 @@ public class JoinSign implements SignType {
 
 	@Override
 	public void handleCreation(SignChangeEvent e) {
-		final Arena arena = plugin.amanager.getArenaByName(e.getLine(2));
+		final Arena arena = plugin.arenas.getArenaByName(e.getLine(2));
 		if (arena != null) {
 			e.setLine(0, ChatColor.BLUE + "[TNTRun]");
 			e.getPlayer().sendMessage("Sign succesfully created");
@@ -62,7 +62,7 @@ public class JoinSign implements SignType {
 
 	@Override
 	public void handleClick(PlayerInteractEvent e) {
-		Arena arena = plugin.amanager.getArenaByName(((Sign) e.getClickedBlock().getState()).getLine(2));
+		Arena arena = plugin.arenas.getArenaByName(((Sign) e.getClickedBlock().getState()).getLine(2));
 		if (arena != null) {
 			boolean canJoin = arena.getPlayerHandler().checkJoin(e.getPlayer());
 			if (canJoin) {
