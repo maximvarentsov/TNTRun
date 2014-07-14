@@ -32,7 +32,7 @@ import tntrun.signs.editor.SignEditor;
 
 import java.io.File;
 
-public class TNTRun extends JavaPlugin {
+public final class TNTRun extends JavaPlugin {
 
 	public ArenasManager arenas;
 	public SignEditor signEditor;
@@ -53,7 +53,9 @@ public class TNTRun extends JavaPlugin {
 		new SignHandler(this);
 
 		File arenas = new File(getDataFolder(), "arenas");
-		arenas.mkdirs();
+		if (!arenas.exists()) {
+            arenas.mkdirs();
+        }
 
         for (String file : arenas.list()) {
             Arena arena = new Arena(file.substring(0, file.length() - 4), this);

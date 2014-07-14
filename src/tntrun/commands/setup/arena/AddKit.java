@@ -22,17 +22,19 @@ import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.datahandler.ArenasManager;
 
 public class AddKit implements CommandHandlerInterface {
 
-	private TNTRun plugin;
-	public AddKit(TNTRun plugin) {
-		this.plugin = plugin;
+	private final ArenasManager arenas;
+
+    public AddKit(final TNTRun plugin) {
+		arenas = plugin.arenas;
 	}
 
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
-		Arena arena = plugin.arenas.getArenaByName(args[0]);
+		Arena arena = arenas.getArenaByName(args[0]);
 		if (arena == null) {
 			player.sendMessage("Arena does not exist");
 			return true;
@@ -45,5 +47,4 @@ public class AddKit implements CommandHandlerInterface {
 		player.sendMessage("Kit added");
 		return true;
 	}
-
 }

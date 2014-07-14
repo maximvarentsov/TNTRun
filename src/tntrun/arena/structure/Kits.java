@@ -17,27 +17,24 @@
 
 package tntrun.arena.structure;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
+import java.util.*;
+
 public class Kits {
 
-	private HashMap<String, Kit> kits = new HashMap<String, Kit>();
+	private final Map<String, Kit> kits = new HashMap<>();
 
-	public boolean isKitExist(String name) {
+	public boolean exists(String name) {
 		return kits.containsKey(name);
 	}
 
-	public HashSet<String> getKits() {
-		return new HashSet<String>(kits.keySet());
+    public Set<String> getKits() {
+		return kits.keySet();
 	}
 
 	public void registerKit(String name, Player player) {
@@ -56,7 +53,7 @@ public class Kits {
 	public void giveKit(String name, Player player) {
 		try {
 			kits.get(name).giveKit(player);
-		} catch (Exception e) {
+		} catch (Exception ignore) {
 		}
 	}
 
@@ -111,5 +108,4 @@ public class Kits {
 			kits.get(name).saveToConfig(config, "kits."+name);
 		}
 	}
-
 }

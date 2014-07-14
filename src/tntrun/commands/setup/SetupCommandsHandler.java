@@ -24,8 +24,6 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.commands.setup.arena.*;
-import tntrun.commands.setup.reload.ReloadBars;
-import tntrun.commands.setup.reload.ReloadMSG;
 import tntrun.commands.setup.selection.Clear;
 import tntrun.commands.setup.selection.SetP1;
 import tntrun.commands.setup.selection.SetP2;
@@ -49,8 +47,6 @@ public class SetupCommandsHandler implements CommandExecutor {
 		commandHandlers.put("setp1", new SetP1(plselection));
 		commandHandlers.put("setp2", new SetP2(plselection));
 		commandHandlers.put("clear", new Clear(plselection));
-		commandHandlers.put("reloadmsg", new ReloadMSG(plugin));
-		commandHandlers.put("reloadbars", new ReloadBars(plugin));
 		commandHandlers.put("create", new CreateArena(plugin));
 		commandHandlers.put("delete", new DeleteArena(plugin));
 		commandHandlers.put("setarena", new SetArena(plugin, plselection));
@@ -68,7 +64,6 @@ public class SetupCommandsHandler implements CommandExecutor {
 		commandHandlers.put("addkit", new AddKit(plugin));
 		commandHandlers.put("deleteKit", new DeleteKit(plugin));
 		commandHandlers.put("settimelimit", new SetTimeLimit(plugin));
-		commandHandlers.put("setteleport", new SetTeleport(plugin));
 		commandHandlers.put("finish", new FinishArena(plugin));
 		commandHandlers.put("disable", new DisableArena(plugin));
 		commandHandlers.put("enable", new EnableArena(plugin));
@@ -90,8 +85,7 @@ public class SetupCommandsHandler implements CommandExecutor {
 		//execute command
 		if (args.length > 0 && commandHandlers.containsKey(args[0])) {
 			CommandHandlerInterface commandh = commandHandlers.get(args[0]);
-			boolean result = commandh.handleCommand(player, Arrays.copyOfRange(args, 1, args.length));
-			return result;
+            return commandh.handleCommand(player, Arrays.copyOfRange(args, 1, args.length));
 		}
 
         return false;

@@ -17,19 +17,17 @@
 
 package tntrun.arena.structure;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.milkbowl.vault.economy.Economy;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
-
 import tntrun.messages.Messages;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Rewards {
 
@@ -44,7 +42,7 @@ public class Rewards {
 		}
 	}
 
-	private List<ItemStack> itemrewards = new ArrayList<ItemStack>();
+	private List<ItemStack> itemrewards = new ArrayList<>();
 
 	public List<ItemStack> getItemRewads() {
 		return itemrewards;
