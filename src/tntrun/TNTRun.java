@@ -93,12 +93,7 @@ public class TNTRun extends JavaPlugin {
 		}
 		// save lobby
 		globallobby.saveToConfig();
-		globallobby = null;
 		// save signs
 		signEditor.saveConfiguration();
-		signEditor = null;
-		// unload other things
-		pdata = null;
-		amanager = null;
 	}
 }
