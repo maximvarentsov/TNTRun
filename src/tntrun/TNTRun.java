@@ -17,14 +17,9 @@
 
 package tntrun;
 
-import java.io.File;
-import java.util.logging.Logger;
-
 import org.bukkit.plugin.java.JavaPlugin;
-
 import tntrun.arena.Arena;
 import tntrun.bars.Bars;
-import tntrun.commands.ConsoleCommands;
 import tntrun.commands.GameCommands;
 import tntrun.commands.setup.SetupCommandsHandler;
 import tntrun.datahandler.ArenasManager;
@@ -36,6 +31,9 @@ import tntrun.lobby.GlobalLobby;
 import tntrun.messages.Messages;
 import tntrun.signs.SignHandler;
 import tntrun.signs.editor.SignEditor;
+
+import java.io.File;
+import java.util.logging.Logger;
 
 public class TNTRun extends JavaPlugin {
 
@@ -57,7 +55,6 @@ public class TNTRun extends JavaPlugin {
 		amanager = new ArenasManager();
 		getCommand("tntrunsetup").setExecutor(new SetupCommandsHandler(this));
 		getCommand("tntrun").setExecutor(new GameCommands(this));
-		getCommand("tntrunconsole").setExecutor(new ConsoleCommands(this));
 		getServer().getPluginManager().registerEvents(new PlayerStatusHandler(this), this);
 		getServer().getPluginManager().registerEvents(new RestrictionHandler(this), this);
 		getServer().getPluginManager().registerEvents(new PlayerLeaveArenaChecker(this), this);
