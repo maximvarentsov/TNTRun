@@ -33,11 +33,9 @@ import tntrun.signs.SignHandler;
 import tntrun.signs.editor.SignEditor;
 
 import java.io.File;
-import java.util.logging.Logger;
 
 public class TNTRun extends JavaPlugin {
 
-	private Logger log;
 
 	public PlayerDataStore pdata;
 	public ArenasManager amanager;
@@ -46,7 +44,6 @@ public class TNTRun extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		log = getLogger();
 		signEditor = new SignEditor(this);
 		globallobby = new GlobalLobby(this);
 		Messages.loadMessages(this);
@@ -101,11 +98,5 @@ public class TNTRun extends JavaPlugin {
 		// unload other things
 		pdata = null;
 		amanager = null;
-		log = null;
 	}
-
-	public void logSevere(String message) {
-		log.severe(message);
-	}
-
 }
