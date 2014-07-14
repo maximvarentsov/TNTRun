@@ -38,13 +38,11 @@ public class TNTRun extends JavaPlugin {
 
 	public PlayerDataStore pdata;
 	public ArenasManager arenas;
-	public GlobalLobby globallobby;
 	public SignEditor signEditor;
 
 	@Override
 	public void onEnable() {
 		signEditor = new SignEditor(this);
-		globallobby = new GlobalLobby(this);
 		Messages.loadMessages(this);
 		Bars.loadBars(this);
 		pdata = new PlayerDataStore();
@@ -61,15 +59,12 @@ public class TNTRun extends JavaPlugin {
 		File arenas = new File(getDataFolder(), "arenas");
 		arenas.mkdirs();
 
-        globallobby.loadFromConfig();
-
         for (String file : arenas.list()) {
             Arena arena = new Arena(file.substring(0, file.length() - 4), this);
             arena.getStructureManager().loadFromConfig();
             arena.getStatusManager().enableArena();
             this.arenas.registerArena(arena);
         }
-
         signEditor.loadConfiguration();
 	}
 
@@ -79,9 +74,6 @@ public class TNTRun extends JavaPlugin {
 			arena.getStatusManager().disableArena();
 			arena.getStructureManager().saveToConfig();
 		}
-
-        globallobby.saveToConfig();
-
         signEditor.saveConfiguration();
 	}
 }

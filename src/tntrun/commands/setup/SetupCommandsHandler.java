@@ -24,8 +24,6 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.commands.setup.arena.*;
-import tntrun.commands.setup.lobby.DeleteLobby;
-import tntrun.commands.setup.lobby.SetLobby;
 import tntrun.commands.setup.reload.ReloadBars;
 import tntrun.commands.setup.reload.ReloadMSG;
 import tntrun.commands.setup.selection.Clear;
@@ -51,8 +49,6 @@ public class SetupCommandsHandler implements CommandExecutor {
 		commandHandlers.put("setp1", new SetP1(plselection));
 		commandHandlers.put("setp2", new SetP2(plselection));
 		commandHandlers.put("clear", new Clear(plselection));
-		commandHandlers.put("setlobby", new SetLobby(plugin));
-		commandHandlers.put("deletelobby", new DeleteLobby(plugin));
 		commandHandlers.put("reloadmsg", new ReloadMSG(plugin));
 		commandHandlers.put("reloadbars", new ReloadBars(plugin));
 		commandHandlers.put("create", new CreateArena(plugin));

@@ -49,24 +49,10 @@ public class GameCommands implements CommandExecutor {
 		// handle commands
 		// help command
 		if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
-			sender.sendMessage("/tr lobby - teleport to lobby");
 			sender.sendMessage("/tr list - list all arenas");
 			sender.sendMessage("/tr join {arena} - join arena");
 			sender.sendMessage("/tr leave - leave current arena");
 			sender.sendMessage("/tr vote - vote for current arena start");
-			return true;
-		} else if (args.length == 1 && args[0].equalsIgnoreCase("lobby")) {
-			if (plugin.globallobby.isLobbyLocationSet()) {
-				if (plugin.globallobby.isLobbyLocationWorldAvailable()) {
-					player.teleport(plugin.globallobby.getLobbyLocation());
-					Messages.sendMessage(player, Messages.teleporttolobby);
-				} else {
-					player.sendMessage("Lobby world is unloaded, can't join lobby");
-				}
-			} else {
-				sender.sendMessage("Lobby is not set");
-
-			}
 			return true;
 		}
 		// list arenas
