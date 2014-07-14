@@ -17,18 +17,15 @@
 
 package tntrun.bars;
 
-import java.io.File;
-import java.io.IOException;
-
-import me.confuser.barapi.BarAPI;
-
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-
 import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
+
+import java.io.File;
+import java.io.IOException;
 
 public class Bars {
 
@@ -42,15 +39,13 @@ public class Bars {
 		message = FormattingCodesParser.parseFormattingCodes(message);
 		if (Bukkit.getPluginManager().getPlugin("BarAPI") != null) {
 			if (!message.equals("")) {
-				BarAPI.setMessage(player, message, percent);
+			    // use bukkit bars
 			}
 		}
 	}
 
 	public static void removeBar(Player player) {
-		if (Bukkit.getPluginManager().getPlugin("BarAPI") != null) {
-			BarAPI.removeBar(player);
-		}
+        // use bukkit bars
 	}
 
 	public static void loadBars(TNTRun plugin) {
