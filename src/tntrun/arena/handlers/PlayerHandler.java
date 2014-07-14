@@ -18,76 +18,72 @@
 package tntrun.arena.handlers;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.bars.Bars;
 import tntrun.messages.Messages;
+import tntrun.signs.editor.SignEditor;
 
 import java.util.HashSet;
+import java.util.Set;
 
 public class PlayerHandler {
 
-	private TNTRun plugin;
-	private Arena arena;
+	private final SignEditor signEditor;
+	private final Arena arena;
+    private final Set<String> votes = new HashSet<>();
 
-	public PlayerHandler(TNTRun plugin, Arena arena) {
-		this.plugin = plugin;
+	public PlayerHandler(final TNTRun plugin, final Arena arena) {
+		this.signEditor = plugin.signEditor;
 		this.arena = arena;
 	}
 
 	// check if player can join the arena
-	public boolean checkJoin(Player player) {
-		if (arena.getStructureManager().getWorld() == null) {
+	public boolean checkJoin(final Player player) {
+
+        if (arena.getStructureManager().getWorld() == null) {
 			player.sendMessage("Arena world is unloaded, can't join arena");
 			return false;
 		}
-		if (!arena.getStatusManager().isArenaEnabled()) {
+
+        if (!arena.getStatusManager().isArenaEnabled()) {
 			Messages.sendMessage(player, Messages.arenadisabled);
 			return false;
 		}
-		if (arena.getStatusManager().isArenaRunning()) {
+
+        if (arena.getStatusManager().isArenaRunning() || arena.getStatusManager().isArenaRegenerating()) {
 			Messages.sendMessage(player, Messages.arenarunning);
 			return false;
 		}
-		if (arena.getStatusManager().isArenaRegenerating()) {
-			Messages.sendMessage(player, Messages.arenarunning);
-			return false;
-		}
-		if (player.isInsideVehicle()) {
-			player.sendMessage("You can't join the game while sitting inside vehicle");
-			return false;
-		}
+
 		if (arena.getPlayersManager().getCount() == arena.getStructureManager().getMaxPlayers()) {
 			Messages.sendMessage(player, Messages.limitreached);
 			return false;
 		}
-		return true;
+
+        return true;
 	}
 
-	// spawn player on arena
 	@SuppressWarnings("deprecation")
 	public void spawnPlayer(final Player player, String msgtoplayer, String msgtoarenaplayers) {
-		// teleport player to arena
-		plugin.pdata.storePlayerLocation(player);
-		player.teleport(arena.getStructureManager().getSpawnPoint());
-		// set player visible to everyone
-		for (Player aplayer : Bukkit.getOnlinePlayers()) {
+
+        player.teleport(arena.getStructureManager().getSpawnPoint());
+
+        for (Player aplayer : Bukkit.getOnlinePlayers()) {
 			aplayer.showPlayer(player);
 		}
-		// change player status
-		plugin.pdata.storePlayerGameMode(player);
+
+        player.setGameMode(GameMode.SURVIVAL);
 		player.setFlying(false);
 		player.setAllowFlight(false);
-		plugin.pdata.storePlayerInventory(player);
-		plugin.pdata.storePlayerArmor(player);
-		plugin.pdata.storePlayerPotionEffects(player);
-		plugin.pdata.storePlayerHunger(player);
-		// update inventory
+        player.getActivePotionEffects().forEach(e -> player.removePotionEffect(e.getType()));
+        player.getInventory().clear();
+        player.setFoodLevel(20);
 		player.updateInventory();
-		// send message to player
-		Messages.sendMessage(player, msgtoplayer);
-		// send message to other players
+
+        Messages.sendMessage(player, msgtoplayer);
 		for (Player oplayer : arena.getPlayersManager().getPlayers()) {
 			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
 			Messages.sendMessage(oplayer, msgtoarenaplayers);
@@ -99,7 +95,7 @@ public class PlayerHandler {
 		message = message.replace("{COUNT}", String.valueOf(arena.getPlayersManager().getCount()));
 		Messages.sendMessage(player, message);
 		// modify signs
-		plugin.signEditor.modifySigns(arena.getArenaName());
+		signEditor.modifySigns(arena.getArenaName());
 		// modify bars
 		if (!arena.getStatusManager().isArenaStarting()) {
 			for (Player oplayer : arena.getPlayersManager().getPlayers()) {
@@ -119,7 +115,7 @@ public class PlayerHandler {
 		// send message to player
 		Messages.sendMessage(player, msgtoplayer);
 		// modify signs
-		plugin.signEditor.modifySigns(arena.getArenaName());
+		signEditor.modifySigns(arena.getArenaName());
 		// send message to other players and update bars
 		for (Player oplayer : arena.getPlayersManager().getPlayers()) {
 			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
@@ -128,6 +124,7 @@ public class PlayerHandler {
 				Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getCount(), 0, arena.getPlayersManager().getCount() * 100 / arena.getStructureManager().getMinPlayers());
 			}
 		}
+        player.teleport(Bukkit.getServer().getWorlds().get(0).getSpawnLocation());
 	}
 
 	protected void leaveWinner(Player player, String msgtoplayer) {
@@ -136,34 +133,19 @@ public class PlayerHandler {
 		// send message to player
 		Messages.sendMessage(player, msgtoplayer);
 		// modify signs
-		plugin.signEditor.modifySigns(arena.getArenaName());
+		signEditor.modifySigns(arena.getArenaName());
 	}
 
 	@SuppressWarnings("deprecation")
 	private void removePlayerFromArenaAndRestoreState(Player player, boolean winner) {
-		// remove vote
 		votes.remove(player.getName());
-		// remove bar
 		Bars.removeBar(player);
-		// remove player on arena data
 		arena.getPlayersManager().remove(player);
-		// restore player status
-		plugin.pdata.restorePlayerHunger(player);
-		plugin.pdata.restorePlayerPotionEffects(player);
-		plugin.pdata.restorePlayerArmor(player);
-		plugin.pdata.restorePlayerInventory(player);
-		// reward player before restoring gamemode if player is winner
 		if (winner) {
 			arena.getStructureManager().getRewards().rewardPlayer(player);
 		}
-		plugin.pdata.restorePlayerGameMode(player);
-		plugin.pdata.restorePlayerLocation(player);
-		// update inventory
 		player.updateInventory();
 	}
-
-	// vote for game start
-	private HashSet<String> votes = new HashSet<String>();
 
 	public boolean vote(Player player) {
 		if (!votes.contains(player.getName())) {

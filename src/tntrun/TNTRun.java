@@ -23,11 +23,9 @@ import tntrun.bars.Bars;
 import tntrun.commands.GameCommands;
 import tntrun.commands.setup.SetupCommandsHandler;
 import tntrun.datahandler.ArenasManager;
-import tntrun.datahandler.PlayerDataStore;
 import tntrun.eventhandler.PlayerLeaveArenaChecker;
 import tntrun.eventhandler.PlayerStatusHandler;
 import tntrun.eventhandler.RestrictionHandler;
-import tntrun.lobby.GlobalLobby;
 import tntrun.messages.Messages;
 import tntrun.signs.SignHandler;
 import tntrun.signs.editor.SignEditor;
@@ -36,7 +34,6 @@ import java.io.File;
 
 public class TNTRun extends JavaPlugin {
 
-	public PlayerDataStore pdata;
 	public ArenasManager arenas;
 	public SignEditor signEditor;
 
@@ -45,7 +42,6 @@ public class TNTRun extends JavaPlugin {
 		signEditor = new SignEditor(this);
 		Messages.loadMessages(this);
 		Bars.loadBars(this);
-		pdata = new PlayerDataStore();
 		arenas = new ArenasManager();
 
         new SetupCommandsHandler(this);
