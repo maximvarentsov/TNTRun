@@ -18,7 +18,9 @@
 package tntrun.arena;
 
 import org.bukkit.entity.Player;
+import tntrun.TNTRun;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -26,6 +28,26 @@ import java.util.Map;
 public class ArenasManager implements Iterable<Arena> {
 
 	private final Map<String, Arena> arenas = new HashMap<>();
+
+    public ArenasManager(final TNTRun plugin) {
+        File arenas = new File(plugin.getDataFolder(), "arenas");
+        if (arenas.exists()) {
+            for (String file : arenas.list()) {
+                Arena arena = new Arena(file, plugin);
+                arena.getStructureManager().loadFromConfig();
+                arena.getStatusManager().enableArena();
+                this.add(arena);
+            }
+        } else {
+            arenas.mkdirs();
+        }
+    }
+
+    public void disable() {
+        for (Arena arena : this) {
+            arena.disable();
+        }
+    }
 
 	public void add(final Arena arena) {
 		arenas.put(arena.getArenaName(), arena);

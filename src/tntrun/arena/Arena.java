@@ -17,7 +17,6 @@
 
 package tntrun.arena;
 
-import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.arena.handlers.GameHandler;
 import tntrun.arena.handlers.PlayerHandler;
@@ -50,10 +49,6 @@ public class Arena {
         getPlayerHandler().leavePlayer(player, "", Messages.playerlefttoothers);
     }
 
-    public void leave(Message message, Object...args, Player ) {
-
-    }
-
     public String getArenaName() {
 		return name;
 	}
@@ -81,5 +76,10 @@ public class Arena {
 	public PlayersManager getPlayersManager() {
 		return playersManager;
 	}
+
+    public void disable() {
+        getStatusManager().disableArena();
+        getStructureManager().saveToConfig();
+    }
 
 }

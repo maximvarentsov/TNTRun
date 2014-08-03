@@ -18,14 +18,11 @@
 package tntrun;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import tntrun.arena.Arena;
 import tntrun.arena.ArenasManager;
 import tntrun.bars.Bars;
 import tntrun.commands.GameCommands;
 import tntrun.commands.setup.SetupCommandsHandler;
 import tntrun.messages.Messages;
-
-import java.io.File;
 
 public final class TNTRun extends JavaPlugin {
 
@@ -36,34 +33,18 @@ public final class TNTRun extends JavaPlugin {
 
         saveDefaultConfig();
 
-		Bars.loadBars(this);
-		arenas = new ArenasManager();
-
         new Messages(getConfig());
-        new Listeners(this);
 
+		Bars.loadBars(this);
+		arenas = new ArenasManager(this);
+
+        new Listeners(this);
         new SetupCommandsHandler(this);
 		new GameCommands(this);
-
-		File arenas = new File(getDataFolder(), "arenas");
-
-        if (arenas.exists()) {
-            for (String file : arenas.list()) {
-                Arena arena = new Arena(file, this);
-                arena.getStructureManager().loadFromConfig();
-                arena.getStatusManager().enableArena();
-                this.arenas.add(arena);
-            }
-        } else {
-            arenas.mkdirs();
-        }
 	}
 
 	@Override
 	public void onDisable() {
-		for (Arena arena : arenas) {
-			arena.getStatusManager().disableArena();
-			arena.getStructureManager().saveToConfig();
-		}
+        arenas.disable();
 	}
 }
