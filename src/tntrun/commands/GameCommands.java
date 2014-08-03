@@ -25,27 +25,30 @@ import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
+import tntrun.arena.ArenasManager;
 import tntrun.messages.Messages;
 
 public class GameCommands implements CommandExecutor {
 
-	private final TNTRun plugin;
+	private final ArenasManager arenas;
 
 	public GameCommands(final TNTRun plugin) {
-
         PluginCommand pluginCommand = plugin.getCommand("tntrunsetup");
         pluginCommand.setExecutor(this);
 
-        this.plugin = plugin;
+        arenas = plugin.arenas;
 	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if (!(sender instanceof Player)) {
+
+        if (!(sender instanceof Player)) {
 			sender.sendMessage("A player is expected");
 			return true;
 		}
+
 		Player player = (Player) sender;
+
 		// handle commands
 		// help command
 		if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
@@ -55,11 +58,12 @@ public class GameCommands implements CommandExecutor {
 			sender.sendMessage("/tr vote - vote for current arena start");
 			return true;
 		}
+
 		// list arenas
 		else if (args.length == 1 && args[0].equalsIgnoreCase("list")) {
 			StringBuilder message = new StringBuilder(200);
 			message.append(Messages.availablearenas);
-			for (Arena arena : plugin.arenas.getArenas()) {
+			for (Arena arena : arenas) {
 				if (arena.getStatusManager().isArenaEnabled()) {
 					message.append("&a" + arena.getArenaName() + " ");
 				} else {
@@ -75,7 +79,7 @@ public class GameCommands implements CommandExecutor {
 				player.sendMessage("You can join the game only by using a sign");
 				return true;
 			}
-			Arena arena = plugin.arenas.getArenaByName(args[1]);
+			Arena arena = arenas.get(args[1]);
 			if (arena != null) {
 				boolean canJoin = arena.getPlayerHandler().checkJoin(player);
 				if (canJoin) {
@@ -89,7 +93,7 @@ public class GameCommands implements CommandExecutor {
 		}
 		// leave arena
 		else if (args.length == 1 && args[0].equalsIgnoreCase("leave")) {
-			Arena arena = plugin.arenas.getPlayerArena(player.getName());
+			Arena arena = arenas.get(player);
 			if (arena != null) {
 				arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
 				return true;
@@ -100,7 +104,7 @@ public class GameCommands implements CommandExecutor {
 		}
 		// vote
 		else if (args.length == 1 && args[0].equalsIgnoreCase("vote")) {
-			Arena arena = plugin.arenas.getPlayerArena(player.getName());
+			Arena arena = arenas.get(player);
 			if (arena != null) {
 				if (arena.getPlayerHandler().vote(player)) {
 					Messages.sendMessage(player, Messages.playervotedforstart);

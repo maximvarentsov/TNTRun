@@ -19,59 +19,51 @@ package tntrun;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import tntrun.arena.Arena;
+import tntrun.arena.ArenasManager;
 import tntrun.bars.Bars;
 import tntrun.commands.GameCommands;
 import tntrun.commands.setup.SetupCommandsHandler;
-import tntrun.datahandler.ArenasManager;
-import tntrun.eventhandler.PlayerLeaveArenaChecker;
-import tntrun.eventhandler.PlayerStatusHandler;
-import tntrun.eventhandler.RestrictionHandler;
 import tntrun.messages.Messages;
-import tntrun.signs.SignHandler;
-import tntrun.signs.editor.SignEditor;
 
 import java.io.File;
 
 public final class TNTRun extends JavaPlugin {
 
 	public ArenasManager arenas;
-	public SignEditor signEditor;
 
 	@Override
 	public void onEnable() {
-		signEditor = new SignEditor(this);
-		Messages.loadMessages(this);
+
+        saveDefaultConfig();
+
 		Bars.loadBars(this);
 		arenas = new ArenasManager();
+
+        new Messages(getConfig());
+        new Listeners(this);
 
         new SetupCommandsHandler(this);
 		new GameCommands(this);
 
-        new PlayerStatusHandler(this);
-		new RestrictionHandler(this);
-		new PlayerLeaveArenaChecker(this);
-		new SignHandler(this);
-
 		File arenas = new File(getDataFolder(), "arenas");
-		if (!arenas.exists()) {
+
+        if (arenas.exists()) {
+            for (String file : arenas.list()) {
+                Arena arena = new Arena(file, this);
+                arena.getStructureManager().loadFromConfig();
+                arena.getStatusManager().enableArena();
+                this.arenas.add(arena);
+            }
+        } else {
             arenas.mkdirs();
         }
-
-        for (String file : arenas.list()) {
-            Arena arena = new Arena(file.substring(0, file.length() - 4), this);
-            arena.getStructureManager().loadFromConfig();
-            arena.getStatusManager().enableArena();
-            this.arenas.registerArena(arena);
-        }
-        signEditor.loadConfiguration();
 	}
 
 	@Override
 	public void onDisable() {
-		for (Arena arena : arenas.getArenas()) {
+		for (Arena arena : arenas) {
 			arena.getStatusManager().disableArena();
 			arena.getStructureManager().saveToConfig();
 		}
-        signEditor.saveConfiguration();
 	}
 }

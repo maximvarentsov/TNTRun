@@ -21,10 +21,10 @@ import org.bukkit.Location;
 
 public class PlayerCuboidSelection {
 
-	private Location minpoint;
-	private Location maxpoint;
+	private final Location minpoint;
+	private final Location maxpoint;
 
-	public PlayerCuboidSelection(Location minpoint, Location maxpoint) {
+	public PlayerCuboidSelection(final Location minpoint, final Location maxpoint) {
 		this.minpoint = minpoint;
 		this.maxpoint = maxpoint;
 	}

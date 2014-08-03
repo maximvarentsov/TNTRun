@@ -17,58 +17,67 @@
 
 package tntrun.arena;
 
-import java.io.File;
-
+import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.arena.handlers.GameHandler;
 import tntrun.arena.handlers.PlayerHandler;
 import tntrun.arena.status.PlayersManager;
 import tntrun.arena.status.StatusManager;
 import tntrun.arena.structure.StructureManager;
+import tntrun.messages.Message;
+import tntrun.messages.Messages;
+
+import java.io.File;
 
 public class Arena {
 
-	public TNTRun plugin;
+    private String name;
+    private File file;
+    private GameHandler gameHandler;
+    private PlayerHandler playerHandler;
+    private StatusManager statusManager = new StatusManager(this);
+    private StructureManager structureManager = new StructureManager(this);
+    private PlayersManager playersManager = new PlayersManager();
 
-	public Arena(String name, TNTRun plugin) {
-		this.arenaname = name;
-		this.plugin = plugin;
-		arenagh = new GameHandler(plugin, this);
-		arenaph = new PlayerHandler(plugin, this);
-		arenafile = new File(plugin.getDataFolder() + File.separator + "arenas" + File.separator + arenaname + ".yml");
+    public Arena(String name, TNTRun plugin) {
+		this.name = name;
+		gameHandler = new GameHandler(plugin, this);
+		playerHandler = new PlayerHandler(plugin, this);
+		file = new File(plugin.getDataFolder(), "arenas" + File.separator + name);
 	}
 
-	private String arenaname;
-	public String getArenaName() {
-		return arenaname;
+    public void broadcast(Message message, Object...args) {
+        getPlayerHandler().leavePlayer(player, "", Messages.playerlefttoothers);
+    }
+
+    public void leave(Message message, Object...args, Player ) {
+
+    }
+
+    public String getArenaName() {
+		return name;
 	}
 
-	private File arenafile;
 	public File getArenaFile() {
-		return arenafile;
+		return file;
 	}
 
-	private GameHandler arenagh;
 	public GameHandler getGameHandler() {
-		return arenagh;
+		return gameHandler;
 	}
 
-	private PlayerHandler arenaph;
 	public PlayerHandler getPlayerHandler() {
-		return arenaph;
+		return playerHandler;
 	}
 
-	private StatusManager statusManager = new StatusManager(this);
 	public StatusManager getStatusManager() {
 		return statusManager;
 	}
 
-	private StructureManager structureManager = new StructureManager(this);
 	public StructureManager getStructureManager() {
 		return structureManager;
 	}
 
-	private PlayersManager playersManager = new PlayersManager();
 	public PlayersManager getPlayersManager() {
 		return playersManager;
 	}

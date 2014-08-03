@@ -20,23 +20,21 @@ package tntrun.arena.handlers;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.bars.Bars;
 import tntrun.messages.Messages;
-import tntrun.signs.editor.SignEditor;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class PlayerHandler {
 
-	private final SignEditor signEditor;
 	private final Arena arena;
     private final Set<String> votes = new HashSet<>();
 
 	public PlayerHandler(final TNTRun plugin, final Arena arena) {
-		this.signEditor = plugin.signEditor;
 		this.arena = arena;
 	}
 
@@ -49,7 +47,7 @@ public class PlayerHandler {
 		}
 
         if (!arena.getStatusManager().isArenaEnabled()) {
-			Messages.sendMessage(player, Messages.arenadisabled);
+			Messages.send(player, Messages.arenadisabled);
 			return false;
 		}
 
@@ -94,8 +92,6 @@ public class PlayerHandler {
 		String message = Messages.playerscountinarena;
 		message = message.replace("{COUNT}", String.valueOf(arena.getPlayersManager().getCount()));
 		Messages.sendMessage(player, message);
-		// modify signs
-		signEditor.modifySigns(arena.getArenaName());
 		// modify bars
 		if (!arena.getStatusManager().isArenaStarting()) {
 			for (Player oplayer : arena.getPlayersManager().getPlayers()) {
@@ -108,16 +104,57 @@ public class PlayerHandler {
 		}
 	}
 
+    // move to spectators
+    public void spectatePlayer(Player player, String msgtoplayer, String msgtoarenaplayers) {
+        // remove form players
+        arena.getPlayersManager().remove(player);
+        // teleport to spectators spawn
+        player.teleport(arena.getStructureManager().getSpectatorSpawn());
+        // clear inventory
+        player.getInventory().clear();
+        player.getInventory().setArmorContents(new ItemStack[4]);
+        // allow flight
+        player.setAllowFlight(true);
+        player.setFlying(true);
+        // hide from others
+        for (Player oplayer : Bukkit.getOnlinePlayers()) {
+            oplayer.hidePlayer(player);
+        }
+        // send message to player
+        Messages.sendMessage(player, msgtoplayer);
+        // send message to other players and update bars
+        for (Player oplayer : arena.getPlayersManager().getAllParticipantsCopy()) {
+            msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
+            Messages.sendMessage(oplayer, msgtoarenaplayers);
+        }
+        //add to spectators
+        arena.getPlayersManager().add(player);
+    }
+
 	// remove player from arena
 	public void leavePlayer(Player player, String msgtoplayer, String msgtoarenaplayers) {
-		// remove player from arena and restore his state
-		removePlayerFromArenaAndRestoreState(player, false);
+		// reset spectators
+        boolean spectator = arena.getPlayersManager().isSpectator(player.getName());
+
+        if (spectator) {
+            arena.getPlayersManager().removeSpecator(player.getName());
+            for (Player oplayer : Bukkit.getOnlinePlayers()) {
+                oplayer.showPlayer(player);
+            }
+            player.setAllowFlight(false);
+            player.setFlying(false);
+            return;
+        }
+        // remove player from arena and restore his state
+        removePlayerFromArenaAndRestoreState(player, false);
+        // should not send messages and other things when player is a spectator
+        if (spectator) {
+            return;
+        }
 		// send message to player
 		Messages.sendMessage(player, msgtoplayer);
-		// modify signs
-		signEditor.modifySigns(arena.getArenaName());
 		// send message to other players and update bars
-		for (Player oplayer : arena.getPlayersManager().getPlayers()) {
+		for (Player oplayer : arena.getPlayersManager().getAllParticipantsCopy()) {
 			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
 			Messages.sendMessage(oplayer, msgtoarenaplayers);
 			if (!arena.getStatusManager().isArenaStarting() && !arena.getStatusManager().isArenaRunning()) {
@@ -132,8 +169,6 @@ public class PlayerHandler {
 		removePlayerFromArenaAndRestoreState(player, true);
 		// send message to player
 		Messages.sendMessage(player, msgtoplayer);
-		// modify signs
-		signEditor.modifySigns(arena.getArenaName());
 	}
 
 	@SuppressWarnings("deprecation")

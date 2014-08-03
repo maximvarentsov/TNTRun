@@ -18,22 +18,28 @@
 package tntrun.commands.setup.selection;
 
 import org.bukkit.entity.Player;
-
 import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.messages.Message;
+import tntrun.messages.Messages;
 import tntrun.selectionget.PlayerSelection;
 
 public class SetP2 implements CommandHandlerInterface {
 
-	private PlayerSelection selection;
-	public SetP2(PlayerSelection selection) {
+	private final PlayerSelection selection;
+
+    public SetP2(final PlayerSelection selection) {
 		this.selection = selection;
 	}
 
 	@Override
-	public boolean handleCommand(Player player, String[] args) {
-		selection.setSelectionPoint1(player);
-		player.sendMessage("p2 saved");
-		return true;
+	public boolean handleCommand(final Player player, final String[] args) {
+		selection.setSelectionPoint2(player);
+		Messages.send(player, Message.p2_saved);
+        return true;
 	}
 
+    @Override
+    public int getMinArgsLength() {
+        return 0;
+    }
 }

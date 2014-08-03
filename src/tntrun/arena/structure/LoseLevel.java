@@ -23,13 +23,11 @@ import org.bukkit.util.Vector;
 
 public class LoseLevel {
 
-	private Vector p1 = null;
+	private Vector p1, p2;
 
 	public Vector getP1() {
 		return p1;
 	}
-
-	private Vector p2 = null;
 
 	public Vector getP2() {
 		return p2;

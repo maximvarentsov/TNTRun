@@ -22,31 +22,42 @@ import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.messages.Message;
+import tntrun.messages.Messages;
 
 public class SetSpawn implements CommandHandlerInterface {
 
-	private TNTRun plugin;
-	public SetSpawn(TNTRun plugin) {
+	private final TNTRun plugin;
+
+	public SetSpawn(final TNTRun plugin) {
 		this.plugin = plugin;
 	}
 
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
-		Arena arena = plugin.arenas.getArenaByName(args[0]);
-		if (arena != null) {
-			if (arena.getStatusManager().isArenaEnabled()) {
-				player.sendMessage("Disable arena first");
-				return true;
-			}
-			if (arena.getStructureManager().setSpawnPoint(player.getLocation())) {
-				player.sendMessage("Spawnpoint set");
-			} else {
-				player.sendMessage("Spawnpoint should be in arena bounds");
-			}
-		} else {
-			player.sendMessage("Arena does not exist");
-		}
+		Arena arena = plugin.arenas.get(args[0]);
+
+        if (arena == null) {
+            Messages.send(player, Message.arena_not_found, args[0]);
+            return true;
+        }
+
+        if (arena.getStatusManager().isArenaEnabled()) {
+            player.sendMessage("Disable arena first");
+            return true;
+        }
+
+        if (arena.getStructureManager().setSpawnPoint(player.getLocation())) {
+            player.sendMessage("Spawnpoint set");
+        } else {
+            player.sendMessage("Spawnpoint should be in arena bounds");
+        }
+
 		return true;
 	}
 
+    @Override
+    public int getMinArgsLength() {
+        return 1;
+    }
 }

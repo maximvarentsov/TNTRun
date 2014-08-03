@@ -21,29 +21,41 @@ import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
+import tntrun.arena.ArenasManager;
 import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.messages.Message;
+import tntrun.messages.Messages;
 
 public class SetMoneyRewards implements CommandHandlerInterface {
 
-	private TNTRun plugin;
-	public SetMoneyRewards(TNTRun plugin) {
-		this.plugin = plugin;
+	private final ArenasManager arenas;
+
+    public SetMoneyRewards(final TNTRun plugin) {
+	    arenas = plugin.arenas;
 	}
 
 	@Override
-	public boolean handleCommand(Player player, String[] args) {
-		Arena arena = plugin.arenas.getArenaByName(args[0]);
-		if (arena != null) {
-			if (arena.getStatusManager().isArenaEnabled()) {
-				player.sendMessage("Disable arena first");
-				return true;
-			}
-			arena.getStructureManager().setRewards(Integer.valueOf(args[1]));
-			player.sendMessage("Money Rewards set");
-		} else {
-			player.sendMessage("Arena does not exist");
-		}
+	public boolean handleCommand(final Player player, final String[] args) {
+		Arena arena = arenas.get(args[0]);
+
+        if (arena == null) {
+            Messages.send(player, Message.arena_not_found, args[0]);
+            return true;
+        }
+
+        if (arena.getStatusManager().isArenaEnabled()) {
+            Messages.send(player, Message.disable_arena_first);
+            return true;
+        }
+
+        arena.getStructureManager().setRewards(Integer.parseInt(args[1]));
+        player.sendMessage("Money Rewards set");
+
 		return true;
 	}
 
+    @Override
+    public int getMinArgsLength() {
+        return 2;
+    }
 }

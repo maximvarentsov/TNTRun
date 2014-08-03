@@ -25,8 +25,8 @@ import tntrun.messages.Messages;
 
 public class StatusManager {
 
-	private Arena arena;
-	public StatusManager(Arena arena) {
+	private final Arena arena;
+	public StatusManager(final Arena arena) {
 		this.arena = arena;
 	}
 
@@ -43,7 +43,6 @@ public class StatusManager {
 		if (arena.getStructureManager().isArenaConfigured()) {
 			enabled = true;
 			arena.getGameHandler().startArenaAntiLeaveHandler();
-			arena.plugin.signEditor.modifySigns(arena.getArenaName());
 			return true;
 		}
 		return false;
@@ -65,12 +64,8 @@ public class StatusManager {
 		}
 		// stop antileave handler
 		arena.getGameHandler().stopArenaAntiLeaveHandler();
-		// regen gamelevels
-		for (GameLevel gl : arena.getStructureManager().getGameLevels()) {
-			gl.regen();
-		}
-		// modify signs
-		arena.plugin.signEditor.modifySigns(arena.getArenaName());
+        // regen gamezone
+        arena.getStructureManager().getGameZone().regenNow();
 	}
 
 	public boolean isArenaStarting() {

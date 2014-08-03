@@ -22,34 +22,46 @@ import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.arena.ArenasManager;
+import tntrun.messages.Message;
+import tntrun.messages.Messages;
 
 public class FinishArena implements CommandHandlerInterface {
 
-	private TNTRun plugin;
-	public FinishArena(TNTRun plugin) {
-		this.plugin = plugin;
+	private final ArenasManager arenas;
+
+	public FinishArena(final TNTRun plugin) {
+		arenas = plugin.arenas;
 	}
 
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
-		Arena arena = plugin.arenas.getArenaByName(args[0]);
-		if (arena != null) {
-			if (!arena.getStatusManager().isArenaEnabled()) {
-				if (arena.getStructureManager().isArenaConfigured()) {
-					arena.getStructureManager().saveToConfig();
-					plugin.arenas.registerArena(arena);
-					arena.getStatusManager().enableArena();
-					player.sendMessage("Arena saved and enabled");
-				} else {
-					player.sendMessage("Arena is not configured. Reason: " + arena.getStructureManager().isArenaConfiguredString());
-				}
-			} else {
-				player.sendMessage("Disable arena first");
-			}
-		} else {
-			player.sendMessage("Arena does not exist");
-		}
+
+        Arena arena = arenas.get(args[0]);
+
+        if (arena == null) {
+            Messages.send(player, Message.arena_not_found, args[0]);
+            return true;
+        }
+
+        if (!arena.getStatusManager().isArenaEnabled()) {
+            if (arena.getStructureManager().isArenaConfigured()) {
+                arena.getStructureManager().saveToConfig();
+                arenas.add(arena);
+                arena.getStatusManager().enableArena();
+                player.sendMessage("Arena saved and enabled");
+            } else {
+                player.sendMessage("Arena is not configured. Reason: " + arena.getStructureManager().isArenaConfiguredString());
+            }
+        } else {
+            player.sendMessage("Disable arena first");
+        }
+
 		return true;
 	}
 
+    @Override
+    public int getMinArgsLength() {
+        return 1;
+    }
 }

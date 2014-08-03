@@ -32,8 +32,9 @@ import java.util.List;
 public class Rewards {
 
 	private Object economy = null;
+    private int moneyreward = 0;
 
-	public Rewards() {
+    public Rewards() {
 		if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
 			RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
 			if (economyProvider != null) {
@@ -42,25 +43,8 @@ public class Rewards {
 		}
 	}
 
-	private List<ItemStack> itemrewards = new ArrayList<>();
-
-	public List<ItemStack> getItemRewads() {
-		return itemrewards;
-	}
-
-	private int moneyreward = 0;
-
 	public int getMoneyReward() {
 		return moneyreward;
-	}
-
-	public void setRewards(ItemStack[] rewards) {
-		this.itemrewards.clear();
-		for (ItemStack reward : rewards) {
-			if (reward != null) {
-				this.itemrewards.add(reward);
-			}
-		}
 	}
 
 	public void setRewards(int money) {
@@ -69,14 +53,7 @@ public class Rewards {
 
 	public void rewardPlayer(Player player) {
 		String rewardmessage = "";
-		for (ItemStack reward : itemrewards) {
-			if (player.getInventory().firstEmpty() != -1) {
-				player.getInventory().addItem(reward);
-			} else {
-				player.getWorld().dropItemNaturally(player.getLocation(),reward);
-			}
-			rewardmessage += reward.getAmount() + " x " + reward.getType().toString().replace("_", "").toLowerCase()+ ", ";
-		}
+
 		if (moneyreward != 0) {
 			rewardMoney(player.getName(), moneyreward);
 			rewardmessage += ChatColor.GOLD.toString() + moneyreward;
@@ -99,16 +76,11 @@ public class Rewards {
 
 	public void saveToConfig(FileConfiguration config) {
 		config.set("reward.money", moneyreward);
-		config.set("reward.items", itemrewards);
 	}
 
 	@SuppressWarnings("unchecked")
 	public void loadFromConfig(FileConfiguration config) {
 		moneyreward = config.getInt("reward.money", moneyreward);
-		Object obj = config.get("reward.items");
-		if (obj != null) {
-			itemrewards = (List<ItemStack>) obj;
-		}
 	}
 
 }

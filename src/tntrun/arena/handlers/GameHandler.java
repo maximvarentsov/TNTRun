@@ -32,10 +32,10 @@ import tntrun.messages.Messages;
 
 public class GameHandler {
 
-	private TNTRun plugin;
-	private Arena arena;
+	private final TNTRun plugin;
+	private final Arena arena;
 
-	public GameHandler(TNTRun plugin, Arena arena) {
+	public GameHandler(final TNTRun plugin, final Arena arena) {
 		this.plugin = plugin;
 		this.arena = arena;
 		count = arena.getStructureManager().getCountdown();
@@ -47,17 +47,19 @@ public class GameHandler {
 	public void startArenaAntiLeaveHandler() {
 		leavetaskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(
 			plugin,
-			new Runnable() {
-				@Override
-				public void run() {
-					for (Player player : arena.getPlayersManager().getPlayersCopy()) {
-						if (!arena.getStructureManager().isInArenaBounds(player.getLocation())) {
-							arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
-						}
-					}
-				}
-			},
-			0, 1
+                () -> {
+                    for (Player player : arena.getPlayersManager().getPlayersCopy()) {
+                        if (!arena.getStructureManager().isInArenaBounds(player.getLocation())) {
+                            arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
+                        }
+                    }
+                    for (Player player : arena.getPlayersManager().getSpectatorsCopy()) {
+                        if (!arena.getStructureManager().isInArenaBounds(player.getLocation())) {
+                            arena.getPlayerHandler().leavePlayer(player, "", "");
+                        }
+                    }
+                },
+			0L, 1L
 		);
 	}
 
@@ -73,33 +75,31 @@ public class GameHandler {
 		arena.getStatusManager().setStarting(true);
 		runtaskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(
 			plugin,
-			new Runnable() {
-				@Override
-				public void run() {
-					// check if countdown should be stopped for some various reasons
-					if (arena.getPlayersManager().getCount() < arena.getStructureManager().getMinPlayers()) {
-						for (Player player : arena.getPlayersManager().getPlayers()) {
-							Bars.setBar(player, Bars.waiting, arena.getPlayersManager().getCount(), 0, arena.getPlayersManager().getCount() * 100 / arena.getStructureManager().getMinPlayers());
-						}
-						stopArenaCountdown();
-					} else
-					// start arena if countdown is 0
-					if (count == 0) {
-						stopArenaCountdown();
-						startArena();
-					} else
-					// countdown
-					{
-						String message = Messages.arenacountdown;
-						message = message.replace("{COUNTDOWN}", String.valueOf(count));
-						for (Player player : arena.getPlayersManager().getPlayers()) {
-							Messages.sendMessage(player, message);
-							Bars.setBar(player, Bars.starting, 0, count, count * 100 / arena.getStructureManager().getCountdown());
-						}
-						count--;
-					}
-				}
-			},
+                () -> {
+                    // check if countdown should be stopped for some various reasons
+                    if (arena.getPlayersManager().getCount() < arena.getStructureManager().getMinPlayers()) {
+                        for (Player player : arena.getPlayersManager().getPlayers()) {
+                            Bars.setBar(player, Bars.waiting, arena.getPlayersManager().getCount(), 0, arena.getPlayersManager().getCount() * 100 / arena.getStructureManager().getMinPlayers());
+                        }
+                        stopArenaCountdown();
+                    } else
+                    // start arena if countdown is 0
+                    if (count == 0) {
+                        stopArenaCountdown();
+                        startArena();
+                    } else
+                    // countdown
+                    {
+                        String message = Messages.arenacountdown;
+                        message = message.replace("{COUNTDOWN}", String.valueOf(count));
+                        for (Player player : arena.getPlayersManager().getPlayers()) {
+                            //player.sendMessage(Messages.);
+                            Messages.sendMessage(player, message);
+                            Bars.setBar(player, Bars.starting, 0, count, count * 100 / arena.getStructureManager().getCountdown());
+                        }
+                        count--;
+                    }
+                },
 			0, 20
 		);
 	}
@@ -121,9 +121,8 @@ public class GameHandler {
 		String message = Messages.arenastarted;
 		message = message.replace("{TIMELIMIT}", String.valueOf(arena.getStructureManager().getTimeLimit()));
 		for (Player player : arena.getPlayersManager().getPlayers()) {
-			Messages.sendMessage(player, message);
-		}
-		plugin.signEditor.modifySigns(arena.getArenaName());
+            Messages.sendMessage(player, message);
+        }
 		Kits kits = arena.getStructureManager().getKits();
 		if (kits.getKits().size() > 0) {
 			String[] kitnames = kits.getKits().toArray(new String[kits.getKits().size()]);
@@ -134,43 +133,44 @@ public class GameHandler {
 		timelimit = arena.getStructureManager().getTimeLimit() * 20; // timelimit is in ticks
 		arenahandler = Bukkit.getScheduler().scheduleSyncRepeatingTask(
 			plugin,
-			new Runnable() {
-				@Override
-				public void run() {
-					if (timelimit < 0) {
-						for (Player player : arena.getPlayersManager().getPlayersCopy()) {
-							// kick player
-							arena.getPlayerHandler().leavePlayer(player,Messages.arenatimeout, "");
-						}
-						// stop arena
-						stopArena();
-						return;
-					}
-					// stop arena if player count is 0 (just in case)
-					if (arena.getPlayersManager().getCount() == 0) {
-						// stop arena
-						stopArena();
-						return;
-					}
-					// handle players
-					for (Player player : arena.getPlayersManager().getPlayersCopy()) {
-						// update bar
-						Bars.setBar(player, Bars.playing, arena.getPlayersManager().getCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit());
-						// handle player
-						handlePlayer(player);
-					}
-					// decrease timelimit
-					timelimit--;
-				}
-			},
+                () -> {
+                    // stop arena if player count is 0
+                    if (arena.getPlayersManager().getCount() == 0) {
+                        // stop arena
+                        stopArena();
+                        return;
+                    }
+                    // kick all players if time is out
+                    if (timelimit < 0) {
+                        for (Player player : arena.getPlayersManager().getPlayersCopy()) {
+                            arena.getPlayerHandler().leavePlayer(player, Messages.arenatimeout, "");
+                        }
+                        return;
+                    }
+                    // handle players
+                    for (Player player : arena.getPlayersManager().getPlayersCopy()) {
+                        // update bar
+                        Bars.setBar(player, Bars.playing, arena.getPlayersManager().getCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit());
+                        // handle player
+                        handlePlayer(player);
+                    }
+                    // update bars for spectators too
+                    for (Player player : arena.getPlayersManager().getSpectators()) {
+                        Bars.setBar(player, Bars.playing, arena.getPlayersManager().getCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit());
+                    }
+                    // decrease timelimit
+                    timelimit--;
+                },
 			0, 1
 		);
 	}
 
 	public void stopArena() {
-		arena.getStatusManager().setRunning(false);
+        for (Player player : arena.getPlayersManager().getAllParticipantsCopy()) {
+            arena.getPlayerHandler().leavePlayer(player, "", "");
+        }
+        arena.getStatusManager().setRunning(false);
 		Bukkit.getScheduler().cancelTask(arenahandler);
-		plugin.signEditor.modifySigns(arena.getArenaName());
 		if (arena.getStatusManager().isArenaEnabled()) {
 			startArenaRegen();
 		}
@@ -180,26 +180,23 @@ public class GameHandler {
 	public void handlePlayer(final Player player) {
 		Location plloc = player.getLocation();
 		Location plufloc = plloc.clone().add(0, -1, 0);
-		// check for game location
-		for (final GameLevel gl : arena.getStructureManager().getGameLevels()) {
-			// remove block under player feet
-			if (gl.isSandLocation(plufloc)) {
-				gl.destroyBlock(plufloc, arena);
-			}
-		}
+        // remove block under player feet
+        arena.getStructureManager().getGameZone().destroyBlock(plufloc, arena);
 		// check for win
 		if (arena.getPlayersManager().getCount() == 1) {
 			// last player won
 			arena.getPlayerHandler().leaveWinner(player, Messages.playerwontoplayer);
 			broadcastWin(player);
-			stopArena();
 			return;
 		}
 		// check for lose
 		if (arena.getStructureManager().getLoseLevel().isLooseLocation(plloc)) {
-			// player lost
-			arena.getPlayerHandler().leavePlayer(player, Messages.playerlosttoplayer, Messages.playerlosttoothers);
-			return;
+            // if we have the spectate spawn than we will move player to spectators, otherwise we will remove him from arena
+            if (arena.getStructureManager().getSpawnPointVector() != null) {
+                arena.getPlayerHandler().spectatePlayer(player, Messages.playerlosttoplayer, Messages.playerlosttoothers);
+            } else {
+                arena.getPlayerHandler().leavePlayer(player, Messages.playerlosttoplayer, Messages.playerlosttoothers);
+            }
 		}
 	}
 
@@ -207,43 +204,17 @@ public class GameHandler {
 		String message = Messages.playerwonbroadcast;
 		message = message.replace("{PLAYER}", player.getName());
 		message = message.replace("{ARENA}", arena.getArenaName());
-		Messages.broadcastMessage(message);
+		Messages.broadcast(message);
 	}
 
 	private void startArenaRegen() {
 		// set arena is regenerating status
 		arena.getStatusManager().setRegenerating(true);
-		// modify signs
-		plugin.signEditor.modifySigns(arena.getArenaName());
-		// schedule gamelevels regen
-		int delay = 1;
-		for (final GameLevel gl : arena.getStructureManager().getGameLevels()) {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(
-				arena.plugin,
-				new Runnable() {
-					@Override
-					public void run() {
-						if (arena.getStatusManager().isArenaEnabled()) {
-							gl.regen();
-						}
-					}
-				},
-				delay
-			);
-			delay++;
-		}
-		// schedule arena regen finished
+		// schedule gamezone regen
+        int delay = arena.getStructureManager().getGameZone().regen(plugin);
+        // regen finished
 		Bukkit.getScheduler().scheduleSyncDelayedTask(
-			arena.plugin,
-			new Runnable() {
-				@Override
-				public void run() {
-					// set not regenerating status
-					arena.getStatusManager().setRegenerating(false);
-					// modify signs
-					plugin.signEditor.modifySigns(arena.getArenaName());
-				}
-			},
+			plugin, () -> arena.getStatusManager().setRegenerating(false),
 			delay
 		);
 	}

@@ -17,21 +17,21 @@
 
 package tntrun.selectionget;
 
-import java.util.HashMap;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class OwnLocations {
 
-	private HashMap<String, Location> loc1 = new HashMap<String, Location>();
+	private final Map<String, Location> loc1 = new HashMap<>();
+    private final Map<String, Location> loc2 = new HashMap<>();
 
 	protected void putPlayerLoc1(String playername, Location loc) {
 		loc = loc.getBlock().getLocation();
 		loc1.put(playername, loc);
 	}
-
-	private HashMap<String, Location> loc2 = new HashMap<String, Location>();
 
 	protected void putPlayerLoc2(String playername, Location loc) {
 		loc = loc.getBlock().getLocation();
@@ -43,16 +43,12 @@ public class OwnLocations {
 		loc2.remove(playername);
 	}
 
-	protected Location[] getLocations(Player player, boolean oneBlockHigh) {
+	protected Location[] getLocations(Player player) {
 		try {
-			Location[] locs = sortLoc(player);
-			if (oneBlockHigh && !isOneBlockHigh(locs)) {
-				return null;
-			}
-			return locs;
-		} catch (Exception e) {
+			return sortLoc(player);
+		} catch (Exception ignore) {
+            return null;
 		}
-		return null;
 	}
 
 	// 0 is min, 1 is max
@@ -85,14 +81,4 @@ public class OwnLocations {
 		locs[0].distanceSquared(locs[1]);
 		return locs;
 	}
-
-	private boolean isOneBlockHigh(Location[] locs) {
-		int y1 = locs[0].getBlockY();
-		int y2 = locs[1].getBlockY();
-		if (y1 == y2) {
-			return true;
-		}
-		return false;
-	}
-
 }

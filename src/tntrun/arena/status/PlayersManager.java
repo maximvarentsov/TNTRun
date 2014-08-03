@@ -17,19 +17,19 @@
 
 package tntrun.arena.status;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import org.bukkit.entity.Player;
+
+import java.util.*;
 
 public class PlayersManager {
 
-	private HashMap<String, Player> players = new HashMap<String, Player>();
+	private final Map<String, Player> players = new HashMap<>();
+    private final Map<String, Player> spectators = new HashMap<>();
 
 	public boolean isInArena(String name) {
-		return players.containsKey(name);
+		return players.containsKey(name) || spectators.containsKey(name);
 	}
 
 	public int getCount() {
@@ -37,19 +37,45 @@ public class PlayersManager {
 	}
 
 	public Collection<Player> getPlayers() {
-		return Collections.unmodifiableCollection(players.values());
+		return ImmutableList.copyOf(players.values());
 	}
 
-	public HashSet<Player> getPlayersCopy() {
-		return new HashSet<Player>(players.values());
+	public Collection<Player> getPlayersCopy() {
+		return players.values();
 	}
 
-	public void add(Player player) {
+	public void add(final Player player) {
 		players.put(player.getName(), player);
 	}
 
-	public void remove(Player player) {
+	public void remove(final Player player) {
 		players.remove(player.getName());
 	}
 
+    public boolean isSpectator(String name) {
+        return spectators.containsKey(name);
+    }
+
+    public void addSpectator(Player player) {
+        spectators.put(player.getName(), player);
+    }
+
+    public void removeSpecator(String name) {
+        spectators.remove(name);
+    }
+
+    public Set<Player> getSpectatorsCopy() {
+        return ImmutableSet.copyOf(spectators.values());
+    }
+
+    public Collection<Player> getSpectators() {
+        return Collections.unmodifiableCollection(spectators.values());
+    }
+
+    public Set<Player> getAllParticipantsCopy() {
+        Set<Player> p = new HashSet<>();
+        p.addAll(players.values());
+        p.addAll(spectators.values());
+        return p;
+    }
 }

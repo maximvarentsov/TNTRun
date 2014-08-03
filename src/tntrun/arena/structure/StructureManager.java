@@ -17,29 +17,44 @@
 
 package tntrun.arena.structure;
 
-import java.io.IOException;
-import java.util.HashSet;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
-
 import tntrun.arena.Arena;
+
+import java.io.IOException;
 
 public class StructureManager {
 
 	private Arena arena;
-	public StructureManager(Arena arena) {
+    private String world;
+    private Vector p1 = null;
+    private Vector p2 = null;
+    private GameZone gamezone = new GameZone();
+    private int gameleveldestroydelay = 8;
+    private LoseLevel loselevel = new LoseLevel();
+    private Vector spawnpoint = null;
+    private int maxPlayers = 6;
+    private int minPlayers = 2;
+    private double votesPercent = 0.75;
+    private int timelimit = 180;
+    private int countdown = 10;
+    private Kits kits = new Kits();
+    private Rewards rewards = new Rewards();
+    private DamageEnabled damageEnabled = DamageEnabled.NO;
+    private Vector spectatorspawn = null;
+
+    public static enum DamageEnabled {
+        YES, ZERO, NO
+    }
+
+    public StructureManager(final Arena arena) {
 		this.arena = arena;
 	}
-
-	private String world;
 
 	public String getWorldName() {
 		return world;
@@ -49,106 +64,84 @@ public class StructureManager {
 		return Bukkit.getWorld(world);
 	}
 
-	private Vector p1 = null;
-
 	public Vector getP1() {
 		return p1;
 	}
-
-	private Vector p2 = null;
 
 	public Vector getP2() {
 		return p2;
 	}
 
-	private HashSet<GameLevel> gamelevels = new HashSet<GameLevel>();
-
-	public HashSet<GameLevel> getGameLevels() {
-		return gamelevels;
+	public GameZone getGameZone() {
+		return gamezone;
 	}
-
-	private int gameleveldestroydelay = 8;
 
 	public int getGameLevelDestroyDelay() {
 		return gameleveldestroydelay;
 	}
 
-	private LoseLevel loselevel = new LoseLevel();
-
 	public LoseLevel getLoseLevel() {
 		return loselevel;
 	}
 
-	private Vector spawnpoint = null;
+    public Vector getSpectatorSpawnVector() {
+        return spectatorspawn;
+    }
+
+    public Location getSpectatorSpawn() {
+        if (spectatorspawn != null) {
+            return new Location(getWorld(), spectatorspawn.getX(), spectatorspawn.getY(), spectatorspawn.getZ());
+        }
+        return null;
+    }
 
 	public Vector getSpawnPointVector() {
 		return spawnpoint;
 	}
 
 	public Location getSpawnPoint() {
-		Location spawn = new Location(getWorld(), spawnpoint.getX(), spawnpoint.getY(), spawnpoint.getZ());
-		return spawn;
+		return new Location(getWorld(), spawnpoint.getX(), spawnpoint.getY(), spawnpoint.getZ());
 	}
-
-	private int maxPlayers = 6;
 
 	public int getMaxPlayers() {
 		return maxPlayers;
 	}
 
-	private int minPlayers = 2;
-
 	public int getMinPlayers() {
 		return minPlayers;
 	}
 
-	private double votesPercent = 0.75;
-
-	public double getVotePercent() {
+    public double getVotePercent() {
 		return votesPercent;
 	}
-
-	private int timelimit = 180;
 
 	public int getTimeLimit() {
 		return timelimit;
 	}
 
-	private int countdown = 10;
-
 	public int getCountdown() {
 		return countdown;
 	}
-
-	private Kits kits = new Kits();
 
 	public Kits getKits() {
 		return kits;
 	}
 
-	private Rewards rewards = new Rewards();
-
 	public Rewards getRewards() {
 		return rewards;
 	}
 
+    public DamageEnabled getDamageEnabled() {
+        return damageEnabled;
+    }
 
-	private TeleportDestination teleportDest = TeleportDestination.PREVIOUS;
+    public void setDamageEnabled(final DamageEnabled damageEnabled) {
+        this.damageEnabled = damageEnabled;
+    }
 
-	public TeleportDestination getTeleportDestination() {
-		return teleportDest;
-	}
-
-	public static enum TeleportDestination {
-		PREVIOUS, LOBBY;
-	}
-
-	public boolean isInArenaBounds(Location loc) {
-		if (loc.toVector().isInAABB(getP1(), getP2())) {
-			return true;
-		}
-		return false;
-	}
+	public boolean isInArenaBounds(final Location loc) {
+        return loc.toVector().isInAABB(getP1(), getP2());
+    }
 
 	public boolean isArenaConfigured() {
 		return isArenaConfiguredString().equals("yes");
@@ -157,9 +150,6 @@ public class StructureManager {
 	public String isArenaConfiguredString() {
 		if (getP1() == null || getP2() == null || world == null) {
 			return "Arena bounds not set";
-		}
-		if (gamelevels.size() == 0) {
-			return "Arena gamelevels not set";
 		}
 		if (!loselevel.isConfigured()) {
 			return "Arena looselevel not set";
@@ -174,37 +164,6 @@ public class StructureManager {
 		this.world = loc1.getWorld().getName();
 		this.p1 = loc1.toVector();
 		this.p2 = loc2.toVector();
-	}
-
-	public boolean setGameLevel(String glname, Location loc1, Location loc2) {
-		if (isInArenaBounds(loc1) && isInArenaBounds(loc2)) {
-			GameLevel gl = getGameLevelByName(glname);
-			if (gl == null) {
-				gl = new GameLevel(glname);
-				gamelevels.add(gl);
-			}
-			gl.setGameLocation(loc1, loc2);
-			return true;
-		}
-		return false;
-	}
-
-	public boolean removeGameLevel(String glname) {
-		GameLevel gl = getGameLevelByName(glname);
-		if (gl != null) {
-			gamelevels.remove(gl);
-			return true;
-		}
-		return false;
-	}
-
-	private GameLevel getGameLevelByName(String name) {
-		for (GameLevel gl : gamelevels) {
-			if (gl.getGameLevelName().equals(name)) {
-				return gl;
-			}
-		}
-		return null;
 	}
 
 	public void setGameLevelDestroyDelay(int delay) {
@@ -226,6 +185,18 @@ public class StructureManager {
 		}
 		return false;
 	}
+
+    public boolean setSpectatorsSpawn(Location loc) {
+        if (isInArenaBounds(loc)) {
+            spectatorspawn = loc.toVector();
+            return true;
+        }
+        return false;
+    }
+
+    public void removeSpectatorsSpawn() {
+        spectatorspawn = null;
+    }
 
 	public void setMaxPlayers(int maxplayers) {
 		this.maxPlayers = maxplayers;
@@ -255,16 +226,8 @@ public class StructureManager {
 		kits.unregisterKit(name);
 	}
 
-	public void setRewards(ItemStack[] rewards) {
-		this.rewards.setRewards(rewards);
-	}
-
 	public void setRewards(int money) {
 		this.rewards.setRewards(money);
-	}
-
-	public void setTeleportDestination(TeleportDestination teleportDest) {
-		this.teleportDest = teleportDest;
 	}
 
 	public void saveToConfig() {
@@ -274,27 +237,29 @@ public class StructureManager {
 			config.set("world", world);
 			config.set("p1", p1);
 			config.set("p2", p2);
-		} catch (Exception e) {
+		} catch (Exception ignore) {
 		}
-		// save gamelevels
-		for (GameLevel gl : gamelevels) {
-			try {
-				gl.saveToConfig(config);
-			} catch (Exception e) {
-			}
-		}
+
+        // save damage enabled
+        config.set("damageenabled", damageEnabled.toString());
+
 		// save gamelevel destroy delay
 		config.set("gameleveldestroydelay", gameleveldestroydelay);
 		// save looselevel
 		try {
 			loselevel.saveToConfig(config);
-		} catch (Exception e) {
+		} catch (Exception ignore) {
 		}
 		// save spawnpoint
 		try {
 			config.set("spawnpoint", spawnpoint);
-		} catch (Exception e) {
+		} catch (Exception ignore) {
 		}
+        // save spectators spawn
+        try {
+            config.set("spectatorspawn", spectatorspawn);
+        } catch (Exception ignore) {
+        }
 		// save maxplayers
 		config.set("maxPlayers", maxPlayers);
 		// save minplayers
@@ -305,16 +270,13 @@ public class StructureManager {
 		config.set("timelimit", timelimit);
 		// save countdown
 		config.set("countdown", countdown);
-		// save teleport destination
-		config.set("teleportto", teleportDest.toString());
 		// save kits
 		kits.saveToConfig(config);
 		// save rewards
 		rewards.saveToConfig(config);
 		try {
 			config.save(arena.getArenaFile());
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ignore) {
 		}
 	}
 
@@ -325,21 +287,16 @@ public class StructureManager {
 		// load arena bounds
 		p1 = config.getVector("p1", null);
 		p2 = config.getVector("p2", null);
-		// load gamelevels
-		ConfigurationSection cs = config.getConfigurationSection("gamelevels");
-		if (cs != null) {
-			for (String glname : cs.getKeys(false)) {
-				GameLevel gl = new GameLevel(glname);
-				gl.loadFromConfig(config);
-				gamelevels.add(gl);
-			}
-		}
+
+        damageEnabled = DamageEnabled.valueOf(config.getString("damageenabled", DamageEnabled.NO.toString()));
 		// load gamelevel destroy delay
 		gameleveldestroydelay = config.getInt("gameleveldestroydelay", gameleveldestroydelay);
 		// load looselevel
 		loselevel.loadFromConfig(config);
 		// load spawnpoint
 		spawnpoint = config.getVector("spawnpoint", null);
+        // load spectators spawn
+        spectatorspawn = config.getVector("spectatorspawn", null);
 		// load maxplayers
 		maxPlayers = config.getInt("maxPlayers", maxPlayers);
 		// load minplayers
@@ -350,12 +307,9 @@ public class StructureManager {
 		timelimit = config.getInt("timelimit", timelimit);
 		// load countdown
 		countdown = config.getInt("countdown", countdown);
-		// load teleport destination
-		teleportDest = TeleportDestination.valueOf(config.getString("teleportto", "PREVIOUS"));
 		// load kits
 		kits.loadFromConfig(config);
 		// load rewards
 		rewards.loadFromConfig(config);
 	}
-
 }

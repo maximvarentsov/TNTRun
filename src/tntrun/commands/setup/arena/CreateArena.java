@@ -25,22 +25,27 @@ import tntrun.commands.setup.CommandHandlerInterface;
 
 public class CreateArena implements CommandHandlerInterface {
 
-	private TNTRun plugin;
-	public CreateArena(TNTRun plugin) {
+	private final TNTRun plugin;
+
+    public CreateArena(final TNTRun plugin) {
 		this.plugin = plugin;
 	}
 
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
-		Arena arenac = plugin.arenas.getArenaByName(args[0]);
+		Arena arenac = plugin.arenas.get(args[0]);
 		if (arenac != null) {
 			player.sendMessage("Arena already exists");
 			return true;
 		}
 		Arena arena = new Arena(args[0], plugin);
-		plugin.arenas.registerArena(arena);
+		plugin.arenas.add(arena);
 		player.sendMessage("Arena created");
 		return true;
 	}
 
+    @Override
+    public int getMinArgsLength() {
+        return 1;
+    }
 }

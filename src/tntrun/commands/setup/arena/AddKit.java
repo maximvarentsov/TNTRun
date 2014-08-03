@@ -22,7 +22,9 @@ import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
-import tntrun.datahandler.ArenasManager;
+import tntrun.arena.ArenasManager;
+import tntrun.messages.Message;
+import tntrun.messages.Messages;
 
 public class AddKit implements CommandHandlerInterface {
 
@@ -33,18 +35,28 @@ public class AddKit implements CommandHandlerInterface {
 	}
 
 	@Override
-	public boolean handleCommand(Player player, String[] args) {
-		Arena arena = arenas.getArenaByName(args[0]);
-		if (arena == null) {
-			player.sendMessage("Arena does not exist");
-			return true;
-		}
-		if (arena.getStatusManager().isArenaEnabled()) {
+	public boolean handleCommand(final Player player, final String[] args) {
+
+        Arena arena = arenas.get(args[0]);
+
+        if (arena == null) {
+            Messages.send(player, Message.arena_not_found, args[0]);
+            return true;
+        }
+
+        if (arena.getStatusManager().isArenaEnabled()) {
 			player.sendMessage("Disable arena first");
 			return true;
 		}
-		arena.getStructureManager().addKit(args[1], player);
+
+        arena.getStructureManager().addKit(args[1], player);
 		player.sendMessage("Kit added");
-		return true;
+
+        return true;
 	}
+
+    @Override
+    public int getMinArgsLength() {
+        return 2;
+    }
 }

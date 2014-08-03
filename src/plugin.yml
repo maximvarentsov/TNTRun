@@ -3,12 +3,37 @@ main: ${groupId}.${artifactId}
 softdepend: [WorldEdit, Vault]
 version: ${version}
 author: _Shevchik_
+
 commands:
+    tntrun:
+      description: TNTRun game commands
+      aliases: tr
+      usage: |
+             /<command> join <arena> - join arena.
+             /<command> list - list all arenas.
+             /<command> leave - leave current arena.
+             /<command> vote - vote for current arena start.
   tntrunsetup:
     description: TNTRun arena setup commands
     aliases: trsetup
-    usage: Command is invalid
-  tntrun:
-    description: TNTRun game commands
-    aliases: tr
-    usage: Use /tr help to show all commands available in plugin
+    permission: tntrun.setup
+    usage: |
+           /<command> addkit
+           /<command> createarena
+           /<command> deletearena
+           /<command> deletekit
+           /<command> deletespectatorspawn
+           /<command> disablearena
+           /<command> enablearena
+           /<command> finisharena
+           /<command> setarena
+           /<command> setcountdown
+           /<command> setgameleveldestroydelay
+           /<command> setloselevel
+           /<command> setmaxplayers
+           /<command> setminplayers
+           /<command> setmoneyrewards
+           /<command> setspawn
+           /<command> setspectatorspawn
+           /<command> settimelimit
+           /<command> setvotepercent

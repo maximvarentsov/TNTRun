@@ -18,24 +18,26 @@
 package tntrun.commands.setup.arena;
 
 import org.bukkit.entity.Player;
-
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
+import tntrun.arena.ArenasManager;
+import tntrun.arena.structure.StructureManager;
 import tntrun.commands.setup.CommandHandlerInterface;
 import tntrun.messages.Message;
 import tntrun.messages.Messages;
 
-public class SetGameLevelDestroyDelay implements CommandHandlerInterface {
+public class SetDamage implements CommandHandlerInterface {
 
-	private final TNTRun plugin;
+	private final ArenasManager arenas;
 
-    public SetGameLevelDestroyDelay(final TNTRun plugin) {
-		this.plugin = plugin;
+    public SetDamage(final TNTRun plugin) {
+		arenas = plugin.arenas;
 	}
 
 	@Override
-	public boolean handleCommand(Player player, String[] args) {
-		Arena arena = plugin.arenas.get(args[0]);
+	public boolean handleCommand(final Player player, final String[] args) {
+
+        Arena arena = arenas.get(args[0]);
 
         if (arena == null) {
             Messages.send(player, Message.arena_not_found, args[0]);
@@ -43,14 +45,29 @@ public class SetGameLevelDestroyDelay implements CommandHandlerInterface {
         }
 
         if (arena.getStatusManager().isArenaEnabled()) {
-            player.sendMessage("Disable arena first");
-            return true;
+			player.sendMessage("Disable arena first");
+			return true;
+		}
+
+        switch (args[1].toLowerCase()) {
+            case "yes":
+                arena.getStructureManager().setDamageEnabled(StructureManager.DamageEnabled.YES);
+                break;
+            case "no":
+                arena.getStructureManager().setDamageEnabled(StructureManager.DamageEnabled.NO);
+                break;
+            case "zero":
+                arena.getStructureManager().setDamageEnabled(StructureManager.DamageEnabled.ZERO);
+                break;
+            default:
+                player.sendMessage("Unknown damage value.");
+                return true;
         }
 
-        arena.getStructureManager().setGameLevelDestroyDelay(Integer.parseInt(args[1]));
-        player.sendMessage("GameLevel blocks destroy delay set");
+        player.sendMessage("Damage enabled set.");
 
-		return true;
+
+        return true;
 	}
 
     @Override
