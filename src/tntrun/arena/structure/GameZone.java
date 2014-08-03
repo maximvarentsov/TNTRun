@@ -56,7 +56,7 @@ public class GameZone {
             if (!blockstodestroy.contains(fblock)) {
                 blockstodestroy.add(fblock);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(
-                        arena.plugin,
+                        plugin,
                         () -> {
                             if (arena.getStatusManager().isArenaRunning()) {
                                 blockstodestroy.remove(fblock);
@@ -141,5 +141,4 @@ public class GameZone {
         }
 
     }
-
 }

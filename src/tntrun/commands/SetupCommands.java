@@ -18,29 +18,18 @@
 package tntrun.commands;
 
 import com.google.common.collect.ImmutableList;
-import org.bukkit.ChatColor;
-import org.bukkit.command.*;
-import org.bukkit.entity.Player;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import tntrun.TNTRun;
 import tntrun.commands.setup.*;
-import tntrun.messages.Message;
-import tntrun.messages.Messages;
 import tntrun.selectionget.PlayerSelection;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class SetupCommands implements CommandExecutor, TabCompleter {
-
-    private final Map<String, CommandHandlerInterface> commands = new HashMap<>();
+public class SetupCommands extends Commands {
 
 	public SetupCommands(final TNTRun plugin) {
-
-        PluginCommand command = plugin.getCommand("tntrunsetup");
-        command.setExecutor(this);
-        command.setPermissionMessage(Messages.getMessage(Message.nopermission));
+        super(plugin, "tntrunsetup");
 
         PlayerSelection selection = new PlayerSelection();
 
@@ -66,32 +55,6 @@ public class SetupCommands implements CommandExecutor, TabCompleter {
 		commands.put("finish", new FinishArena(plugin));
 		commands.put("disable", new DisableArena(plugin));
 		commands.put("enable", new EnableArena(plugin));
-	}
-
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
-        if (!(sender instanceof Player)) {
-			sender.sendMessage("Player is expected");
-			return true;
-		}
-
-        Player player = (Player) sender;
-
-        if (commands.containsKey(args[0])) {
-			CommandHandlerInterface cmd = commands.get(args[0]);
-
-            if (args.length - 1 < cmd.getMinArgsLength()) {
-                player.sendMessage(ChatColor.RED + "Not enough args");
-                return false;
-            }
-
-            String message = cmd.handleCommand(player, Arrays.copyOfRange(args, 1, args.length));
-            player.sendMessage(message);
-            return true;
-		}
-
-        return false;
 	}
 
     @Override

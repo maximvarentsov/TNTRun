@@ -8,6 +8,7 @@ commands:
     tntrun:
       description: TNTRun game commands
       aliases: tr
+      persmission: true
       usage: |
              /<command> join <arena> - join arena.
              /<command> list - list all arenas.

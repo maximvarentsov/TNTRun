@@ -25,7 +25,6 @@ import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
-import tntrun.arena.structure.GameLevel;
 import tntrun.arena.structure.Kits;
 import tntrun.bars.Bars;
 import tntrun.messages.Messages;
@@ -34,15 +33,18 @@ public class GameHandler {
 
 	private final TNTRun plugin;
 	private final Arena arena;
+    private int leavetaskid;
+    int runtaskid;
+    int count;
+    private int timelimit;
+    private int arenahandler;
+    Random rnd = new Random();
 
 	public GameHandler(final TNTRun plugin, final Arena arena) {
 		this.plugin = plugin;
 		this.arena = arena;
-		count = arena.getStructureManager().getCountdown();
+		this.count = arena.getStructureManager().getCountdown();
 	}
-
-	// arena leave handler
-	private int leavetaskid;
 
 	public void startArenaAntiLeaveHandler() {
 		leavetaskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(
@@ -50,12 +52,12 @@ public class GameHandler {
                 () -> {
                     for (Player player : arena.getPlayersManager().getPlayersCopy()) {
                         if (!arena.getStructureManager().isInArenaBounds(player.getLocation())) {
-                            arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
+                            arena.getPlayerHandler().leave(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
                         }
                     }
                     for (Player player : arena.getPlayersManager().getSpectatorsCopy()) {
                         if (!arena.getStructureManager().isInArenaBounds(player.getLocation())) {
-                            arena.getPlayerHandler().leavePlayer(player, "", "");
+                            arena.getPlayerHandler().leave(player, "", "");
                         }
                     }
                 },
@@ -66,10 +68,6 @@ public class GameHandler {
 	public void stopArenaAntiLeaveHandler() {
 		Bukkit.getScheduler().cancelTask(leavetaskid);
 	}
-
-	// arena start handler (running status updater)
-	int runtaskid;
-	int count;
 
 	public void runArenaCountdown() {
 		arena.getStatusManager().setStarting(true);
@@ -100,7 +98,7 @@ public class GameHandler {
                         count--;
                     }
                 },
-			0, 20
+			0L, 20L
 		);
 	}
 
@@ -109,12 +107,6 @@ public class GameHandler {
 		count = arena.getStructureManager().getCountdown();
 		Bukkit.getScheduler().cancelTask(runtaskid);
 	}
-
-	// main arena handler
-	private int timelimit;
-	private int arenahandler;
-
-	Random rnd = new Random();
 
 	public void startArena() {
 		arena.getStatusManager().setRunning(true);
@@ -143,7 +135,7 @@ public class GameHandler {
                     // kick all players if time is out
                     if (timelimit < 0) {
                         for (Player player : arena.getPlayersManager().getPlayersCopy()) {
-                            arena.getPlayerHandler().leavePlayer(player, Messages.arenatimeout, "");
+                            arena.getPlayerHandler().leave(player, Messages.arenatimeout, "");
                         }
                         return;
                     }
@@ -167,7 +159,7 @@ public class GameHandler {
 
 	public void stopArena() {
         for (Player player : arena.getPlayersManager().getAllParticipantsCopy()) {
-            arena.getPlayerHandler().leavePlayer(player, "", "");
+            arena.getPlayerHandler().leave(player, "", "");
         }
         arena.getStatusManager().setRunning(false);
 		Bukkit.getScheduler().cancelTask(arenahandler);
@@ -195,7 +187,7 @@ public class GameHandler {
             if (arena.getStructureManager().getSpawnPointVector() != null) {
                 arena.getPlayerHandler().spectatePlayer(player, Messages.playerlosttoplayer, Messages.playerlosttoothers);
             } else {
-                arena.getPlayerHandler().leavePlayer(player, Messages.playerlosttoplayer, Messages.playerlosttoothers);
+                arena.getPlayerHandler().leave(player, Messages.playerlosttoplayer, Messages.playerlosttoothers);
             }
 		}
 	}

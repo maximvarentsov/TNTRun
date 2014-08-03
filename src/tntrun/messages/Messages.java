@@ -17,9 +17,7 @@
 
 package tntrun.messages;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
 
 public class Messages {
@@ -27,19 +25,11 @@ public class Messages {
     private static Configuration configuration;
 
     public Messages(final Configuration configuration) {
-        this.configuration = configuration;
+        Messages.configuration = configuration;
     }
 
-	public static void broadcast(final Message message, final Object...args) {
-		Bukkit.broadcastMessage(getMessage(message));
-	}
-
-    public static String getMessage(final Message message) {
+    public static String getMessage(final Message message, Object...args) {
         String value = configuration.getString("messages." + message.name());
-        return ChatColor.translateAlternateColorCodes('&', value);
-    }
-
-    public static void send(final CommandSender sender, final Message message, final Object...args) {
-        sender.sendMessage(String.format(getMessage(message), args));
+        return String.format(ChatColor.translateAlternateColorCodes('&', value), args);
     }
 }

@@ -15,10 +15,9 @@
  *
  */
 
-package tntrun.commands.setup;
+package tntrun.commands.game;
 
 import org.bukkit.entity.Player;
-
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.ArenasManager;
@@ -26,33 +25,33 @@ import tntrun.commands.CommandHandler;
 import tntrun.messages.Message;
 import tntrun.messages.Messages;
 
-public class SetVotePercent implements CommandHandler {
+public class List implements CommandHandler {
 
-	private final ArenasManager arenas;
+    private final ArenasManager arenas;
 
-    public SetVotePercent(final TNTRun plugin) {
-		arenas = plugin.arenas;
-	}
+    public List(final TNTRun plugin) {
+        arenas = plugin.arenas;
+    }
 
-	@Override
-	public String handleCommand(final Player player, final String[] args) {
-		Arena arena = arenas.get(args[0]);
+    @Override
+    public String handleCommand(final Player player, final String[] args) {
 
-        if (arena == null) {
-            return Messages.getMessage(Message.arena_not_found, args[0]);
+        StringBuilder message = new StringBuilder(200);
+        message.append(Messages.getMessage(Message.availablearenas));
+
+        for (Arena arena : arenas) {
+            if (arena.getStatusManager().isArenaEnabled()) {
+                message.append("&a").append(arena.getArenaName()).append(" ");
+            } else {
+                message.append("&c").append(arena.getArenaName()).append(" ");
+            }
         }
 
-        if (arena.getStatusManager().isArenaEnabled()) {
-            return Messages.getMessage(Message.disable_arena_first, args[0]);
-        }
-
-        arena.getStructureManager().setVotePercent(Double.parseDouble(args[1]));
-
-        return "Vote percent set";
-	}
+        return message.toString();
+    }
 
     @Override
     public int getMinArgsLength() {
-        return 2;
+        return 0;
     }
 }

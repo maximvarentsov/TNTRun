@@ -19,7 +19,7 @@ package tntrun.commands;
 
 import org.bukkit.entity.Player;
 
-public interface CommandHandlerInterface {
+public interface CommandHandler {
 	String handleCommand(final Player player, final String[] args);
     int getMinArgsLength();
 }

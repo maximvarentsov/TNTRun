@@ -21,11 +21,11 @@ import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
-import tntrun.commands.CommandHandlerInterface;
+import tntrun.commands.CommandHandler;
 import tntrun.messages.Message;
 import tntrun.messages.Messages;
 
-public class DeleteKit implements CommandHandlerInterface {
+public class DeleteKit implements CommandHandler {
 
 	private TNTRun plugin;
 	public DeleteKit(final TNTRun plugin) {

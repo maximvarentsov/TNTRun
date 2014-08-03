@@ -20,13 +20,13 @@ package tntrun.commands.setup;
 import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
-import tntrun.commands.CommandHandlerInterface;
+import tntrun.commands.CommandHandler;
 import tntrun.messages.Message;
 import tntrun.messages.Messages;
 
 import java.io.File;
 
-public class DeleteArena implements CommandHandlerInterface {
+public class DeleteArena implements CommandHandler {
 
 	private TNTRun plugin;
 	public DeleteArena(TNTRun plugin) {

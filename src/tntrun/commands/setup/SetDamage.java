@@ -22,11 +22,11 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.ArenasManager;
 import tntrun.arena.structure.StructureManager;
-import tntrun.commands.CommandHandlerInterface;
+import tntrun.commands.CommandHandler;
 import tntrun.messages.Message;
 import tntrun.messages.Messages;
 
-public class SetDamage implements CommandHandlerInterface {
+public class SetDamage implements CommandHandler {
 
 	private final ArenasManager arenas;
 

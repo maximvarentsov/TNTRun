@@ -21,14 +21,14 @@ import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
-import tntrun.commands.CommandHandlerInterface;
+import tntrun.commands.CommandHandler;
 import tntrun.arena.ArenasManager;
 import tntrun.messages.Message;
 import tntrun.messages.Messages;
 import tntrun.selectionget.PlayerCuboidSelection;
 import tntrun.selectionget.PlayerSelection;
 
-public class SetLoseLevel implements CommandHandlerInterface {
+public class SetLoseLevel implements CommandHandler {
 
 	private final ArenasManager arenas;
 	private final PlayerSelection selection;

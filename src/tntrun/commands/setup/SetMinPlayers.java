@@ -22,11 +22,11 @@ import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.ArenasManager;
-import tntrun.commands.CommandHandlerInterface;
+import tntrun.commands.CommandHandler;
 import tntrun.messages.Message;
 import tntrun.messages.Messages;
 
-public class SetMinPlayers implements CommandHandlerInterface {
+public class SetMinPlayers implements CommandHandler {
 
 	private final ArenasManager arenas;
 	public SetMinPlayers(final TNTRun plugin) {

@@ -21,9 +21,9 @@ import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
-import tntrun.commands.CommandHandlerInterface;
+import tntrun.commands.CommandHandler;
 
-public class CreateArena implements CommandHandlerInterface {
+public class CreateArena implements CommandHandler {
 
 	private final TNTRun plugin;
 

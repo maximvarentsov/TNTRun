@@ -21,7 +21,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.bars.Bars;
 import tntrun.messages.Messages;
@@ -34,38 +33,12 @@ public class PlayerHandler {
 	private final Arena arena;
     private final Set<String> votes = new HashSet<>();
 
-	public PlayerHandler(final TNTRun plugin, final Arena arena) {
+	public PlayerHandler(final Arena arena) {
 		this.arena = arena;
 	}
 
-	// check if player can join the arena
-	public boolean checkJoin(final Player player) {
 
-        if (arena.getStructureManager().getWorld() == null) {
-			player.sendMessage("Arena world is unloaded, can't join arena");
-			return false;
-		}
-
-        if (!arena.getStatusManager().isArenaEnabled()) {
-			Messages.send(player, Messages.arenadisabled);
-			return false;
-		}
-
-        if (arena.getStatusManager().isArenaRunning() || arena.getStatusManager().isArenaRegenerating()) {
-			Messages.sendMessage(player, Messages.arenarunning);
-			return false;
-		}
-
-		if (arena.getPlayersManager().getCount() == arena.getStructureManager().getMaxPlayers()) {
-			Messages.sendMessage(player, Messages.limitreached);
-			return false;
-		}
-
-        return true;
-	}
-
-	@SuppressWarnings("deprecation")
-	public void spawnPlayer(final Player player, String msgtoplayer, String msgtoarenaplayers) {
+	public void join(final Player player) {
 
         player.teleport(arena.getStructureManager().getSpawnPoint());
 
@@ -81,11 +54,6 @@ public class PlayerHandler {
         player.setFoodLevel(20);
 		player.updateInventory();
 
-        Messages.sendMessage(player, msgtoplayer);
-		for (Player oplayer : arena.getPlayersManager().getPlayers()) {
-			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
-			Messages.sendMessage(oplayer, msgtoarenaplayers);
-		}
 		// set player on arena data
 		arena.getPlayersManager().add(player);
 		// send message about arena player count
@@ -132,7 +100,7 @@ public class PlayerHandler {
     }
 
 	// remove player from arena
-	public void leavePlayer(Player player, String msgtoplayer, String msgtoarenaplayers) {
+	public void leave(Player player) {
 		// reset spectators
         boolean spectator = arena.getPlayersManager().isSpectator(player.getName());
 
@@ -148,15 +116,8 @@ public class PlayerHandler {
         // remove player from arena and restore his state
         removePlayerFromArenaAndRestoreState(player, false);
         // should not send messages and other things when player is a spectator
-        if (spectator) {
-            return;
-        }
-		// send message to player
-		Messages.sendMessage(player, msgtoplayer);
-		// send message to other players and update bars
+        // send message to other players and update bars
 		for (Player oplayer : arena.getPlayersManager().getAllParticipantsCopy()) {
-			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
-			Messages.sendMessage(oplayer, msgtoarenaplayers);
 			if (!arena.getStatusManager().isArenaStarting() && !arena.getStatusManager().isArenaRunning()) {
 				Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getCount(), 0, arena.getPlayersManager().getCount() * 100 / arena.getStructureManager().getMinPlayers());
 			}

@@ -1,12 +1,12 @@
 package tntrun.commands.setup;
 
 import org.bukkit.entity.Player;
-import tntrun.commands.CommandHandlerInterface;
+import tntrun.commands.CommandHandler;
 import tntrun.messages.Message;
 import tntrun.messages.Messages;
 import tntrun.selectionget.PlayerSelection;
 
-public class SetP2 implements CommandHandlerInterface {
+public class SetP2 implements CommandHandler {
 
 	private final PlayerSelection selection;
 

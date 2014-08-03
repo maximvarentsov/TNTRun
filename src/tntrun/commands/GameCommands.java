@@ -17,107 +17,29 @@
 
 package tntrun.commands;
 
+import com.google.common.collect.ImmutableList;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.entity.Player;
-
 import tntrun.TNTRun;
-import tntrun.arena.Arena;
-import tntrun.arena.ArenasManager;
-import tntrun.messages.Messages;
+import tntrun.commands.game.Join;
+import tntrun.commands.game.Leave;
+import tntrun.commands.game.Vote;
 
-public class GameCommands implements CommandExecutor {
+import java.util.List;
 
-	private final ArenasManager arenas;
+public class GameCommands extends Commands {
 
 	public GameCommands(final TNTRun plugin) {
-        PluginCommand pluginCommand = plugin.getCommand("tntrunsetup");
-        pluginCommand.setExecutor(this);
+        super(plugin, "tntrun");
 
-        arenas = plugin.arenas;
+        commands.put("list", new tntrun.commands.game.List(plugin));
+        commands.put("join", new Join(plugin));
+        commands.put("leave", new Leave(plugin));
+        commands.put("vote", new Vote(plugin));
 	}
 
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
-        if (!(sender instanceof Player)) {
-			sender.sendMessage("A player is expected");
-			return true;
-		}
-
-		Player player = (Player) sender;
-
-		// handle commands
-		// help command
-		if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
-			sender.sendMessage("/tr list - list all arenas");
-			sender.sendMessage("/tr join {arena} - join arena");
-			sender.sendMessage("/tr leave - leave current arena");
-			sender.sendMessage("/tr vote - vote for current arena start");
-			return true;
-		}
-
-		// list arenas
-		else if (args.length == 1 && args[0].equalsIgnoreCase("list")) {
-			StringBuilder message = new StringBuilder(200);
-			message.append(Messages.availablearenas);
-			for (Arena arena : arenas) {
-				if (arena.getStatusManager().isArenaEnabled()) {
-					message.append("&a" + arena.getArenaName() + " ");
-				} else {
-					message.append("&c" + arena.getArenaName() + " ");
-				}
-			}
-			Messages.sendMessage(player, message.toString());
-			return true;
-		}
-		// join arena
-		else if (args.length == 2 && args[0].equalsIgnoreCase("join")) {
-			if (player.hasPermission("tntrun.onlysignjoin")) {
-				player.sendMessage("You can join the game only by using a sign");
-				return true;
-			}
-			Arena arena = arenas.get(args[1]);
-			if (arena != null) {
-				boolean canJoin = arena.getPlayerHandler().checkJoin(player);
-				if (canJoin) {
-					arena.getPlayerHandler().spawnPlayer(player, Messages.playerjoinedtoplayer, Messages.playerjoinedtoothers);
-				}
-				return true;
-			} else {
-				sender.sendMessage("Arena does not exist");
-				return true;
-			}
-		}
-		// leave arena
-		else if (args.length == 1 && args[0].equalsIgnoreCase("leave")) {
-			Arena arena = arenas.get(player);
-			if (arena != null) {
-				arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
-				return true;
-			} else {
-				sender.sendMessage("You are not in arena");
-				return true;
-			}
-		}
-		// vote
-		else if (args.length == 1 && args[0].equalsIgnoreCase("vote")) {
-			Arena arena = arenas.get(player);
-			if (arena != null) {
-				if (arena.getPlayerHandler().vote(player)) {
-					Messages.sendMessage(player, Messages.playervotedforstart);
-				} else {
-					Messages.sendMessage(player, Messages.playeralreadyvotedforstart);
-				}
-				return true;
-			} else {
-				sender.sendMessage("You are not in arena");
-				return true;
-			}
-		}
-		return false;
-	}
-
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] strings) {
+        return null;
+    }
 }

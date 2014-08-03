@@ -21,11 +21,11 @@ import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.ArenasManager;
-import tntrun.commands.CommandHandlerInterface;
+import tntrun.commands.CommandHandler;
 import tntrun.messages.Message;
 import tntrun.messages.Messages;
 
-public class SetSpectatorSpawn implements CommandHandlerInterface {
+public class SetSpectatorSpawn implements CommandHandler {
 
 	private final ArenasManager arenas;
 

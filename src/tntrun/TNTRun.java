@@ -20,8 +20,8 @@ package tntrun;
 import org.bukkit.plugin.java.JavaPlugin;
 import tntrun.arena.ArenasManager;
 import tntrun.bars.Bars;
+import tntrun.commands.SetupCommands;
 import tntrun.commands.GameCommands;
-import tntrun.commands.setup.SetupCommandsHandler;
 import tntrun.messages.Messages;
 
 public final class TNTRun extends JavaPlugin {
@@ -39,7 +39,7 @@ public final class TNTRun extends JavaPlugin {
 		arenas = new ArenasManager(this);
 
         new Listeners(this);
-        new SetupCommandsHandler(this);
+        new SetupCommands(this);
 		new GameCommands(this);
 	}
 

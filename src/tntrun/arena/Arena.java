@@ -23,8 +23,6 @@ import tntrun.arena.handlers.PlayerHandler;
 import tntrun.arena.status.PlayersManager;
 import tntrun.arena.status.StatusManager;
 import tntrun.arena.structure.StructureManager;
-import tntrun.messages.Message;
-import tntrun.messages.Messages;
 
 import java.io.File;
 
@@ -44,10 +42,6 @@ public class Arena {
 		playerHandler = new PlayerHandler(plugin, this);
 		file = new File(plugin.getDataFolder(), "arenas" + File.separator + name);
 	}
-
-    public void broadcast(Message message, Object...args) {
-        getPlayerHandler().leavePlayer(player, "", Messages.playerlefttoothers);
-    }
 
     public String getArenaName() {
 		return name;

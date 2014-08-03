@@ -26,14 +26,14 @@ import tntrun.messages.Messages;
 public class StatusManager {
 
 	private final Arena arena;
-	public StatusManager(final Arena arena) {
-		this.arena = arena;
-	}
-
 	private boolean enabled = false;
 	private boolean starting = false;
 	private boolean running = false;
 	private boolean regenerating = false;
+
+    public StatusManager(final Arena arena) {
+        this.arena = arena;
+    }
 
 	public boolean isArenaEnabled() {
 		return enabled;
@@ -52,7 +52,7 @@ public class StatusManager {
 		enabled = false;
 		// drop players
 		for (Player player : arena.getPlayersManager().getPlayersCopy()) {
-			arena.getPlayerHandler().leavePlayer(player, Messages.arenadisabling, "");
+			arena.getPlayerHandler().leave(player, Messages.arenadisabling, "");
 		}
 		// stop arena
 		if (arena.getStatusManager().isArenaRunning()) {
