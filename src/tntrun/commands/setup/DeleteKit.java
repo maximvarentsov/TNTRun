@@ -15,50 +15,41 @@
  *
  */
 
-package tntrun.commands.setup.arena;
+package tntrun.commands.setup;
 
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
-import tntrun.commands.setup.CommandHandlerInterface;
-import tntrun.arena.ArenasManager;
+import tntrun.commands.CommandHandlerInterface;
 import tntrun.messages.Message;
 import tntrun.messages.Messages;
 
-public class EnableArena implements CommandHandlerInterface {
+public class DeleteKit implements CommandHandlerInterface {
 
-	private final ArenasManager arenas;
-
-	public EnableArena(final TNTRun plugin) {
-		arenas = plugin.arenas;
+	private TNTRun plugin;
+	public DeleteKit(final TNTRun plugin) {
+		this.plugin = plugin;
 	}
 
 	@Override
-	public boolean handleCommand(final Player player, final String[] args) {
-
-        Arena arena = arenas.get(args[0]);
+	public String handleCommand(Player player, String[] args) {
+		Arena arena = plugin.arenas.get(args[0]);
 
         if (arena == null) {
-            Messages.send(player, Message.arena_not_found, args[0]);
-            return true;
+            return Messages.getMessage(Message.arena_not_found, args[0]);
         }
 
         if (arena.getStatusManager().isArenaEnabled()) {
-            player.sendMessage("Arena already enabled.");
-        } else {
-            if (arena.getStatusManager().enableArena()) {
-                player.sendMessage("Arena enabled");
-            } else {
-                player.sendMessage("Arena is not configured. Reason: " + arena.getStructureManager().isArenaConfigured());
-            }
+            return Messages.getMessage(Message.disable_arena_first, args[0]);
         }
 
-		return true;
+        arena.getStructureManager().removeKit(args[1]);
+		return "Kit deleted";
 	}
 
     @Override
     public int getMinArgsLength() {
-        return 1;
+        return 2;
     }
 }

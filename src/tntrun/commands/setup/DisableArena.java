@@ -15,63 +15,44 @@
  *
  */
 
-package tntrun.commands.setup.arena;
+package tntrun.commands.setup;
 
 import org.bukkit.entity.Player;
+
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
+import tntrun.commands.CommandHandlerInterface;
 import tntrun.arena.ArenasManager;
-import tntrun.arena.structure.StructureManager;
-import tntrun.commands.setup.CommandHandlerInterface;
 import tntrun.messages.Message;
 import tntrun.messages.Messages;
 
-public class SetDamage implements CommandHandlerInterface {
+public class DisableArena implements CommandHandlerInterface {
 
 	private final ArenasManager arenas;
 
-    public SetDamage(final TNTRun plugin) {
+    public DisableArena(final TNTRun plugin) {
 		arenas = plugin.arenas;
 	}
 
 	@Override
-	public boolean handleCommand(final Player player, final String[] args) {
+	public String handleCommand(final Player player, final String[] args) {
 
         Arena arena = arenas.get(args[0]);
 
         if (arena == null) {
-            Messages.send(player, Message.arena_not_found, args[0]);
-            return true;
+            return Messages.getMessage(Message.arena_not_found, args[0]);
         }
 
         if (arena.getStatusManager().isArenaEnabled()) {
-			player.sendMessage("Disable arena first");
-			return true;
-		}
-
-        switch (args[1].toLowerCase()) {
-            case "yes":
-                arena.getStructureManager().setDamageEnabled(StructureManager.DamageEnabled.YES);
-                break;
-            case "no":
-                arena.getStructureManager().setDamageEnabled(StructureManager.DamageEnabled.NO);
-                break;
-            case "zero":
-                arena.getStructureManager().setDamageEnabled(StructureManager.DamageEnabled.ZERO);
-                break;
-            default:
-                player.sendMessage("Unknown damage value.");
-                return true;
+            arena.getStatusManager().disableArena();
+            return "Arena disabled";
         }
 
-        player.sendMessage("Damage enabled set.");
-
-
-        return true;
+		return "Arena already disabled";
 	}
 
     @Override
     public int getMinArgsLength() {
-        return 2;
+        return 1;
     }
 }

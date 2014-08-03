@@ -15,61 +15,43 @@
  *
  */
 
-package tntrun.commands.setup.arena;
+package tntrun.commands.setup;
 
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
-import tntrun.commands.setup.CommandHandlerInterface;
 import tntrun.arena.ArenasManager;
+import tntrun.commands.CommandHandlerInterface;
 import tntrun.messages.Message;
 import tntrun.messages.Messages;
-import tntrun.selectionget.PlayerCuboidSelection;
-import tntrun.selectionget.PlayerSelection;
 
-public class SetLoseLevel implements CommandHandlerInterface {
+public class SetGameLevelDestroyDelay implements CommandHandlerInterface {
 
 	private final ArenasManager arenas;
-	private final PlayerSelection selection;
 
-    public SetLoseLevel(final TNTRun plugin, final PlayerSelection selection) {
-		this.arenas = plugin.arenas;
-		this.selection = selection;
+    public SetGameLevelDestroyDelay(final TNTRun plugin) {
+		arenas = plugin.arenas;
 	}
 
 	@Override
-	public boolean handleCommand(Player player, String[] args) {
+	public String handleCommand(Player player, String[] args) {
 		Arena arena = arenas.get(args[0]);
 
         if (arena == null) {
-            Messages.send(player, Message.arena_not_found, args[0]);
-            return true;
+            return Messages.getMessage(Message.arena_not_found, args[0]);
         }
 
         if (arena.getStatusManager().isArenaEnabled()) {
-			player.sendMessage("Disable arena first");
-			return true;
-		}
+            return Messages.getMessage(Message.disable_arena_first, args[0]);
+        }
 
-        if (arena.getStructureManager().getWorldName() == null) {
-			player.sendMessage("Set arena bounds first");
-			return true;
-		}
-
-        PlayerCuboidSelection sel = selection.getPlayerSelection(player);
-
-        if (arena.getStructureManager().setLooseLevel(sel.getMinimumLocation(), sel.getMaximumLocation())) {
-			player.sendMessage("LoseLevel set");
-		} else {
-			player.sendMessage("LoseLevel should be in arena bounds");
-		}
-
-		return true;
+        arena.getStructureManager().setGameLevelDestroyDelay(Integer.parseInt(args[1]));
+        return "GameLevel blocks destroy delay set";
 	}
 
     @Override
     public int getMinArgsLength() {
-        return 1;
+        return 2;
     }
 }

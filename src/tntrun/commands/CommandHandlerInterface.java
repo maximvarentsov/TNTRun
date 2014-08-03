@@ -15,12 +15,11 @@
  *
  */
 
-package tntrun.commands.setup;
+package tntrun.commands;
 
 import org.bukkit.entity.Player;
 
 public interface CommandHandlerInterface {
-
-	boolean handleCommand(final Player player, final String[] args);
+	String handleCommand(final Player player, final String[] args);
     int getMinArgsLength();
 }

@@ -15,44 +15,40 @@
  *
  */
 
-package tntrun.commands.setup.arena;
+package tntrun.commands.setup;
 
 import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
-import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.commands.CommandHandlerInterface;
 import tntrun.messages.Message;
 import tntrun.messages.Messages;
 
-public class SetSpectatorSpawn implements CommandHandlerInterface {
+import java.io.File;
 
-	private final TNTRun plugin;
+public class DeleteArena implements CommandHandlerInterface {
 
-	public SetSpectatorSpawn(final TNTRun plugin) {
+	private TNTRun plugin;
+	public DeleteArena(TNTRun plugin) {
 		this.plugin = plugin;
 	}
 
 	@Override
-	public boolean handleCommand(Player player, String[] args) {
+	public String handleCommand(Player player, String[] args) {
 		Arena arena = plugin.arenas.get(args[0]);
 
         if (arena == null) {
-            Messages.send(player, Message.arena_not_found, args[0]);
-            return true;
+            return Messages.getMessage(Message.arena_not_found, args[0]);
         }
 
         if (arena.getStatusManager().isArenaEnabled()) {
-            player.sendMessage("Disable arena first");
-            return true;
+            return Messages.getMessage(Message.disable_arena_first, args[0]);
         }
 
-        if (arena.getStructureManager().setSpectatorsSpawn(player.getLocation())) {
-            player.sendMessage("Spectator spawn set");
-        } else {
-            player.sendMessage("Spectator spawn should be in arena bounds");
-        }
+		new File(plugin.getDataFolder() + File.separator + "arenas" + File.separator + arena.getArenaName() + ".yml").delete();
 
-		return true;
+        plugin.arenas.remove(arena);
+		return "Arena deleted";
 	}
 
     @Override

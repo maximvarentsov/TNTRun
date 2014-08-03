@@ -15,40 +15,39 @@
  *
  */
 
-package tntrun.commands.setup.arena;
+package tntrun.commands.setup;
 
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
-import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.arena.ArenasManager;
+import tntrun.commands.CommandHandlerInterface;
 import tntrun.messages.Message;
 import tntrun.messages.Messages;
 
 public class SetMinPlayers implements CommandHandlerInterface {
 
-	private TNTRun plugin;
-	public SetMinPlayers(TNTRun plugin) {
-		this.plugin = plugin;
+	private final ArenasManager arenas;
+	public SetMinPlayers(final TNTRun plugin) {
+		arenas = plugin.arenas;
 	}
 
 	@Override
-	public boolean handleCommand(Player player, String[] args) {
-		Arena arena = plugin.arenas.get(args[0]);
+	public String handleCommand(Player player, String[] args) {
+		Arena arena = arenas.get(args[0]);
 
         if (arena == null) {
-            Messages.send(player, Message.arena_not_found, args[0]);
-            return true;
+            return Messages.getMessage(Message.arena_not_found, args[0]);
         }
 
         if (arena.getStatusManager().isArenaEnabled()) {
-            player.sendMessage("Disable arena first");
-            return true;
+            return Messages.getMessage(Message.disable_arena_first, args[0]);
         }
-        arena.getStructureManager().setMinPlayers(Integer.parseInt(args[1]));
-        player.sendMessage("Min Players set");
 
-		return true;
+        arena.getStructureManager().setMinPlayers(Integer.parseInt(args[1]));
+
+        return "Min Players set";
 	}
 
     @Override

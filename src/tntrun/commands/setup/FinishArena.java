@@ -15,46 +15,50 @@
  *
  */
 
-package tntrun.commands.setup.arena;
+package tntrun.commands.setup;
 
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
-import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.commands.CommandHandlerInterface;
 import tntrun.arena.ArenasManager;
 import tntrun.messages.Message;
 import tntrun.messages.Messages;
 
-public class SetTimeLimit implements CommandHandlerInterface {
+public class FinishArena implements CommandHandlerInterface {
 
 	private final ArenasManager arenas;
 
-	public SetTimeLimit(final TNTRun plugin) {
+	public FinishArena(final TNTRun plugin) {
 		arenas = plugin.arenas;
 	}
 
 	@Override
-	public boolean handleCommand(Player player, String[] args) {
-		Arena arena = arenas.get(args[0]);
+	public String handleCommand(Player player, String[] args) {
+
+        Arena arena = arenas.get(args[0]);
 
         if (arena == null) {
-            Messages.send(player, Message.arena_not_found, args[0]);
-            return true;
+            return Messages.getMessage(Message.arena_not_found, args[0]);
         }
 
         if (arena.getStatusManager().isArenaEnabled()) {
-            player.sendMessage("Disable arena first");
-            return true;
+            return Messages.getMessage(Message.disable_arena_first, args[0]);
         }
-        arena.getStructureManager().setTimeLimit(Integer.parseInt(args[1]));
-        player.sendMessage("Time limit set");
 
-		return true;
+        if (arena.getStructureManager().isArenaConfigured()) {
+            arena.getStructureManager().saveToConfig();
+            arenas.add(arena);
+            arena.getStatusManager().enableArena();
+            return "Arena saved and enabled";
+        }
+
+        return "Arena is not configured. Reason: " + arena.getStructureManager().isArenaConfiguredString();
 	}
 
     @Override
     public int getMinArgsLength() {
-        return 2;
+        return 1;
     }
 }

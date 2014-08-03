@@ -15,11 +15,10 @@
  *
  */
 
-package tntrun.commands.setup.selection;
+package tntrun.commands.setup;
 
 import org.bukkit.entity.Player;
-
-import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.commands.CommandHandlerInterface;
 import tntrun.messages.Message;
 import tntrun.messages.Messages;
 import tntrun.selectionget.PlayerSelection;
@@ -27,20 +26,19 @@ import tntrun.selectionget.PlayerSelection;
 public class SetP1 implements CommandHandlerInterface {
 
 	private PlayerSelection selection;
-	public SetP1(final PlayerSelection selection) {
+
+    public SetP1(final PlayerSelection selection) {
 		this.selection = selection;
 	}
 
 	@Override
-	public boolean handleCommand(final Player player, final String[] args) {
+	public String handleCommand(final Player player, final String[] args) {
 		selection.setSelectionPoint1(player);
-        Messages.send(player, Message.p1_saved);
-		return true;
+        return Messages.getMessage(Message.p1_saved);
 	}
 
     @Override
     public int getMinArgsLength() {
         return 0;
     }
-
 }

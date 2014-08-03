@@ -15,31 +15,44 @@
  *
  */
 
-package tntrun.commands.setup.selection;
+package tntrun.commands.setup;
 
 import org.bukkit.entity.Player;
-import tntrun.commands.setup.CommandHandlerInterface;
+
+import tntrun.TNTRun;
+import tntrun.arena.Arena;
+import tntrun.arena.ArenasManager;
+import tntrun.commands.CommandHandlerInterface;
 import tntrun.messages.Message;
 import tntrun.messages.Messages;
-import tntrun.selectionget.PlayerSelection;
 
-public class SetP2 implements CommandHandlerInterface {
+public class SetMoneyRewards implements CommandHandlerInterface {
 
-	private final PlayerSelection selection;
+	private final ArenasManager arenas;
 
-    public SetP2(final PlayerSelection selection) {
-		this.selection = selection;
+    public SetMoneyRewards(final TNTRun plugin) {
+	    arenas = plugin.arenas;
 	}
 
 	@Override
-	public boolean handleCommand(final Player player, final String[] args) {
-		selection.setSelectionPoint2(player);
-		Messages.send(player, Message.p2_saved);
-        return true;
+	public String handleCommand(final Player player, final String[] args) {
+		Arena arena = arenas.get(args[0]);
+
+        if (arena == null) {
+            return Messages.getMessage(Message.arena_not_found, args[0]);
+        }
+
+        if (arena.getStatusManager().isArenaEnabled()) {
+            return Messages.getMessage(Message.disable_arena_first, args[0]);
+        }
+
+        arena.getStructureManager().setRewards(Integer.parseInt(args[1]));
+
+        return "Money Rewards set";
 	}
 
     @Override
     public int getMinArgsLength() {
-        return 0;
+        return 2;
     }
 }

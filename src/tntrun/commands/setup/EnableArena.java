@@ -15,47 +15,47 @@
  *
  */
 
-package tntrun.commands.setup.arena;
+package tntrun.commands.setup;
 
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
+import tntrun.commands.CommandHandlerInterface;
 import tntrun.arena.ArenasManager;
-import tntrun.commands.setup.CommandHandlerInterface;
 import tntrun.messages.Message;
 import tntrun.messages.Messages;
 
-public class SetMoneyRewards implements CommandHandlerInterface {
+public class EnableArena implements CommandHandlerInterface {
 
 	private final ArenasManager arenas;
 
-    public SetMoneyRewards(final TNTRun plugin) {
-	    arenas = plugin.arenas;
+	public EnableArena(final TNTRun plugin) {
+		arenas = plugin.arenas;
 	}
 
 	@Override
-	public boolean handleCommand(final Player player, final String[] args) {
-		Arena arena = arenas.get(args[0]);
+	public String handleCommand(final Player player, final String[] args) {
+
+        Arena arena = arenas.get(args[0]);
 
         if (arena == null) {
-            Messages.send(player, Message.arena_not_found, args[0]);
-            return true;
+            return Messages.getMessage(Message.arena_not_found, args[0]);
         }
 
         if (arena.getStatusManager().isArenaEnabled()) {
-            Messages.send(player, Message.disable_arena_first);
-            return true;
+            return "Arena already enabled.";
         }
 
-        arena.getStructureManager().setRewards(Integer.parseInt(args[1]));
-        player.sendMessage("Money Rewards set");
+        if (arena.getStatusManager().enableArena()) {
+            return "Arena enabled";
+        }
 
-		return true;
+        return "Arena is not configured. Reason: " + arena.getStructureManager().isArenaConfigured();
 	}
 
     @Override
     public int getMinArgsLength() {
-        return 2;
+        return 1;
     }
 }

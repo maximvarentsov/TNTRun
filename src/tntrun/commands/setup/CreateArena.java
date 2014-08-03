@@ -15,45 +15,38 @@
  *
  */
 
-package tntrun.commands.setup.arena;
+package tntrun.commands.setup;
 
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
-import tntrun.commands.setup.CommandHandlerInterface;
-import tntrun.messages.Message;
-import tntrun.messages.Messages;
+import tntrun.commands.CommandHandlerInterface;
 
-public class SetMaxPlayers implements CommandHandlerInterface {
+public class CreateArena implements CommandHandlerInterface {
 
-	private TNTRun plugin;
+	private final TNTRun plugin;
 
-	public SetMaxPlayers(TNTRun plugin) {
+    public CreateArena(final TNTRun plugin) {
 		this.plugin = plugin;
 	}
 
 	@Override
-	public boolean handleCommand(Player player, String[] args) {
-		Arena arena = plugin.arenas.get(args[0]);
+	public String handleCommand(Player player, String[] args) {
+		Arena arenac = plugin.arenas.get(args[0]);
 
-        if (arena == null) {
-            Messages.send(player, Message.arena_not_found, args[0]);
-            return true;
-        }
+        if (arenac != null) {
+			return "Arena already exists";
+		}
 
-        if (arena.getStatusManager().isArenaEnabled()) {
-            player.sendMessage("Disable arena first");
-            return true;
-        }
-        arena.getStructureManager().setMaxPlayers(Integer.parseInt(args[1]));
-        player.sendMessage("Max Players set");
+		Arena arena = new Arena(args[0], plugin);
+		plugin.arenas.add(arena);
 
-		return true;
+		return "Arena created";
 	}
 
     @Override
     public int getMinArgsLength() {
-        return 2;
+        return 1;
     }
 }

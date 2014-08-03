@@ -15,43 +15,49 @@
  *
  */
 
-package tntrun.commands.setup.arena;
+package tntrun.commands.setup;
 
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
-import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.commands.CommandHandlerInterface;
 import tntrun.arena.ArenasManager;
 import tntrun.messages.Message;
 import tntrun.messages.Messages;
+import tntrun.selectionget.PlayerCuboidSelection;
+import tntrun.selectionget.PlayerSelection;
 
-public class DisableArena implements CommandHandlerInterface {
+public class SetArena implements CommandHandlerInterface {
 
 	private final ArenasManager arenas;
+	private final PlayerSelection selection;
 
-    public DisableArena(final TNTRun plugin) {
+    public SetArena(final TNTRun plugin, final PlayerSelection playerSelection) {
 		arenas = plugin.arenas;
+		selection = playerSelection;
 	}
 
 	@Override
-	public boolean handleCommand(final Player player, final String[] args) {
-
-        Arena arena = arenas.get(args[0]);
+	public String handleCommand(final Player player, final String[] args) {
+		Arena arena = arenas.get(args[0]);
 
         if (arena == null) {
-            Messages.send(player, Message.arena_not_found, args[0]);
-            return true;
+            return Messages.getMessage(Message.arena_not_found, args[0]);
         }
 
         if (arena.getStatusManager().isArenaEnabled()) {
-            arena.getStatusManager().disableArena();
-            player.sendMessage("Arena disabled");
-        } else {
-            player.sendMessage("Arena already disabled");
+            return Messages.getMessage(Message.disable_arena_first, args[0]);
         }
 
-		return true;
+        PlayerCuboidSelection sel = selection.getPlayerSelection(player);
+
+        if (sel != null) {
+            arena.getStructureManager().setArenaPoints(sel.getMinimumLocation(), sel.getMaximumLocation());
+            return "Arena bounds set";
+        }
+
+        return "Locations are wrong or not defined";
 	}
 
     @Override

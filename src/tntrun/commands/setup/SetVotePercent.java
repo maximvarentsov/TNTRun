@@ -15,42 +15,40 @@
  *
  */
 
-package tntrun.commands.setup.arena;
+package tntrun.commands.setup;
 
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
-import tntrun.commands.setup.CommandHandlerInterface;
 import tntrun.arena.ArenasManager;
+import tntrun.commands.CommandHandlerInterface;
 import tntrun.messages.Message;
 import tntrun.messages.Messages;
 
-public class SetCountdown implements CommandHandlerInterface {
+public class SetVotePercent implements CommandHandlerInterface {
 
 	private final ArenasManager arenas;
 
-	public SetCountdown(final TNTRun plugin) {
+    public SetVotePercent(final TNTRun plugin) {
 		arenas = plugin.arenas;
 	}
 
 	@Override
-	public boolean handleCommand(final Player player, final String[] args) {
+	public String handleCommand(final Player player, final String[] args) {
 		Arena arena = arenas.get(args[0]);
 
         if (arena == null) {
-            Messages.send(player, Message.arena_not_found, args[0]);
-            return true;
+            return Messages.getMessage(Message.arena_not_found, args[0]);
         }
 
         if (arena.getStatusManager().isArenaEnabled()) {
-            player.sendMessage("Disable arena first");
-            return true;
+            return Messages.getMessage(Message.disable_arena_first, args[0]);
         }
 
-        arena.getStructureManager().setCountdown(Integer.parseInt(args[1]));
+        arena.getStructureManager().setVotePercent(Double.parseDouble(args[1]));
 
-		return true;
+        return "Vote percent set";
 	}
 
     @Override

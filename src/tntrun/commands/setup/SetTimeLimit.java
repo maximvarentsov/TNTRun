@@ -15,49 +15,44 @@
  *
  */
 
-package tntrun.commands.setup.arena;
+package tntrun.commands.setup;
 
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
-import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.commands.CommandHandlerInterface;
+import tntrun.arena.ArenasManager;
 import tntrun.messages.Message;
 import tntrun.messages.Messages;
 
-public class SetSpawn implements CommandHandlerInterface {
+public class SetTimeLimit implements CommandHandlerInterface {
 
-	private final TNTRun plugin;
+	private final ArenasManager arenas;
 
-	public SetSpawn(final TNTRun plugin) {
-		this.plugin = plugin;
+	public SetTimeLimit(final TNTRun plugin) {
+		arenas = plugin.arenas;
 	}
 
 	@Override
-	public boolean handleCommand(Player player, String[] args) {
-		Arena arena = plugin.arenas.get(args[0]);
+	public String handleCommand(Player player, String[] args) {
+		Arena arena = arenas.get(args[0]);
 
         if (arena == null) {
-            Messages.send(player, Message.arena_not_found, args[0]);
-            return true;
+            return Messages.getMessage(Message.arena_not_found, args[0]);
         }
 
         if (arena.getStatusManager().isArenaEnabled()) {
-            player.sendMessage("Disable arena first");
-            return true;
+            return Messages.getMessage(Message.disable_arena_first, args[0]);
         }
 
-        if (arena.getStructureManager().setSpawnPoint(player.getLocation())) {
-            player.sendMessage("Spawnpoint set");
-        } else {
-            player.sendMessage("Spawnpoint should be in arena bounds");
-        }
+        arena.getStructureManager().setTimeLimit(Integer.parseInt(args[1]));
 
-		return true;
+        return "Time limit set";
 	}
 
     @Override
     public int getMinArgsLength() {
-        return 1;
+        return 2;
     }
 }
