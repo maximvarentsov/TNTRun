@@ -36,5 +36,4 @@ public class PlayerCuboidSelection {
 	public Location getMaximumLocation() {
 		return maxpoint;
 	}
-
 }

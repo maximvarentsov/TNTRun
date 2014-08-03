@@ -40,10 +40,10 @@ public class PlayerSelection {
 	}
 
 	public void setSelectionPoint1(final Player player) {
-		ownlocations.putPlayerLoc1(player.getName(), player.getTargetBlock(null, 30).getLocation());
+		ownlocations.putPlayerLoc1(player.getName(), player.getLocation());
 	}
 
     public void setSelectionPoint2(final Player player) {
-        ownlocations.putPlayerLoc2(player.getName(), player.getTargetBlock(null, 30).getLocation());
+        ownlocations.putPlayerLoc2(player.getName(), player.getLocation());
     }
 }

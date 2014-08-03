@@ -43,12 +43,8 @@ public class OwnLocations {
 		loc2.remove(playername);
 	}
 
-	protected Location[] getLocations(Player player) {
-		try {
-			return sortLoc(player);
-		} catch (Exception ignore) {
-            return null;
-		}
+	protected Location[] getLocations(final Player player) {
+        return sortLoc(player);
 	}
 
 	// 0 is min, 1 is max
